@@ -1,6 +1,6 @@
 /* ===========================
    ROOSTER RUN VENUE - STYLES
-   Creekside nature theme
+   Multi-page creekside theme
    =========================== */
 
 /* --- RESET & BASE --- */
@@ -68,40 +68,6 @@ a {
   padding: 0 24px;
 }
 
-/* --- PLACEHOLDER IMAGES (replace with real photos) --- */
-.placeholder-img {
-  background:
-    linear-gradient(135deg, rgba(26,58,42,0.85), rgba(45,90,63,0.7)),
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 20px,
-      rgba(255,255,255,0.02) 20px,
-      rgba(255,255,255,0.02) 40px
-    );
-  border-radius: var(--radius);
-  width: 100%;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.45);
-  font-size: 0.9rem;
-  font-style: italic;
-  position: relative;
-  border: 2px dashed rgba(255,255,255,0.15);
-}
-
-.placeholder-img::after {
-  content: attr(data-label);
-  text-align: center;
-  padding: 0 20px;
-}
-
-.placeholder-img.tall {
-  height: 420px;
-}
-
 /* --- HEADER --- */
 .site-header {
   position: fixed;
@@ -132,6 +98,18 @@ a {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 1.4rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.logo-text {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.5rem;
   font-weight: 700;
@@ -165,11 +143,13 @@ a {
   transition: width var(--transition);
 }
 
-.main-nav a:hover {
+.main-nav a:hover,
+.main-nav a.active {
   color: var(--cream);
 }
 
-.main-nav a:hover::after {
+.main-nav a:hover::after,
+.main-nav a.active::after {
   width: 100%;
 }
 
@@ -218,7 +198,9 @@ a {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* --- HERO --- */
+/* ===========================
+   HERO - HOME PAGE
+   =========================== */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -227,7 +209,16 @@ a {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  /* Real forest image from Unsplash - free to use */
+}
+
+.hero-bg-layers {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
   background:
     url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
@@ -238,17 +229,24 @@ a {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(13, 31, 21, 0.65) 0%,
+    rgba(13, 31, 21, 0.7) 0%,
     rgba(26, 58, 42, 0.55) 40%,
-    rgba(13, 31, 21, 0.75) 100%
+    rgba(13, 31, 21, 0.8) 100%
   );
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
   padding: 120px 24px 80px;
-  max-width: 860px;
+  max-width: 900px;
 }
 
 .hero-location {
@@ -260,17 +258,29 @@ a {
   font-weight: 700;
 }
 
-.hero h1 {
-  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+.hero-title-big {
+  font-size: clamp(3.5rem, 10vw, 7rem);
   color: var(--white);
+  margin-bottom: 16px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+  line-height: 1;
+}
+
+.hero-tagline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: rgba(255,255,255,0.9);
   margin-bottom: 24px;
-  font-weight: 700;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.4;
 }
 
 .hero-sub {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.75);
   margin-bottom: 40px;
   font-weight: 300;
   line-height: 1.7;
@@ -304,7 +314,128 @@ a {
   color: var(--gold-light);
 }
 
-/* --- BUTTONS --- */
+/* Scroll hint */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid rgba(255,255,255,0.4);
+  border-bottom: 2px solid rgba(255,255,255,0.4);
+  transform: rotate(45deg);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.4; }
+  50% { transform: rotate(45deg) translate(4px, 4px); opacity: 1; }
+}
+
+/* ===========================
+   PAGE HEROES (sub-pages)
+   =========================== */
+.page-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.page-hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 120px 24px 80px;
+  max-width: 800px;
+}
+
+.page-hero-content h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--white);
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+.page-hero-content p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: rgba(255,255,255,0.85);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.page-hero-content .section-label {
+  margin-bottom: 16px;
+}
+
+/* Fishing hero */
+.page-hero-fishing {
+  background:
+    linear-gradient(135deg, rgba(13,31,21,0.85), rgba(26,58,42,0.75)),
+    url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1920&q=80')
+    center center / cover no-repeat;
+}
+
+.page-hero-fishing .page-hero-overlay {
+  background:
+    radial-gradient(ellipse at 30% 80%, rgba(45,90,63,0.3) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(13,31,21,0.3) 0%, rgba(13,31,21,0.6) 100%);
+}
+
+/* Weddings hero */
+.page-hero-weddings {
+  background:
+    linear-gradient(135deg, rgba(26,36,30,0.85), rgba(45,60,50,0.75)),
+    url('https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&w=1920&q=80')
+    center center / cover no-repeat;
+}
+
+.page-hero-weddings .page-hero-overlay {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(200,164,90,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.5) 100%);
+}
+
+/* Events hero */
+.page-hero-events {
+  background:
+    linear-gradient(135deg, rgba(26,40,32,0.85), rgba(40,70,50,0.75)),
+    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1920&q=80')
+    center center / cover no-repeat;
+}
+
+.page-hero-events .page-hero-overlay {
+  background:
+    radial-gradient(ellipse at 50% 60%, rgba(200,164,90,0.08) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.5) 100%);
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
 .btn {
   display: inline-block;
   padding: 14px 32px;
@@ -343,6 +474,18 @@ a {
   transform: translateY(-2px);
 }
 
+.btn-secondary-dark {
+  background: transparent;
+  color: var(--cream);
+  border-color: rgba(245, 240, 232, 0.35);
+}
+
+.btn-secondary-dark:hover {
+  border-color: var(--cream);
+  background: rgba(245, 240, 232, 0.1);
+  transform: translateY(-2px);
+}
+
 .btn-outline {
   background: transparent;
   color: var(--green-mid);
@@ -360,7 +503,9 @@ a {
   text-align: center;
 }
 
-/* --- SECTIONS --- */
+/* ===========================
+   SECTIONS (shared)
+   =========================== */
 .section {
   padding: 100px 0;
 }
@@ -401,11 +546,19 @@ a {
   line-height: 1.6;
 }
 
+.center-tagline {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .section h2 + .section-tagline {
   margin-bottom: 48px;
 }
 
-/* --- INTRO SECTION --- */
+/* ===========================
+   INTRO SECTION
+   =========================== */
 .intro-section {
   padding: 80px 0;
   background: var(--white);
@@ -447,7 +600,115 @@ a {
   line-height: 1.6;
 }
 
-/* --- SPLIT LAYOUT --- */
+/* ===========================
+   OFFERINGS CARDS (home page)
+   =========================== */
+.offerings-section {
+  padding: 100px 0;
+  background: var(--cream);
+}
+
+.offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.offering-card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.offering-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.offering-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s ease;
+}
+
+.offering-card:hover .offering-bg {
+  transform: scale(1.05);
+}
+
+.offering-fishing .offering-bg {
+  background:
+    linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.85) 70%),
+    url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80')
+    center center / cover no-repeat;
+}
+
+.offering-weddings .offering-bg {
+  background:
+    linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,36,30,0.88) 70%),
+    url('https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&w=800&q=80')
+    center center / cover no-repeat;
+}
+
+.offering-events .offering-bg {
+  background:
+    linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,40,32,0.88) 70%),
+    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80')
+    center center / cover no-repeat;
+}
+
+.offering-content {
+  position: relative;
+  z-index: 2;
+  padding: 36px 28px;
+}
+
+.offering-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.offering-card h2 {
+  font-size: 1.6rem;
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.offering-card p {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.offering-link {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color var(--transition);
+}
+
+.offering-card:hover .offering-link {
+  color: var(--gold-light);
+}
+
+/* ===========================
+   SPLIT LAYOUT
+   =========================== */
 .split-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -504,12 +765,74 @@ a {
   font-size: 0.85rem;
 }
 
-/* --- FISHING SECTION --- */
-.fishing-section {
-  background: var(--cream-light);
+/* ===========================
+   SCENIC PANELS (image placeholders with icons)
+   =========================== */
+.scenic-panel {
+  border-radius: var(--radius);
+  width: 100%;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* --- CABIN SECTION --- */
+.cabin-panel {
+  background:
+    linear-gradient(135deg, rgba(26,58,42,0.9), rgba(45,90,63,0.75)),
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 40px);
+  border: 2px solid rgba(255,255,255,0.08);
+}
+
+.fishing-creek-panel {
+  background:
+    linear-gradient(135deg, rgba(20,50,60,0.9), rgba(30,80,70,0.75)),
+    repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(255,255,255,0.02) 15px, rgba(255,255,255,0.02) 30px);
+  border: 2px solid rgba(255,255,255,0.08);
+}
+
+.trout-panel {
+  background:
+    linear-gradient(135deg, rgba(26,58,42,0.88), rgba(60,100,70,0.72));
+  border: 2px solid rgba(255,255,255,0.08);
+}
+
+.wedding-panel {
+  background:
+    linear-gradient(135deg, rgba(40,30,25,0.9), rgba(80,60,45,0.7));
+  border: 2px solid rgba(200,164,90,0.15);
+}
+
+.events-panel {
+  background:
+    linear-gradient(135deg, rgba(26,58,42,0.88), rgba(45,90,63,0.72));
+  border: 2px solid rgba(255,255,255,0.08);
+}
+
+.scenic-icon {
+  width: 80px;
+  height: 80px;
+  color: rgba(245,240,232,0.4);
+}
+
+.scenic-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.scenic-caption {
+  color: rgba(245,240,232,0.4);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ===========================
+   CABIN SECTION
+   =========================== */
 .cabin-section {
   background: var(--cream);
 }
@@ -540,7 +863,9 @@ a {
   font-size: 0.85rem;
 }
 
-/* --- AMENITIES --- */
+/* ===========================
+   AMENITIES
+   =========================== */
 .amenities-section {
   background: var(--cream-light);
   text-align: center;
@@ -596,40 +921,30 @@ a {
   line-height: 1.5;
 }
 
-/* --- WEDDINGS --- */
-.weddings-section {
-  background: var(--white);
-}
-
-/* --- EVENTS --- */
-.events-section {
+/* ===========================
+   AREA HIGHLIGHTS
+   =========================== */
+.area-section {
   background: var(--green-dark);
   color: var(--cream);
   text-align: center;
 }
 
-.events-section h2 {
+.area-section h2 {
   color: var(--cream);
 }
 
-.events-section .section-label {
-  background: rgba(200, 164, 90, 0.2);
+.area-section .section-tagline {
+  color: rgba(245,240,232,0.7);
 }
 
-.events-section .section-tagline {
-  color: rgba(245, 240, 232, 0.7);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.events-grid {
+.area-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 40px;
 }
 
-.event-card {
+.area-card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius);
@@ -638,29 +953,27 @@ a {
   transition: transform var(--transition), border-color var(--transition), background var(--transition);
 }
 
-.event-card:hover {
+.area-card:hover {
   transform: translateY(-4px);
   border-color: rgba(200, 164, 90, 0.4);
   background: rgba(255,255,255,0.1);
 }
 
-.event-card h3 {
+.area-card h3 {
   color: var(--gold);
   font-size: 1.15rem;
   margin-bottom: 12px;
 }
 
-.event-card p {
+.area-card p {
   color: rgba(245, 240, 232, 0.7);
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
-.events-cta {
-  margin-top: 8px;
-}
-
-/* --- BOOKING STEPS --- */
+/* ===========================
+   BOOKING STEPS
+   =========================== */
 .steps-section {
   background: var(--cream);
   text-align: center;
@@ -708,7 +1021,9 @@ a {
   font-size: 0.95rem;
 }
 
-/* --- LOCATION --- */
+/* ===========================
+   LOCATION
+   =========================== */
 .location-section {
   background: var(--cream-light);
   text-align: center;
@@ -719,14 +1034,20 @@ a {
   margin-right: auto;
 }
 
+.directions-row {
+  margin-bottom: 28px;
+}
+
 .map-container {
-  margin-top: 32px;
+  margin-top: 16px;
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-md);
 }
 
-/* --- CONTACT --- */
+/* ===========================
+   CONTACT
+   =========================== */
 .contact-section {
   background: var(--green-dark);
   color: var(--cream);
@@ -850,7 +1171,459 @@ a {
   color: var(--cream);
 }
 
-/* --- FOOTER --- */
+/* ===========================
+   CTA SECTION (bottom of sub-pages)
+   =========================== */
+.cta-section {
+  background: var(--green-dark);
+  text-align: center;
+}
+
+.cta-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cta-content h2 {
+  color: var(--cream);
+  margin-bottom: 16px;
+}
+
+.cta-content p {
+  color: rgba(245,240,232,0.75);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===========================
+   FISHING SCHEDULE
+   =========================== */
+.fishing-schedule-section {
+  background: var(--green-dark);
+  color: var(--cream);
+  text-align: center;
+}
+
+.fishing-schedule-section h2 {
+  color: var(--cream);
+}
+
+.fishing-schedule-section .section-tagline {
+  color: rgba(245,240,232,0.7);
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.schedule-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: left;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.schedule-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(200,164,90,0.4);
+}
+
+.schedule-season {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.schedule-months {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(245,240,232,0.5);
+  margin-bottom: 16px;
+}
+
+.schedule-card p {
+  color: rgba(245,240,232,0.7);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.schedule-note {
+  color: rgba(245,240,232,0.5);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.schedule-note a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.schedule-note a:hover {
+  color: var(--gold-light);
+}
+
+/* ===========================
+   FISHING RULES
+   =========================== */
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.rule-card {
+  background: var(--white);
+  padding: 32px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--green-accent);
+}
+
+.rule-card h3 {
+  color: var(--green-dark);
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.rule-card p {
+  color: var(--text-mid);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.rule-card a {
+  color: var(--green-mid);
+  text-decoration: underline;
+}
+
+/* ===========================
+   LAKE STATS
+   =========================== */
+.lake-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.lake-stat {
+  background: var(--white);
+  padding: 32px 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.lake-stat strong {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--green-mid);
+  margin-bottom: 6px;
+}
+
+.lake-stat span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+}
+
+.lake-species {
+  color: var(--text-mid);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ===========================
+   WEDDING VALUE
+   =========================== */
+.wedding-value-section {
+  background: var(--cream-light);
+  text-align: center;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.value-card {
+  background: var(--white);
+  padding: 40px 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.value-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+.value-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 20px;
+  color: var(--gold);
+}
+
+.value-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.value-card h3 {
+  color: var(--green-dark);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.value-card p {
+  color: var(--text-mid);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   WEDDING FEATURES
+   =========================== */
+.wedding-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.wedding-feature {
+  background: var(--white);
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--gold);
+}
+
+.wedding-feature h3 {
+  color: var(--green-dark);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.wedding-feature p {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   WEDDING TIMELINE
+   =========================== */
+.wedding-timeline-section {
+  background: var(--cream-light);
+}
+
+.wedding-timeline-section h2 {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.timeline {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 60px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--green-accent);
+  opacity: 0.25;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -42px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 3px solid var(--cream-light);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.timeline-time {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.timeline-desc h3 {
+  color: var(--green-dark);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.timeline-desc p {
+  color: var(--text-mid);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   FAQ
+   =========================== */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.faq-item {
+  background: var(--white);
+  padding: 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.faq-item h3 {
+  color: var(--green-dark);
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.faq-item p {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   EVENTS SHOWCASE
+   =========================== */
+.events-types-section {
+  background: var(--white);
+}
+
+.events-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.event-showcase-card {
+  background: var(--cream-light);
+  padding: 40px 28px;
+  border-radius: var(--radius);
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+  border-bottom: 3px solid transparent;
+}
+
+.event-showcase-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-bottom-color: var(--gold);
+}
+
+.event-showcase-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  color: var(--green-mid);
+}
+
+.event-showcase-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.event-showcase-card h3 {
+  color: var(--green-dark);
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.event-showcase-card p {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   EVENT AMENITIES
+   =========================== */
+.event-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.event-amenity {
+  background: var(--white);
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--green-accent);
+}
+
+.event-amenity h3 {
+  color: var(--green-dark);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.event-amenity p {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   WHY OUTSIDE
+   =========================== */
+.why-outside-section {
+  background: var(--cream-light);
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
 .site-footer {
   background: #0d1f15;
   padding: 48px 0 32px;
@@ -863,6 +1636,12 @@ a {
   align-items: center;
   gap: 16px;
   text-align: center;
+}
+
+.footer-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cream);
 }
 
 .footer-brand p {
@@ -920,7 +1699,39 @@ a {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .events-grid {
+  .area-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .offerings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .offering-card {
+    min-height: 360px;
+  }
+
+  .schedule-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wedding-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .events-showcase-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .event-amenities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .value-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lake-features {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -956,6 +1767,11 @@ a {
     padding: 100px 20px 60px;
   }
 
+  .hero-title-big {
+    font-size: clamp(2.5rem, 12vw, 4.5rem);
+    letter-spacing: 3px;
+  }
+
   .intro-grid {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -978,7 +1794,7 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .events-grid {
+  .area-grid {
     grid-template-columns: 1fr;
   }
 
@@ -999,15 +1815,60 @@ a {
   .section {
     padding: 64px 0;
   }
+
+  .offerings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wedding-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .events-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-hero {
+    min-height: 50vh;
+  }
+
+  .page-hero-content {
+    padding: 100px 20px 60px;
+  }
+
+  .scenic-panel {
+    height: 280px;
+  }
 }
 
 @media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.8rem;
+  .hero-title-big {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
   }
 
   .hero-sub {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .hero-buttons {
@@ -1020,7 +1881,21 @@ a {
     max-width: 280px;
   }
 
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
   .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lake-features {
     grid-template-columns: 1fr;
   }
 
@@ -1030,7 +1905,9 @@ a {
   }
 }
 
-/* --- SCROLL ANIMATIONS --- */
+/* ===========================
+   SCROLL ANIMATIONS
+   =========================== */
 .animate-ready {
   opacity: 0;
   transform: translateY(30px);

@@ -1,5 +1,6 @@
 /* ===========================
    ROOSTER RUN VENUE - SCRIPTS
+   Multi-page support
    =========================== */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // --- Smooth scroll for anchor links ---
+  // --- Smooth scroll for same-page anchor links ---
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
       var targetId = this.getAttribute('href');
@@ -57,14 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      // Collect form data
       var formData = new FormData(contactForm);
       var data = {};
       formData.forEach(function (value, key) {
         data[key] = value;
       });
 
-      // Show confirmation (replace with actual form submission later)
       var btn = contactForm.querySelector('button[type="submit"]');
       var originalText = btn.textContent;
       btn.textContent = 'Message Sent!';
@@ -84,7 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // --- Scroll-in animations ---
   var animateElements = document.querySelectorAll(
-    '.amenity-card, .event-card, .step-card, .intro-card, .split-text, .split-image, .cabin-feature'
+    '.amenity-card, .area-card, .event-card, .event-showcase-card, .step-card, .intro-card, ' +
+    '.split-text, .split-image, .cabin-feature, .offering-card, .schedule-card, .rule-card, ' +
+    '.value-card, .wedding-feature, .faq-item, .event-amenity, .lake-stat, .timeline-item'
   );
 
   if ('IntersectionObserver' in window) {
@@ -101,6 +102,18 @@ document.addEventListener('DOMContentLoaded', function () {
       el.classList.add('animate-ready');
       observer.observe(el);
     });
+  }
+
+  // --- Handle hash navigation from other pages ---
+  if (window.location.hash) {
+    setTimeout(function () {
+      var target = document.querySelector(window.location.hash);
+      if (target) {
+        var headerHeight = document.getElementById('header').offsetHeight;
+        var targetPos = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    }, 100);
   }
 
 });

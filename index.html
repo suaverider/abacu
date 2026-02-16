@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rooster Run Venue | Creek Fishing, Outdoor Weddings & Events in Rutledge, TN</title>
-  <meta name="description" content="Private creekside venue on Buffalo Creek in Rutledge, TN. Fish TWRA-stocked trout, host outdoor weddings, or rent the property for your next gathering. Cabin stays available.">
+  <title>Rooster Run | Creek Fishing, Outdoor Weddings & Events — Rutledge, TN</title>
+  <meta name="description" content="Private creekside venue on Buffalo Creek in Rutledge, TN. Fish TWRA-stocked trout year-round, host rustic outdoor weddings, or rent the property for your next gathering.">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- HEADER / NAV -->
   <header class="site-header" id="header">
     <div class="header-inner">
-      <a href="#" class="logo">Rooster Run</a>
+      <a href="index.html" class="logo">
+        <span class="logo-icon">&#9733;</span>
+        <span class="logo-text">Rooster Run</span>
+      </a>
       <nav class="main-nav" id="mainNav">
-        <a href="#fishing">Fishing</a>
-        <a href="#cabin">Stay</a>
-        <a href="#weddings">Weddings</a>
-        <a href="#events">Events</a>
-        <a href="#contact">Contact</a>
+        <a href="fishing.html">Fishing</a>
+        <a href="weddings.html">Weddings</a>
+        <a href="events.html">Events</a>
+        <a href="index.html#cabin">The Cabin</a>
+        <a href="index.html#contact">Contact</a>
       </nav>
       <a href="tel:+14237368821" class="header-cta">423-736-8821</a>
       <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
@@ -30,19 +33,28 @@
     </div>
   </header>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section class="hero" id="hero">
-    <div class="hero-overlay"></div>
+    <div class="hero-bg-layers">
+      <div class="hero-bg-img"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-particles" id="heroParticles"></div>
+    </div>
     <div class="hero-content">
       <p class="hero-location">Rutledge, Tennessee &bull; On Buffalo Creek</p>
-      <h1>Cast a line at sunrise.<br>Gather under the stars.</h1>
-      <p class="hero-sub">A private creekside property for fishing getaways, outdoor weddings, and group gatherings&mdash;right next to TWRA&rsquo;s Buffalo Springs Wildlife Management Area.</p>
+      <h1 class="hero-title-big">ROOSTER RUN</h1>
+      <p class="hero-tagline">Cast a line at sunrise.<br>Gather under the stars.</p>
+      <p class="hero-sub">A private creekside property for fishing getaways, rustic outdoor weddings, and group gatherings&mdash;right next to Tennessee&rsquo;s largest trout hatchery and the Buffalo Springs Wildlife Management Area.</p>
       <div class="hero-buttons">
-        <a href="#fishing" class="btn btn-primary">Plan a Fishing Trip</a>
-        <a href="#weddings" class="btn btn-secondary">Outdoor Weddings</a>
-        <a href="#events" class="btn btn-secondary">Rent the Venue</a>
+        <a href="fishing.html" class="btn btn-primary">Plan a Fishing Trip</a>
+        <a href="weddings.html" class="btn btn-secondary">Outdoor Weddings</a>
+        <a href="events.html" class="btn btn-secondary">Rent the Venue</a>
       </div>
       <p class="hero-phone">Call or Text: <a href="tel:+14237368821">423-736-8821</a></p>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
     </div>
   </section>
 
@@ -61,38 +73,53 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
         <h3>Next to TWRA Land</h3>
-        <p>The property borders the Buffalo Springs Wildlife Management Area&mdash;342 acres of public woodland managed by the Tennessee Wildlife Resources Agency.</p>
+        <p>The property borders the Buffalo Springs Wildlife Management Area&mdash;342 acres of public woodland managed by TWRA, home to Tennessee&rsquo;s largest trout hatchery.</p>
       </div>
       <div class="intro-card">
         <div class="intro-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
         <h3>Stay Overnight</h3>
-        <p>A renovated on-site cabin with a queen bed, TV, mini-fridge, and a front porch with rocking chairs overlooking the creek.</p>
+        <p>A renovated on-site cabin with a queen bed, TV, mini-fridge, and a cozy interior with creek views from the window. Wake up to the sound of Buffalo Creek.</p>
       </div>
     </div>
   </section>
 
-  <!-- FISHING SECTION -->
-  <section class="section fishing-section" id="fishing">
-    <div class="container split-layout">
-      <div class="split-text">
-        <span class="section-label">Fishing</span>
-        <h2>Buffalo Creek Runs Right Through the Property</h2>
-        <p>Rooster Run sits directly on Buffalo Creek in Grainger County, giving you walk-out access to the water from the moment you arrive. The Tennessee Wildlife Resources Agency (TWRA) stocks this stretch of the creek with trout, so you can fish without a long drive to some distant river.</p>
-        <p>Whether you want a quiet morning solo session, a father-son weekend, or a multi-day trip with friends, you have a private base camp with a cabin, a campfire, and creek access steps from your door.</p>
-        <ul class="feature-list">
-          <li>Direct walk-out access to Buffalo Creek</li>
-          <li>TWRA-stocked trout in the creek</li>
-          <li>Adjacent to the 342-acre Buffalo Springs WMA</li>
-          <li>Day trips or overnight cabin stays</li>
-          <li>Campfire area for evening gatherings</li>
-          <li>Valid Tennessee fishing license required</li>
-        </ul>
-        <a href="#contact" class="btn btn-primary">Book a Fishing Trip</a>
-      </div>
-      <div class="split-image">
-        <div class="placeholder-img tall" data-label="Your Photo: Creek Fishing at Rooster Run"></div>
+  <!-- THREE BIG OFFERINGS -->
+  <section class="section offerings-section" id="offerings">
+    <div class="container">
+      <div class="offerings-grid">
+
+        <a href="fishing.html" class="offering-card offering-fishing">
+          <div class="offering-bg"></div>
+          <div class="offering-content">
+            <span class="offering-label">Fishing</span>
+            <h2>Buffalo Creek<br>Trout Fishing</h2>
+            <p>Walk out to TWRA-stocked waters right from the property. Year-round rainbow trout, spring-fed creek, steps from the state&rsquo;s largest hatchery.</p>
+            <span class="offering-link">Explore Fishing &rarr;</span>
+          </div>
+        </a>
+
+        <a href="weddings.html" class="offering-card offering-weddings">
+          <div class="offering-bg"></div>
+          <div class="offering-content">
+            <span class="offering-label">Weddings</span>
+            <h2>Rustic Outdoor<br>Weddings</h2>
+            <p>Say your vows creekside under open sky. Affordable, intimate, and beautiful&mdash;no banquet hall needed. Starting well below what others charge.</p>
+            <span class="offering-link">Plan Your Wedding &rarr;</span>
+          </div>
+        </a>
+
+        <a href="events.html" class="offering-card offering-events">
+          <div class="offering-bg"></div>
+          <div class="offering-content">
+            <span class="offering-label">Private Events</span>
+            <h2>Birthdays, Reunions<br>&amp; More</h2>
+            <p>A private outdoor venue with a covered pavilion, restrooms, creek access, campfire area, and room to spread out. Rent it for any occasion.</p>
+            <span class="offering-link">See Event Options &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </div>
   </section>
@@ -103,7 +130,7 @@
       <div class="split-text">
         <span class="section-label">Overnight Stays</span>
         <h2>The Cabin on the Creek</h2>
-        <p>Stay right on the property in a renovated cabin built for comfort after a long day on the water. Fall asleep to the sound of Buffalo Creek and wake up to coffee on the front porch.</p>
+        <p>Stay right on the property in a renovated cabin built for comfort after a long day on the water. Fall asleep to the sound of Buffalo Creek and wake up to coffee on the front porch. The cabin faces away from the creek for privacy, but step inside and the view through the windows brings the water right to you.</p>
         <div class="cabin-features">
           <div class="cabin-feature">
             <strong>Queen Bed</strong>
@@ -119,13 +146,26 @@
           </div>
           <div class="cabin-feature">
             <strong>Front Porch &amp; Rocking Chairs</strong>
-            <span>Morning coffee overlooking the creek</span>
+            <span>Relax and take in the quiet</span>
+          </div>
+          <div class="cabin-feature">
+            <strong>Creek Views from Inside</strong>
+            <span>Watch the water from your window</span>
+          </div>
+          <div class="cabin-feature">
+            <strong>Walk-Out Creek Access</strong>
+            <span>Steps from your door to the water</span>
           </div>
         </div>
         <a href="#contact" class="btn btn-primary">Reserve the Cabin</a>
       </div>
       <div class="split-image">
-        <div class="placeholder-img tall" data-label="Your Photo: Cabin at Rooster Run"></div>
+        <div class="scenic-panel cabin-panel">
+          <div class="scenic-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 56h48"/><path d="M12 56V28l20-16 20 16v28"/><path d="M24 56V40h16v16"/><rect x="20" y="32" width="8" height="8" rx="1"/><rect x="36" y="32" width="8" height="8" rx="1"/><path d="M4 58h56"/></svg>
+          </div>
+          <span class="scenic-caption">The Cabin at Rooster Run</span>
+        </div>
       </div>
     </div>
   </section>
@@ -142,91 +182,64 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
           <h3>Open-Air Pavilion</h3>
-          <p>A covered outdoor space for receptions, cookouts, or simply staying dry. Seats groups comfortably for meals and celebrations.</p>
+          <p>Covered outdoor space for receptions, cookouts, or simply staying dry. Seats groups comfortably.</p>
         </div>
         <div class="amenity-card">
           <div class="amenity-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
           <h3>On-Site Restrooms</h3>
-          <p>Clean, accessible bathroom facilities available for all guests and event attendees throughout your visit.</p>
+          <p>Clean, accessible bathroom facilities for all guests and event attendees.</p>
         </div>
         <div class="amenity-card">
           <div class="amenity-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
           </div>
           <h3>Campfire &amp; Log Seating</h3>
-          <p>A dedicated fire pit area surrounded by log seating. Ideal for winding down under the stars after a day on the creek.</p>
+          <p>A dedicated fire pit surrounded by log seating. Wind down under the stars after a day on the creek.</p>
         </div>
         <div class="amenity-card">
           <div class="amenity-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
           </div>
           <h3>Easy Parking</h3>
-          <p>Plenty of on-site parking for trucks, trailers, and guest vehicles. No tight lots or parallel parking headaches.</p>
+          <p>Plenty of on-site parking for trucks, trailers, and guest vehicles. No tight lots.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- WEDDINGS SECTION -->
-  <section class="section weddings-section" id="weddings">
-    <div class="container split-layout">
-      <div class="split-text">
-        <span class="section-label">Weddings</span>
-        <h2>Say Your Vows Creekside</h2>
-        <p>Rooster Run is a natural fit for couples who want an outdoor wedding with real character&mdash;not a generic banquet hall. The creek, the trees, and the open sky do the decorating for you.</p>
-        <p>Exchange vows along Buffalo Creek, host your reception under the covered pavilion, and end the night around the campfire with the people who matter most. The intimate scale of the property means your wedding feels personal, not overwhelming.</p>
-        <ul class="feature-list">
-          <li>Natural creekside ceremony setting</li>
-          <li>Covered pavilion for receptions</li>
-          <li>Cabin accommodations on-site</li>
-          <li>Campfire gathering after the celebration</li>
-          <li>Intimate capacity for meaningful ceremonies</li>
-          <li>Flexible setup&mdash;bring your own vendors</li>
-        </ul>
-        <a href="#contact" class="btn btn-primary">Inquire About Weddings</a>
-      </div>
-      <div class="split-image">
-        <div class="placeholder-img tall" data-label="Your Photo: Wedding at Rooster Run"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EVENTS SECTION -->
-  <section class="section events-section" id="events">
+  <!-- AREA HIGHLIGHTS -->
+  <section class="section area-section" id="area">
     <div class="container">
-      <span class="section-label center">Private Events</span>
-      <h2>Rent the Property for Any Occasion</h2>
-      <p class="section-tagline">Rooster Run works for more than fishing and weddings. If you need an outdoor space with a roof, restrooms, creek access, and privacy, this is it.</p>
-      <div class="events-grid">
-        <div class="event-card">
-          <h3>Family Reunions</h3>
-          <p>Enough room for the whole family to spread out. Kids play by the creek while the adults catch up under the pavilion.</p>
+      <span class="section-label center">The Area</span>
+      <h2>Just 45 Minutes from Knoxville&mdash;A World Away</h2>
+      <p class="section-tagline center-tagline">Rooster Run sits in the heart of Grainger County, one of East Tennessee&rsquo;s most beautiful rural landscapes. Here&rsquo;s what&rsquo;s nearby.</p>
+      <div class="area-grid">
+        <div class="area-card">
+          <h3>Cherokee Lake</h3>
+          <p>Nearly 30,000 acres and 400 miles of shoreline&mdash;minutes away. Bass, crappie, walleye, catfish, boating, and swimming.</p>
         </div>
-        <div class="event-card">
-          <h3>Birthday Parties</h3>
-          <p>A private outdoor setting beats a crowded restaurant. Bring a cake, build a fire, and make it a day they remember.</p>
+        <div class="area-card">
+          <h3>Buffalo Creek Falls</h3>
+          <p>A scenic waterfall right on Buffalo Creek. Fish right below the falls where TWRA stocks trout.</p>
         </div>
-        <div class="event-card">
-          <h3>Church Gatherings</h3>
-          <p>Baptisms by the creek, fellowship under the pavilion, or a youth group retreat with cabin accommodations.</p>
+        <div class="area-card">
+          <h3>Panther Creek State Park</h3>
+          <p>Hiking and mountain biking trails on Cherokee Lake with mountaintop overlooks.</p>
         </div>
-        <div class="event-card">
-          <h3>Baby &amp; Bridal Showers</h3>
-          <p>The natural backdrop photographs beautifully. Set up under the pavilion and let the scenery do the rest.</p>
+        <div class="area-card">
+          <h3>Grainger County Tomato Festival</h3>
+          <p>One of the top 10 festivals in America. 30,000 people come every July for the county&rsquo;s famous tomatoes, live music, and Southern charm.</p>
         </div>
-        <div class="event-card">
-          <h3>Community Events</h3>
-          <p>Fundraisers, cookouts, appreciation days&mdash;an easy outdoor venue for organizations that need a great space.</p>
+        <div class="area-card">
+          <h3>Great Smoky Mountains</h3>
+          <p>Gatlinburg and the Smokies are about 75 miles south&mdash;easy day trip distance.</p>
         </div>
-        <div class="event-card">
-          <h3>Corporate &amp; Team Outings</h3>
-          <p>Get the team out of the office and onto the creek. A working retreat with real fresh air and a change of scenery.</p>
+        <div class="area-card">
+          <h3>Small-Town Tennessee</h3>
+          <p>Rutledge is a quiet county seat of about 1,300 people. Quilt trails on barns, local shops, and genuine Southern hospitality.</p>
         </div>
-      </div>
-      <div class="events-cta">
-        <a href="#contact" class="btn btn-primary">Plan Your Event</a>
       </div>
     </div>
   </section>
@@ -260,7 +273,10 @@
   <section class="section location-section" id="location">
     <div class="container">
       <h2>Find Us in Rutledge, TN</h2>
-      <p class="section-tagline">351 Tampico Church Rd, Rutledge, TN &bull; Grainger County &bull; Right on Buffalo Creek</p>
+      <p class="section-tagline center-tagline">351 Tampico Church Rd, Rutledge, TN &bull; Grainger County &bull; Right on Buffalo Creek</p>
+      <div class="directions-row">
+        <a href="https://www.google.com/maps/dir//351+Tampico+Church+Rd,+Rutledge,+TN" class="btn btn-primary" target="_blank" rel="noopener">Get Directions</a>
+      </div>
       <div class="map-container">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3226.8!2d-83.52!3d36.28!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s351+Tampico+Church+Rd%2C+Rutledge%2C+TN!5e0!3m2!1sen!2sus"
@@ -290,7 +306,7 @@
           <div class="contact-block">
             <h3>Visit Us</h3>
             <p>Rooster Run Venue<br>351 Tampico Church Rd<br>Rutledge, TN<br>Grainger County</p>
-            <a href="https://www.google.com/maps/search/351+Tampico+Church+Rd+Rutledge+TN" class="btn btn-outline" target="_blank" rel="noopener">Get Directions</a>
+            <a href="https://www.google.com/maps/dir//351+Tampico+Church+Rd,+Rutledge,+TN" class="btn btn-outline" target="_blank" rel="noopener">Get Directions</a>
           </div>
         </div>
         <div class="contact-form-wrap">
@@ -345,18 +361,18 @@
     <div class="container">
       <div class="footer-inner">
         <div class="footer-brand">
-          <span class="logo">Rooster Run</span>
+          <span class="logo-text footer-logo">Rooster Run</span>
           <p>351 Tampico Church Rd &bull; Rutledge, TN</p>
           <p><a href="tel:+14237368821">423-736-8821</a></p>
         </div>
         <div class="footer-links">
-          <a href="#fishing">Fishing</a>
-          <a href="#cabin">Stay</a>
-          <a href="#weddings">Weddings</a>
-          <a href="#events">Events</a>
-          <a href="#contact">Contact</a>
+          <a href="fishing.html">Fishing</a>
+          <a href="weddings.html">Weddings</a>
+          <a href="events.html">Events</a>
+          <a href="index.html#cabin">The Cabin</a>
+          <a href="index.html#contact">Contact</a>
         </div>
-        <p class="footer-legal">Rooster Run is a private venue. A valid Tennessee fishing license is required for all anglers. TWRA regulations apply to fishing on Buffalo Creek. Please respect the property and surrounding wildlife management areas.</p>
+        <p class="footer-legal">Rooster Run is a private venue. A valid Tennessee fishing license and trout stamp are required for all anglers. TWRA regulations apply to fishing on Buffalo Creek. Please respect the property and surrounding wildlife management areas.</p>
         <p class="footer-copy">&copy; 2026 Rooster Run Venue. All rights reserved.</p>
       </div>
     </div>
