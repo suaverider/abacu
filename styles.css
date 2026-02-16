@@ -160,6 +160,25 @@ a {
   width: 100%;
 }
 
+.header-phones {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header-phone-link {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  transition: color var(--transition);
+  white-space: nowrap;
+}
+
+.header-phone-link:hover {
+  color: var(--gold-light);
+}
+
 .header-cta {
   background: var(--gold);
   color: var(--green-dark);
@@ -227,7 +246,7 @@ a {
   position: absolute;
   inset: 0;
   background:
-    url('https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -402,7 +421,7 @@ a {
 .page-hero-fishing {
   background:
     linear-gradient(135deg, rgba(13,31,21,0.85), rgba(26,58,42,0.75)),
-    url('https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1500049242364-5f500807cdd7?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -416,7 +435,7 @@ a {
 .page-hero-weddings {
   background:
     linear-gradient(135deg, rgba(26,36,30,0.85), rgba(45,60,50,0.75)),
-    url('https://images.unsplash.com/photo-1464699908537-0954e50791ee?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -430,7 +449,7 @@ a {
 .page-hero-events {
   background:
     linear-gradient(135deg, rgba(26,40,32,0.85), rgba(40,70,50,0.75)),
-    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -652,21 +671,21 @@ a {
 .offering-fishing .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.85) 70%),
-    url('https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1500049242364-5f500807cdd7?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
 .offering-weddings .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,36,30,0.88) 70%),
-    url('https://images.unsplash.com/photo-1464699908537-0954e50791ee?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
 .offering-events .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,40,32,0.88) 70%),
-    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
@@ -1795,6 +1814,10 @@ a {
   }
 
   .header-cta {
+    display: none;
+  }
+
+  .header-phones {
     display: none;
   }
 
