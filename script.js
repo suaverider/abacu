@@ -5,8 +5,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // --- Mobile Navigation Toggle ---
-  const mobileToggle = document.getElementById('mobileToggle');
-  const mainNav = document.getElementById('mainNav');
+  var mobileToggle = document.getElementById('mobileToggle');
+  var mainNav = document.getElementById('mainNav');
 
   if (mobileToggle && mainNav) {
     mobileToggle.addEventListener('click', function () {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --- Header scroll effect ---
-  const header = document.getElementById('header');
+  var header = document.getElementById('header');
   if (header) {
     window.addEventListener('scroll', function () {
       if (window.scrollY > 50) {
@@ -34,71 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
-
-  // --- Photo Carousel ---
-  const track = document.getElementById('carouselTrack');
-  const prevBtn = document.getElementById('carouselPrev');
-  const nextBtn = document.getElementById('carouselNext');
-
-  if (track && prevBtn && nextBtn) {
-    var currentSlide = 0;
-    var slides = track.querySelectorAll('.carousel-slide');
-    var totalSlides = slides.length;
-
-    function goToSlide(index) {
-      if (index < 0) index = totalSlides - 1;
-      if (index >= totalSlides) index = 0;
-      currentSlide = index;
-      track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-    }
-
-    prevBtn.addEventListener('click', function () {
-      goToSlide(currentSlide - 1);
-    });
-
-    nextBtn.addEventListener('click', function () {
-      goToSlide(currentSlide + 1);
-    });
-
-    // Auto-advance every 5 seconds
-    var autoSlide = setInterval(function () {
-      goToSlide(currentSlide + 1);
-    }, 5000);
-
-    // Pause auto-advance on hover
-    track.addEventListener('mouseenter', function () {
-      clearInterval(autoSlide);
-    });
-
-    track.addEventListener('mouseleave', function () {
-      autoSlide = setInterval(function () {
-        goToSlide(currentSlide + 1);
-      }, 5000);
-    });
-  }
-
-  // --- Gallery Filter Tabs ---
-  var galleryTabs = document.querySelectorAll('.gallery-tab');
-  var galleryItems = document.querySelectorAll('.gallery-item');
-
-  galleryTabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      var filter = this.getAttribute('data-filter');
-
-      // Update active tab
-      galleryTabs.forEach(function (t) { t.classList.remove('active'); });
-      this.classList.add('active');
-
-      // Filter gallery items
-      galleryItems.forEach(function (item) {
-        if (filter === 'all' || item.getAttribute('data-category') === filter) {
-          item.classList.remove('hidden');
-        } else {
-          item.classList.add('hidden');
-        }
-      });
-    });
-  });
 
   // --- Smooth scroll for anchor links ---
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
@@ -129,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data[key] = value;
       });
 
-      // Show confirmation (replace with actual submission logic)
+      // Show confirmation (replace with actual form submission later)
       var btn = contactForm.querySelector('button[type="submit"]');
       var originalText = btn.textContent;
       btn.textContent = 'Message Sent!';
@@ -148,7 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // --- Scroll-in animations ---
-  var animateElements = document.querySelectorAll('.amenity-card, .pricing-card, .step-card, .testimonial-card, .split-text, .split-image');
+  var animateElements = document.querySelectorAll(
+    '.amenity-card, .event-card, .step-card, .intro-card, .split-text, .split-image, .cabin-feature'
+  );
 
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
