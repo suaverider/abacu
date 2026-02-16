@@ -103,6 +103,13 @@ a {
   gap: 10px;
 }
 
+.logo-rooster {
+  width: 32px;
+  height: 32px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
 .logo-icon {
   font-size: 1.4rem;
   color: var(--gold);
@@ -220,7 +227,7 @@ a {
   position: absolute;
   inset: 0;
   background:
-    url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -395,7 +402,7 @@ a {
 .page-hero-fishing {
   background:
     linear-gradient(135deg, rgba(13,31,21,0.85), rgba(26,58,42,0.75)),
-    url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -409,7 +416,7 @@ a {
 .page-hero-weddings {
   background:
     linear-gradient(135deg, rgba(26,36,30,0.85), rgba(45,60,50,0.75)),
-    url('https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1464699908537-0954e50791ee?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -423,7 +430,7 @@ a {
 .page-hero-events {
   background:
     linear-gradient(135deg, rgba(26,40,32,0.85), rgba(40,70,50,0.75)),
-    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1920&q=80')
+    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80')
     center center / cover no-repeat;
 }
 
@@ -645,21 +652,21 @@ a {
 .offering-fishing .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.85) 70%),
-    url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
 .offering-weddings .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,36,30,0.88) 70%),
-    url('https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1464699908537-0954e50791ee?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
 .offering-events .offering-bg {
   background:
     linear-gradient(180deg, rgba(13,31,21,0.15) 0%, rgba(26,40,32,0.88) 70%),
-    url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80')
+    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80')
     center center / cover no-repeat;
 }
 
@@ -1277,6 +1284,34 @@ a {
 }
 
 .schedule-note a:hover {
+  color: var(--gold-light);
+}
+
+.fishing-disclaimer {
+  margin-top: 28px;
+  padding: 20px 24px;
+  background: rgba(200, 164, 90, 0.12);
+  border: 1px solid rgba(200, 164, 90, 0.25);
+  border-radius: var(--radius-sm);
+  color: rgba(245,240,232,0.85);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.fishing-disclaimer strong {
+  color: var(--gold);
+}
+
+.fishing-disclaimer a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.fishing-disclaimer a:hover {
   color: var(--gold-light);
 }
 
@@ -1903,6 +1938,30 @@ a {
     flex-wrap: wrap;
     justify-content: center;
   }
+}
+
+/* ===========================
+   VIDEO SECTIONS (ready for when videos are added)
+   =========================== */
+.video-section {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  margin: 32px 0;
+}
+
+.video-section video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+.video-inline {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===========================
