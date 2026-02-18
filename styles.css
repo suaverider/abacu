@@ -877,6 +877,91 @@ a {
 }
 
 /* ===========================
+   PRICING TABLE
+   =========================== */
+.pricing-table {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin: 32px 0;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--cream-dark);
+}
+
+.pricing-table h3 {
+  color: var(--green-dark);
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.pricing-subtitle {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.pricing-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.pricing-row:last-child {
+  border-bottom: none;
+}
+
+.pricing-label {
+  color: var(--text-dark);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.pricing-label small {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+.pricing-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.pricing-row.featured-price {
+  background: rgba(200, 164, 90, 0.08);
+  margin: 0 -32px;
+  padding: 14px 32px;
+  border-bottom: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+
+.pricing-row.featured-price .pricing-price {
+  color: var(--gold);
+  font-size: 1.5rem;
+}
+
+.pricing-note {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream-dark);
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ===========================
    AMENITIES
    =========================== */
 .amenities-section {
@@ -1631,7 +1716,7 @@ a {
    =========================== */
 .event-amenities-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
@@ -1766,6 +1851,11 @@ a {
 
   .event-amenities-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pricing-row.featured-price {
+    margin: 0 -24px;
+    padding: 14px 24px;
   }
 
   .value-grid {
