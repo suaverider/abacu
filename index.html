@@ -412,11 +412,13 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="card-body">
             <div class="flex justify-between items-center">
               <div class="flex gap-xs">
-                <button class="btn btn-sm" id="sp5">5s</button>
-                <button class="btn btn-sm" id="sp10">10s</button>
-                <button class="btn btn-sm" id="spMixed">Mixed</button>
+                <button class="btn btn-sm" id="sp5">Friends of 5</button>
+                <button class="btn btn-sm" id="sp10">Friends of 10</button>
               </div>
-              <div class="stat">Score: <b id="spScore">0</b> / <span id="spTotal">0</span></div>
+              <div class="flex gap-md items-center">
+                <div class="stat"><span class="clock mono" id="spClock" style="font-size:.9rem;color:var(--teal)">0:00</span></div>
+                <div class="stat">Done: <b id="spScore">0</b> / <span id="spTotal">0</span></div>
+              </div>
             </div>
             <div class="sprint-display">
               <span class="sprint-n" id="spN">-</span>
@@ -535,7 +537,8 @@ let frames=[],frameIdx=0,playTimer=null,playSpeed=1;
 let bpManual=false,bpPersist=false,bpMicro=false,bpHide=false,steppingLock=false;
 let persistedMisses=load('soroban_misses',[]),practiceMissesMode=false;
 // Sprint state
-let spTarget=0,spMixed=false,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null,spCurrentTarget=0;
+let spTarget=0,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null;
+let spTimerId=null,spElapsed=0;
 // Anzan state
 let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrect=0,anzanTotal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
@@ -1019,6 +1022,7 @@ function startSession(){
 function endSession(){
   running=false;isPaused=false;
   if(timerId){clearInterval(timerId);timerId=null}
+  if(spTimerId){clearInterval(spTimerId);spTimerId=null}
   stopPlayback();
   setScreen('summary');
 
@@ -1086,7 +1090,7 @@ function ensureKeypad(){
     b.className='btn';
     b.textContent=d;
     b.addEventListener('click',()=>checkSprint(d));
-    if(!spTarget&&!spMixed) b.disabled=true;
+    if(!spTarget) b.disabled=true;
     spGridEl.appendChild(b);
   }
 }
@@ -1096,25 +1100,30 @@ function resetSprintStats(){
   spScoreEl.textContent='0';spTotalEl.textContent='0';
   spNEl.textContent='-';spAnsEl.textContent='?';
   spFeedbackEl.textContent='';
+  // Reset and start count-up timer
+  spElapsed=0;
+  if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+  const spClockEl=$('#spClock');
+  spClockEl.textContent='0:00';
+  spTimerId=setInterval(()=>{
+    if(isPaused) return;
+    spElapsed++;
+    const m=Math.floor(spElapsed/60);
+    const s=spElapsed%60;
+    spClockEl.textContent=m+':'+(s<10?'0':'')+s;
+  },1000);
 }
 
 function nextSprint(){
-  if(!spTarget&&!spMixed) return;
-  // Pick target for this round
-  if(spMixed){
-    spCurrentTarget=Math.random()<0.5?5:10;
-  } else {
-    spCurrentTarget=spTarget;
-  }
-  if(spCurrentTarget===10){
+  if(!spTarget) return;
+  if(spTarget===10){
     spCurrentN=randInt(1,9);spCurrentAns=10-spCurrentN;
   } else {
     spCurrentN=randInt(1,4);spCurrentAns=5-spCurrentN;
   }
   spNEl.textContent=spCurrentN;
   spAnsEl.textContent='?';
-  // Show which target on mixed mode
-  if(spMixed) spTagEl.textContent='= '+spCurrentTarget;
+  spAnsEl.style.color='var(--gold)';
   spFeedbackEl.textContent='';
   spGridEl.querySelectorAll('button').forEach(b=>{
     b.disabled=isPaused;
@@ -1123,19 +1132,17 @@ function nextSprint(){
 }
 
 function checkSprint(x){
-  if((!spTarget&&!spMixed)||isPaused) return;
+  if(!spTarget||isPaused) return;
   spTotalVal++;spTotalEl.textContent=spTotalVal;
   if(x===spCurrentAns){
     spScoreVal++;spScoreEl.textContent=spScoreVal;
     spAnsEl.textContent=spCurrentAns;
     spAnsEl.style.color='var(--good)';
-    // Instant next on correct
     setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},250);
   } else {
-    spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spCurrentTarget+'</span>';
+    spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spTarget+'</span>';
     spAnsEl.textContent=spCurrentAns;
     spAnsEl.style.color='var(--bad)';
-    // Show correct answer briefly, then auto-next
     setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},600);
   }
 }
@@ -1407,10 +1414,10 @@ $('#startBtn').addEventListener('click',()=>{
   anzanAutoNext=$('#anzanAutoNext').checked;
   if(mode==='anzan'){startAnzan();return}
   if(mode==='sprint5'||mode==='sprint10'){
-    spTarget=mode==='sprint10'?10:5;spMixed=false;
-    spTagEl.textContent='Target '+spTarget;
-    $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
-    $(mode==='sprint10'?'#sp10':'#sp5').classList.add('btn-active');
+    spTarget=mode==='sprint10'?10:5;
+    spTagEl.textContent=mode==='sprint10'?'Friends of 10':'Friends of 5';
+    $('#sp5').classList.toggle('btn-active',mode==='sprint5');
+    $('#sp10').classList.toggle('btn-active',mode==='sprint10');
     resetSprintStats();
     startSession();
     nextSprint();
@@ -1480,21 +1487,13 @@ $('#bpSpeed').addEventListener('change',e=>{playSpeed=Number(e.target.value)||1;
 
 // Sprint buttons
 $('#sp5').addEventListener('click',()=>{
-  spTarget=5;spMixed=false;spTagEl.textContent='Target 5';
-  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
-  $('#sp5').classList.add('btn-active');
+  spTarget=5;spTagEl.textContent='Friends of 5';
+  $('#sp5').classList.add('btn-active');$('#sp10').classList.remove('btn-active');
   resetSprintStats();ensureKeypad();nextSprint();
 });
 $('#sp10').addEventListener('click',()=>{
-  spTarget=10;spMixed=false;spTagEl.textContent='Target 10';
-  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
-  $('#sp10').classList.add('btn-active');
-  resetSprintStats();ensureKeypad();nextSprint();
-});
-$('#spMixed').addEventListener('click',()=>{
-  spTarget=0;spMixed=true;spTagEl.textContent='Mixed 5 & 10';
-  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
-  $('#spMixed').classList.add('btn-active');
+  spTarget=10;spTagEl.textContent='Friends of 10';
+  $('#sp10').classList.add('btn-active');$('#sp5').classList.remove('btn-active');
   resetSprintStats();ensureKeypad();nextSprint();
 });
 
