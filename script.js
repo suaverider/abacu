@@ -52,35 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // --- Contact Form Handling ---
-  var contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      var formData = new FormData(contactForm);
-      var data = {};
-      formData.forEach(function (value, key) {
-        data[key] = value;
-      });
-
-      var btn = contactForm.querySelector('button[type="submit"]');
-      var originalText = btn.textContent;
-      btn.textContent = 'Message Sent!';
-      btn.disabled = true;
-      btn.style.background = '#4a8c62';
-      btn.style.borderColor = '#4a8c62';
-
-      setTimeout(function () {
-        btn.textContent = originalText;
-        btn.disabled = false;
-        btn.style.background = '';
-        btn.style.borderColor = '';
-        contactForm.reset();
-      }, 3000);
-    });
-  }
-
   // --- Scroll-in animations ---
   var animateElements = document.querySelectorAll(
     '.amenity-card, .area-card, .event-card, .event-showcase-card, .step-card, .intro-card, ' +
