@@ -273,13 +273,27 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
       <!-- Anzan settings (hidden by default) -->
       <div id="anzanSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
         <div class="setup-label" style="margin-bottom:10px">Anzan Settings</div>
+        <div class="flex wrap gap-md items-center" style="margin-bottom:12px">
+          <div class="flex-col gap-xs">
+            <label class="tip">Anzan Level</label>
+            <div class="btn-group">
+              <button class="btn btn-active" data-anzlvl="beginner">Beginner</button>
+              <button class="btn" data-anzlvl="intermediate">Intermediate</button>
+              <button class="btn" data-anzlvl="advanced">Advanced</button>
+            </div>
+          </div>
+        </div>
+        <div id="anzanLevelDesc" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-size:.85rem;color:var(--ink2)">
+          <b style="color:var(--gold)">Beginner:</b> Addition only, 1-digit numbers (1-5), 3 numbers, slow speed (3s each). Perfect for learning to visualize the ones rod. Focus on seeing the beads move in your mind.
+        </div>
         <div class="flex wrap gap-md items-center">
           <div class="flex-col gap-xs">
-            <label class="tip">Flash speed (ms per number)</label>
+            <label class="tip">Flash speed</label>
             <select id="anzanSpeed" class="btn" style="width:auto">
+              <option value="3000" selected>Very Slow (3s)</option>
               <option value="2000">Slow (2s)</option>
               <option value="1500">Medium (1.5s)</option>
-              <option value="1000" selected>Normal (1s)</option>
+              <option value="1000">Normal (1s)</option>
               <option value="700">Fast (0.7s)</option>
               <option value="500">Very Fast (0.5s)</option>
             </select>
@@ -287,13 +301,16 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="flex-col gap-xs">
             <label class="tip">Numbers per round</label>
             <select id="anzanCount" class="btn" style="width:auto">
-              <option value="3">3 numbers</option>
+              <option value="2">2 numbers</option>
+              <option value="3" selected>3 numbers</option>
               <option value="4">4 numbers</option>
-              <option value="5" selected>5 numbers</option>
+              <option value="5">5 numbers</option>
               <option value="7">7 numbers</option>
               <option value="10">10 numbers</option>
             </select>
           </div>
+          <label class="toggle"><input type="checkbox" id="anzanAddOnly" checked/><span class="track"></span> Addition only</label>
+          <label class="toggle"><input type="checkbox" id="anzanAutoNext"/><span class="track"></span> Auto-advance on correct</label>
         </div>
       </div>
 
@@ -431,12 +448,14 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
         <div class="flex items-center gap-md">
           <div class="stat">Correct: <b id="anzanCorrect">0</b> / <span id="anzanTotal">0</span></div>
           <div class="stat">Acc: <b class="mono" id="anzanAcc">0%</b></div>
+          <div class="stat">Level: <b id="anzanLevelDisplay">Beginner</b></div>
         </div>
         <button class="btn btn-sm btn-ghost" id="anzanEndBtn">End Session</button>
       </div>
       <div class="card-body">
         <div class="anzan-display">
           <div class="tip" id="anzanInstruction">Watch each number flash, then add them in your mind.</div>
+          <div class="tip" id="anzanCoachTip" style="color:var(--teal);font-style:normal;font-weight:600;min-height:20px"></div>
           <div class="anzan-number" id="anzanNumber">&nbsp;</div>
           <div class="anzan-progress" id="anzanDots"></div>
           <div class="answer-row" id="anzanAnswerRow" style="display:none">
@@ -445,7 +464,11 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
             <button class="btn btn-primary" id="anzanSubmitBtn">Submit</button>
           </div>
           <div class="feedback" id="anzanFeedback"></div>
-          <button class="btn btn-gold hidden" id="anzanNextBtn">Next Round</button>
+          <div id="anzanBreakdown" class="hidden" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-top:8px;font-size:.9rem;max-width:400px">
+            <div style="font-weight:700;color:var(--gold);margin-bottom:4px">Step-by-step breakdown:</div>
+            <div id="anzanBreakdownContent" class="mono" style="color:var(--ink2)"></div>
+          </div>
+          <button class="btn btn-gold hidden" id="anzanNextBtn" style="margin-top:8px">Next Round</button>
         </div>
       </div>
     </div>
@@ -463,6 +486,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="summary-stat"><span class="label">Problems/min</span><span class="value" id="sumPPM">0</span></div>
           <div class="summary-stat"><span class="label">Hints Used</span><span class="value" id="sumHints">0</span></div>
         </div>
+        <div id="sumMessage" style="text-align:center;padding:12px;margin-top:12px;font-size:1rem;font-weight:600;color:var(--gold)"></div>
         <div id="missWrap" class="hidden" style="margin-top:20px">
           <div style="font-weight:700;margin-bottom:8px">Missed Problems (<span id="missLen">0</span>)</div>
           <div class="missed-grid" id="missList"></div>
@@ -513,8 +537,14 @@ let persistedMisses=load('soroban_misses',[]),practiceMissesMode=false;
 // Sprint state
 let spTarget=0,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null,spAutoAdvance=false;
 // Anzan state
-let anzanSpeed=1000,anzanCount=5,anzanNumbers=[],anzanAnswer=0;
+let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrect=0,anzanTotal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
+let anzanLevel='beginner',anzanAddOnly=true,anzanAutoNext=false;
+const ANZAN_LEVELS={
+  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,desc:'Addition only, 1-digit numbers (1-5), 3 numbers, slow speed (3s each). Perfect for learning to visualize the ones rod. Focus on seeing the beads move in your mind.'},
+  intermediate:{label:'Intermediate',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
+  advanced:{label:'Advanced',speed:1000,count:7,maxNum:50,addOnly:false,desc:'Add and subtract, numbers up to 50, 7 numbers, normal speed (1s). Full mental soroban with tens and ones rods. Aim for automatic bead visualization.'}
+};
 // Session misses (for this session only)
 let sessionMisses=[];
 
@@ -750,6 +780,8 @@ const anzanDotsEl=$('#anzanDots'),anzanInputEl=$('#anzanInput');
 const anzanFeedbackEl=$('#anzanFeedback'),anzanAnswerRow=$('#anzanAnswerRow');
 const anzanNextBtn=$('#anzanNextBtn');
 const anzanCorrectEl=$('#anzanCorrect'),anzanTotalEl=$('#anzanTotal'),anzanAccEl=$('#anzanAcc');
+const anzanCoachTip=$('#anzanCoachTip'),anzanBreakdown=$('#anzanBreakdown'),anzanBreakdownContent=$('#anzanBreakdownContent');
+const anzanLevelDisplay=$('#anzanLevelDisplay');
 
 /* ===== SCREEN MANAGEMENT ===== */
 function setScreen(which){
@@ -925,19 +957,22 @@ function submitAnswer(){
   if(isNaN(v)) return;
   const ok=v===problem.answer;
   total++;
+  const encourageMsg=['Correct!','Nice!','Well done!','Great work!','Right on!'];
   if(ok){
     correct++;
     feedbackEl.className='feedback correct';
-    feedbackEl.textContent='Correct!';
+    feedbackEl.textContent=encourageMsg[randInt(0,encourageMsg.length-1)];
     $('#problemArea').classList.add('flash-correct');
     setTimeout(()=>$('#problemArea').classList.remove('flash-correct'),500);
   } else {
     feedbackEl.className='feedback wrong';
-    feedbackEl.textContent='Wrong. Answer: '+problem.answer;
+    feedbackEl.textContent='Not quite. The answer was '+problem.answer;
     $('#problemArea').classList.add('flash-wrong');
     setTimeout(()=>$('#problemArea').classList.remove('flash-wrong'),500);
     sessionMisses.push({lines:problem.lines,answer:problem.answer});
     persistedMisses.push({lines:problem.lines,answer:problem.answer});
+    // Keep only the 10 most recent misses
+    if(persistedMisses.length>10) persistedMisses=persistedMisses.slice(-10);
     save('soroban_misses',persistedMisses);
   }
   // Adaptive difficulty
@@ -989,6 +1024,13 @@ function endSession(){
   $('#sumAcc').className='value '+(accVal>=80?'good':accVal>=60?'warn':'bad');
   $('#sumPPM').textContent=ppmVal;
   $('#sumHints').textContent=hintsUsed;
+
+  // Motivational message
+  const msgs=accVal>=90?['Outstanding! Your bead work is razor sharp.','Excellent session! You are building real speed.','Sensei-level accuracy! Keep this streak going.']:
+             accVal>=70?['Good work! Consistency is the key to mastery.','Solid session. Focus on the ones you missed.','You are improving. Try the missed set for extra practice.']:
+             accVal>=50?['Keep going! Every session builds your mental soroban.','Practice makes progress. Try slowing down for accuracy.','Not bad! Focus on complement pairs to speed up.']:
+             ['Tough session. Try the complement sprint to strengthen your basics.','Every expert was once a beginner. Keep practicing daily!','Slow down and focus on visualizing each bead movement.'];
+  $('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
 
   // Save history
   const hist=loadHist();
@@ -1075,14 +1117,40 @@ function checkSprint(x){
 }
 
 /* ===== ANZAN (MENTAL VISUALIZATION) ===== */
+function getAnzanCoachTip(idx,item,runningSum){
+  if(anzanLevel==='beginner'){
+    if(idx===0) return 'Picture a soroban. Set '+item.value+' earth beads up on the ones rod.';
+    const newSum=item.op==='+'?runningSum+item.value:runningSum-item.value;
+    if(item.op==='+'){
+      if(runningSum<5&&newSum>=5) return 'Push '+item.value+' up. You cross 5! Drop the heaven bead and set '+(newSum-5)+' earth.';
+      return 'Push '+item.value+' more earth beads up. You should see '+newSum+'.';
+    }
+    return 'Pull '+item.value+' earth beads down. You should see '+newSum+'.';
+  }
+  if(idx===0) return 'Set '+item.value+' on your mental soroban.';
+  return (item.op==='+'?'Add ':'Subtract ')+item.value+'. Use complements if needed.';
+}
+
+function buildAnzanBreakdown(){
+  let sum=0;
+  const lines=[];
+  anzanNumbers.forEach((item,i)=>{
+    const prev=sum;
+    sum=item.op==='+'?sum+item.value:sum-item.value;
+    if(i===0) lines.push('Start: '+item.value+' = '+sum);
+    else lines.push((item.op==='+'?'+ ':'- ')+item.value+' = '+sum);
+  });
+  return lines.join('\n');
+}
+
 function startAnzan(){
   anzanCorrect=0;anzanTotal=0;
   anzanTimeLeft=minutes*60;
   anzanPaused=false;
   setScreen('anzan');
+  anzanLevelDisplay.textContent=ANZAN_LEVELS[anzanLevel].label;
   updateClockDisplay(anzanClockEl,anzanTimeLeft);
   anzanCorrectEl.textContent='0';anzanTotalEl.textContent='0';anzanAccEl.textContent='0%';
-  // Start anzan timer
   if(anzanTimerId) clearInterval(anzanTimerId);
   anzanTimerId=setInterval(()=>{
     if(anzanPaused) return;
@@ -1096,28 +1164,26 @@ function startAnzan(){
 
 function nextAnzanRound(){
   if(anzanTimeLeft<=0) return;
-  const conf=DIFFICULTIES[difficulty];
-  const maxVal=stayUnder100?99:Math.pow(10,conf.digits)-1;
-  const minVal=conf.digits>=2?10:1;
+  const lvl=ANZAN_LEVELS[anzanLevel];
+  const maxNum=lvl.maxNum;
+  const useAddOnly=anzanAddOnly;
 
-  // Generate numbers that stay positive
   anzanNumbers=[];
   let sum=0;
   for(let i=0;i<anzanCount;i++){
     let n,op;
     if(i===0){
-      n=randInt(minVal,Math.min(maxVal,stayUnder100?60:maxVal));
-      op='+';
-      sum=n;
+      n=randInt(1,Math.min(maxNum,stayUnder100?60:maxNum));
+      op='+';sum=n;
     } else {
-      op=Math.random()<0.55?'+':'-';
+      op=useAddOnly?'+':Math.random()<0.55?'+':'-';
       if(op==='+'){
-        const room=stayUnder100?99-sum:maxVal-sum;
-        if(room<1){op='-';n=randInt(1,Math.min(sum,stayUnder100?45:maxVal))}
-        else n=randInt(1,Math.min(room,stayUnder100?45:maxVal));
+        const cap=stayUnder100?Math.min(99-sum,maxNum):maxNum;
+        if(cap<1){op='-';n=randInt(1,Math.min(sum,maxNum))}
+        else n=randInt(1,cap);
       } else {
-        if(sum<2){op='+';n=randInt(1,Math.min(stayUnder100?99-sum:maxVal-sum,45))}
-        else n=randInt(1,Math.min(sum,stayUnder100?45:maxVal));
+        if(sum<2){op='+';n=randInt(1,Math.min(stayUnder100?99-sum:maxNum,maxNum))}
+        else n=randInt(1,Math.min(sum,maxNum));
       }
       sum=op==='+'?sum+n:sum-n;
     }
@@ -1126,7 +1192,6 @@ function nextAnzanRound(){
   anzanAnswer=sum;
   anzanIdx=0;
 
-  // Build dots
   anzanDotsEl.innerHTML='';
   for(let i=0;i<anzanCount;i++){
     const dot=document.createElement('div');
@@ -1136,29 +1201,36 @@ function nextAnzanRound(){
 
   anzanAnswerRow.style.display='none';
   anzanNextBtn.classList.add('hidden');
-  anzanFeedbackEl.textContent='';
+  anzanFeedbackEl.textContent='';anzanFeedbackEl.className='feedback';
+  anzanBreakdown.classList.add('hidden');
   anzanInputEl.value='';
-  $('#anzanInstruction').textContent='Watch each number, visualize the soroban in your mind...';
+  anzanCoachTip.textContent='';
+  $('#anzanInstruction').textContent='Watch each number. Visualize the soroban beads moving in your mind...';
 
-  // Start flashing
   flashAnzanNumber();
 }
 
 function flashAnzanNumber(){
   if(anzanIdx>=anzanCount){
-    // Done flashing, ask for answer
     anzanNumberEl.innerHTML='&nbsp;';
+    anzanCoachTip.textContent='Now read the beads on your mental soroban.';
     anzanAnswerRow.style.display='flex';
-    $('#anzanInstruction').textContent='What is the total? Visualize your mental soroban.';
+    $('#anzanInstruction').textContent='What is the total?';
     anzanInputEl.focus();
     return;
   }
   const item=anzanNumbers[anzanIdx];
-  const prefix=anzanIdx===0?'':item.op==='+' ?'+':'-';
+  const prefix=anzanIdx===0?'':item.op==='+'?'+':'-';
   anzanNumberEl.textContent=prefix+item.value;
   anzanNumberEl.style.opacity='1';
 
-  // Update dots
+  // Compute running sum up to before this number for coach tip
+  let runSum=0;
+  for(let j=0;j<anzanIdx;j++){
+    runSum=anzanNumbers[j].op==='+'?runSum+anzanNumbers[j].value:runSum-anzanNumbers[j].value;
+  }
+  anzanCoachTip.textContent=getAnzanCoachTip(anzanIdx,item,runSum);
+
   const dots=anzanDotsEl.querySelectorAll('.anzan-dot');
   dots.forEach((d,i)=>{
     d.className='anzan-dot';
@@ -1166,13 +1238,14 @@ function flashAnzanNumber(){
     if(i===anzanIdx) d.classList.add('current');
   });
 
+  const showTime=Math.max(300,anzanSpeed-200);
   anzanTimer=setTimeout(()=>{
     anzanNumberEl.style.opacity='0';
     setTimeout(()=>{
       anzanIdx++;
       if(!anzanPaused) flashAnzanNumber();
     },200);
-  },anzanSpeed-200);
+  },showTime);
 }
 
 function submitAnzan(){
@@ -1195,15 +1268,23 @@ function submitAnzan(){
   const a=anzanTotal>0?Math.round(anzanCorrect/anzanTotal*1000)/10:0;
   anzanAccEl.textContent=a+'%';
 
+  // Show breakdown
+  anzanBreakdownContent.textContent=buildAnzanBreakdown();
+  anzanBreakdown.classList.remove('hidden');
+  anzanCoachTip.textContent='';
+
   anzanAnswerRow.style.display='none';
-  anzanNextBtn.classList.remove('hidden');
+  if(anzanAutoNext&&ok){
+    setTimeout(nextAnzanRound,1200);
+  } else {
+    anzanNextBtn.classList.remove('hidden');
+  }
 }
 
 function endAnzan(){
   running=false;
   if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
   if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
-  // Re-use standard summary
   correct=anzanCorrect;total=anzanTotal;
   timeLeft=anzanTimeLeft;
   mode='anzan';
@@ -1275,11 +1356,31 @@ $('#under100').addEventListener('change',e=>stayUnder100=e.target.checked);
 $('#adaptive').addEventListener('change',e=>adaptive=e.target.checked);
 $('#practiceMisses').addEventListener('change',e=>practiceMissesMode=e.target.checked);
 
+// Anzan level buttons
+$$('.btn[data-anzlvl]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('.btn[data-anzlvl]').forEach(b=>b.classList.remove('btn-active'));
+    btn.classList.add('btn-active');
+    anzanLevel=btn.dataset.anzlvl;
+    const lvl=ANZAN_LEVELS[anzanLevel];
+    $('#anzanLevelDesc').innerHTML='<b style="color:var(--gold)">'+lvl.label+':</b> '+lvl.desc;
+    // Set recommended defaults
+    $('#anzanSpeed').value=lvl.speed;
+    $('#anzanCount').value=lvl.count;
+    $('#anzanAddOnly').checked=lvl.addOnly;
+  });
+});
+
+$('#anzanAddOnly').addEventListener('change',e=>anzanAddOnly=e.target.checked);
+$('#anzanAutoNext').addEventListener('change',e=>anzanAutoNext=e.target.checked);
+
 // Start
 $('#startBtn').addEventListener('click',()=>{
   practiceMissesMode=$('#practiceMisses').checked;
   anzanSpeed=Number($('#anzanSpeed').value);
   anzanCount=Number($('#anzanCount').value);
+  anzanAddOnly=$('#anzanAddOnly').checked;
+  anzanAutoNext=$('#anzanAutoNext').checked;
   if(mode==='anzan'){startAnzan();return}
   if(mode==='sprint5'||mode==='sprint10'){
     spTarget=mode==='sprint10'?10:5;
