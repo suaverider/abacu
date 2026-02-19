@@ -153,6 +153,18 @@ a {
   align-items: center;
 }
 
+.header-contact-label {
+  color: var(--cream);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.mobile-contact-info {
+  display: none;
+}
+
 .header-phone-link {
   color: var(--gold);
   font-weight: 700;
@@ -1871,6 +1883,27 @@ a {
 
   .header-phones {
     display: none;
+  }
+
+  .mobile-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+
+  .mobile-contact-info span {
+    color: var(--cream);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .mobile-contact-info a {
+    color: var(--gold);
+    font-size: 0.95rem;
+    font-weight: 600;
   }
 
   .hero-content {
