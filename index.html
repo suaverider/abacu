@@ -412,8 +412,9 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="card-body">
             <div class="flex justify-between items-center">
               <div class="flex gap-xs">
-                <button class="btn btn-sm" id="sp5">Target 5</button>
-                <button class="btn btn-sm" id="sp10">Target 10</button>
+                <button class="btn btn-sm" id="sp5">5s</button>
+                <button class="btn btn-sm" id="sp10">10s</button>
+                <button class="btn btn-sm" id="spMixed">Mixed</button>
               </div>
               <div class="stat">Score: <b id="spScore">0</b> / <span id="spTotal">0</span></div>
             </div>
@@ -423,7 +424,6 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
               <span class="sprint-ans" id="spAns">?</span>
             </div>
             <div class="numpad" id="spGrid"></div>
-            <label class="toggle" style="justify-content:center;margin-top:8px"><input type="checkbox" id="spAutoAdvance"/><span class="track"></span><span style="font-size:.8rem">Auto-advance on correct</span></label>
             <div class="sprint-feedback" id="spFeedback"></div>
           </div>
         </div>
@@ -535,7 +535,7 @@ let frames=[],frameIdx=0,playTimer=null,playSpeed=1;
 let bpManual=false,bpPersist=false,bpMicro=false,bpHide=false,steppingLock=false;
 let persistedMisses=load('soroban_misses',[]),practiceMissesMode=false;
 // Sprint state
-let spTarget=0,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null,spAutoAdvance=false;
+let spTarget=0,spMixed=false,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null,spCurrentTarget=0;
 // Anzan state
 let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrect=0,anzanTotal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
@@ -929,17 +929,25 @@ function throttled(fn){
 /* ===== PROBLEM LIFECYCLE ===== */
 function beginProblem(){
   if(!running) return;
-  const conf=DIFFICULTIES[difficulty];
-  const boost=adaptive?chainBoost:0;
-  const digitsUsed=stayUnder100?Math.min(conf.digits,2):conf.digits;
-  const p=generateProblem({
-    digits:digitsUsed,
-    chainMin:clamp(conf.chain[0]+boost,conf.chain[0],conf.chain[1]+2),
-    chainMax:clamp(conf.chain[1]+boost,conf.chain[0],conf.chain[1]+2)
-  });
+  let p;
+  if(practiceMissesMode&&persistedMisses.length>0){
+    // Replay from missed problems, cycling through them
+    const missIdx=problemCount%persistedMisses.length;
+    const miss=persistedMisses[missIdx];
+    p={lines:miss.lines,answer:miss.answer};
+  } else {
+    const conf=DIFFICULTIES[difficulty];
+    const boost=adaptive?chainBoost:0;
+    const digitsUsed=stayUnder100?Math.min(conf.digits,2):conf.digits;
+    p=generateProblem({
+      digits:digitsUsed,
+      chainMin:clamp(conf.chain[0]+boost,conf.chain[0],conf.chain[1]+2),
+      chainMax:clamp(conf.chain[1]+boost,conf.chain[0],conf.chain[1]+2)
+    });
+  }
   problem=p;
   problemCount++;
-  problemNumEl.textContent='#'+problemCount;
+  problemNumEl.textContent=practiceMissesMode?'#'+problemCount+' (missed)':'#'+problemCount;
   renderProblem(p);
   hintBox.classList.add('hidden');
   hintContent.textContent='';
@@ -982,7 +990,7 @@ function submitAnswer(){
     else if(accVal<=60) chainBoost=Math.max(chainBoost-1,0);
   }
   updateScores();
-  setTimeout(()=>{stopPlayback();beginProblem()},ok?400:900);
+  setTimeout(()=>{stopPlayback();beginProblem()},ok?350:650);
 }
 
 function revealAnswer(){
@@ -1073,12 +1081,12 @@ function endSession(){
 /* ===== COMPLEMENT SPRINT ===== */
 function ensureKeypad(){
   spGridEl.innerHTML='';
-  for(let d=0;d<=9;d++){
+  for(let d=1;d<=9;d++){
     const b=document.createElement('button');
     b.className='btn';
     b.textContent=d;
     b.addEventListener('click',()=>checkSprint(d));
-    if(!spTarget) b.disabled=true;
+    if(!spTarget&&!spMixed) b.disabled=true;
     spGridEl.appendChild(b);
   }
 }
@@ -1091,28 +1099,44 @@ function resetSprintStats(){
 }
 
 function nextSprint(){
-  if(!spTarget) return;
-  if(spTarget===10){
+  if(!spTarget&&!spMixed) return;
+  // Pick target for this round
+  if(spMixed){
+    spCurrentTarget=Math.random()<0.5?5:10;
+  } else {
+    spCurrentTarget=spTarget;
+  }
+  if(spCurrentTarget===10){
     spCurrentN=randInt(1,9);spCurrentAns=10-spCurrentN;
   } else {
     spCurrentN=randInt(1,4);spCurrentAns=5-spCurrentN;
   }
   spNEl.textContent=spCurrentN;
   spAnsEl.textContent='?';
+  // Show which target on mixed mode
+  if(spMixed) spTagEl.textContent='= '+spCurrentTarget;
   spFeedbackEl.textContent='';
-  spGridEl.querySelectorAll('button').forEach(b=>b.disabled=isPaused);
+  spGridEl.querySelectorAll('button').forEach(b=>{
+    b.disabled=isPaused;
+    b.className='btn';
+  });
 }
 
 function checkSprint(x){
-  if(!spTarget||isPaused) return;
+  if((!spTarget&&!spMixed)||isPaused) return;
   spTotalVal++;spTotalEl.textContent=spTotalVal;
   if(x===spCurrentAns){
     spScoreVal++;spScoreEl.textContent=spScoreVal;
     spAnsEl.textContent=spCurrentAns;
-    spFeedbackEl.innerHTML='<span style="color:var(--good);font-weight:700">Correct!</span>';
-    if(spAutoAdvance) setTimeout(nextSprint,300);
+    spAnsEl.style.color='var(--good)';
+    // Instant next on correct
+    setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},250);
   } else {
-    spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spTarget+'</span>';
+    spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spCurrentTarget+'</span>';
+    spAnsEl.textContent=spCurrentAns;
+    spAnsEl.style.color='var(--bad)';
+    // Show correct answer briefly, then auto-next
+    setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},600);
   }
 }
 
@@ -1383,8 +1407,10 @@ $('#startBtn').addEventListener('click',()=>{
   anzanAutoNext=$('#anzanAutoNext').checked;
   if(mode==='anzan'){startAnzan();return}
   if(mode==='sprint5'||mode==='sprint10'){
-    spTarget=mode==='sprint10'?10:5;
+    spTarget=mode==='sprint10'?10:5;spMixed=false;
     spTagEl.textContent='Target '+spTarget;
+    $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
+    $(mode==='sprint10'?'#sp10':'#sp5').classList.add('btn-active');
     resetSprintStats();
     startSession();
     nextSprint();
@@ -1454,14 +1480,23 @@ $('#bpSpeed').addEventListener('change',e=>{playSpeed=Number(e.target.value)||1;
 
 // Sprint buttons
 $('#sp5').addEventListener('click',()=>{
-  spTarget=5;spTagEl.textContent='Target 5';
+  spTarget=5;spMixed=false;spTagEl.textContent='Target 5';
+  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
+  $('#sp5').classList.add('btn-active');
   resetSprintStats();ensureKeypad();nextSprint();
 });
 $('#sp10').addEventListener('click',()=>{
-  spTarget=10;spTagEl.textContent='Target 10';
+  spTarget=10;spMixed=false;spTagEl.textContent='Target 10';
+  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
+  $('#sp10').classList.add('btn-active');
   resetSprintStats();ensureKeypad();nextSprint();
 });
-$('#spAutoAdvance').addEventListener('change',e=>spAutoAdvance=e.target.checked);
+$('#spMixed').addEventListener('click',()=>{
+  spTarget=0;spMixed=true;spTagEl.textContent='Mixed 5 & 10';
+  $$('#sp5,#sp10,#spMixed').forEach(b=>b.classList.remove('btn-active'));
+  $('#spMixed').classList.add('btn-active');
+  resetSprintStats();ensureKeypad();nextSprint();
+});
 
 // Anzan controls
 $('#anzanSubmitBtn').addEventListener('click',submitAnzan);
