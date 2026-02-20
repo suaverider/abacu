@@ -218,70 +218,15 @@
       <span class="section-label center">From the Creek</span>
       <h2 style="color: var(--cream);">Catches at Rooster Run</h2>
       <p class="gallery-intro" style="color: rgba(245,240,232,0.7);">Real catches from real trips at Rooster Run. Have a photo from your visit? Send it to us and we may feature it here.</p>
-      <div class="photo-gallery-grid">
-        <!-- PHOTO 1 (featured - spans 2 columns): Replace with a great catch photo -->
-        <div class="gallery-card featured">
-          <img src="" alt="Catch of the day">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Featured Catch</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-        <!-- PHOTO 2 -->
-        <div class="gallery-card">
-          <img src="" alt="Fish caught at Rooster Run">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Catch Photo</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-        <!-- PHOTO 3 -->
-        <div class="gallery-card">
-          <img src="" alt="Fish caught at Rooster Run">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Catch Photo</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-        <!-- PHOTO 4 -->
-        <div class="gallery-card">
-          <img src="" alt="Fish caught at Rooster Run">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Catch Photo</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-        <!-- PHOTO 5 -->
-        <div class="gallery-card">
-          <img src="" alt="Fish caught at Rooster Run">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Catch Photo</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-        <!-- PHOTO 6 -->
-        <div class="gallery-card">
-          <img src="" alt="Fish caught at Rooster Run">
-          <div class="gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Catch Photo</span>
-          </div>
-          <div class="gallery-caption">Guest Name &mdash; Date</div>
-        </div>
-      </div>
       <!--
-        HOW TO ADD PHOTOS:
-        1. Add your photo file to the project folder (e.g., "photos/catch-1.jpg")
-        2. Set the img src to the file path (e.g., src="photos/catch-1.jpg")
-        3. Add class "has-photo" to the gallery-card div
-        4. Update the alt text and gallery-caption with the guest name and date
-        5. To add more photos, copy any gallery-card block and paste it before the closing </div>
+        AUTO-LOADING GALLERY
+        To add photos: Drop .jpg files into the "photos/catches/" folder.
+        Name them: catch-1.jpg, catch-2.jpg, catch-3.jpg, etc.
+        The first photo (catch-1) will be the big featured photo.
+        They MUST be numbered in order with no gaps (1, 2, 3, 4...).
       -->
+      <div class="photo-gallery-grid" id="catches-gallery"></div>
+      <p class="gallery-empty" id="catches-empty" style="display:none; text-align:center; color: rgba(245,240,232,0.5); font-style:italic; padding: 40px 0;">Photos coming soon &mdash; send us your catch photos and we&rsquo;ll add them here!</p>
     </div>
   </section>
 
