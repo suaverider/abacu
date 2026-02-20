@@ -546,7 +546,7 @@ let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrect=0,anzanTotal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
 let anzanLevel='beginner',anzanAddOnly=true,anzanAutoNext=false;
 const ANZAN_LEVELS={
-  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,desc:'Addition only, 1-digit numbers (1-5), 3 numbers, slow speed (3s each). Perfect for learning to visualize the ones rod. Focus on seeing the beads move in your mind.'},
+  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod — total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Focus only on seeing the beads move on one rod in your mind.'},
   intermediate:{label:'Intermediate',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
   advanced:{label:'Advanced',speed:1000,count:7,maxNum:50,addOnly:false,desc:'Add and subtract, numbers up to 50, 7 numbers, normal speed (1s). Full mental soroban with tens and ones rods. Aim for automatic bead visualization.'}
 };
@@ -1203,19 +1203,22 @@ function nextAnzanRound(){
 
   anzanNumbers=[];
   let sum=0;
+  const singleRod=lvl.singleRod||false;
+  const upperCap=singleRod?9:stayUnder100?99:Infinity;
   for(let i=0;i<anzanCount;i++){
     let n,op;
     if(i===0){
-      n=randInt(1,Math.min(maxNum,stayUnder100?60:maxNum));
+      const firstMax=singleRod?Math.min(maxNum,upperCap):Math.min(maxNum,stayUnder100?60:maxNum);
+      n=randInt(1,firstMax);
       op='+';sum=n;
     } else {
       op=useAddOnly?'+':Math.random()<0.55?'+':'-';
       if(op==='+'){
-        const cap=stayUnder100?Math.min(99-sum,maxNum):maxNum;
+        const cap=Math.min(upperCap-sum,maxNum);
         if(cap<1){op='-';n=randInt(1,Math.min(sum,maxNum))}
         else n=randInt(1,cap);
       } else {
-        if(sum<2){op='+';n=randInt(1,Math.min(stayUnder100?99-sum:maxNum,maxNum))}
+        if(sum<2){op='+';n=randInt(1,Math.min(upperCap-sum,maxNum))}
         else n=randInt(1,Math.min(sum,maxNum));
       }
       sum=op==='+'?sum+n:sum-n;
