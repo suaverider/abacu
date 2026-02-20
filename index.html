@@ -1307,6 +1307,7 @@ function submitAnzan(){
   anzanCoachTip.textContent='';
 
   anzanAnswerRow.style.display='none';
+  anzanInputEl.blur();
   if(anzanAutoNext&&ok){
     setTimeout(nextAnzanRound,1200);
   } else {
@@ -1533,6 +1534,10 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPlaybac
 // Global hotkeys - only for non-input keys while in standard mode
 document.addEventListener('keydown',e=>{
   if(!running||isPaused) return;
+  // Anzan: press Enter to advance to next round when Next button is visible
+  if(e.key==='Enter'&&!anzanNextBtn.classList.contains('hidden')){
+    e.preventDefault();nextAnzanRound();return;
+  }
   // Don't intercept if actively typing in an input
   if(document.activeElement&&document.activeElement.tagName==='INPUT') {
     // Only handle arrow keys for coach when in input
