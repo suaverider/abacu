@@ -131,15 +131,16 @@ document.addEventListener('DOMContentLoaded', function () {
   loadGallery('weddings-gallery', 'weddings-empty', 'photos/weddings/', 'wedding-', 'Wedding at Rooster Run');
 
   // Auto-show wedding feature photo at top of weddings page
-  // Uses wedding-1.jpg from photos/weddings/ if it exists
+  // Uses its own separate file: photos/wedding-featured.jpg
+  // This is NOT connected to the wedding gallery — it's its own photo.
   var weddingFeatureSlot = document.getElementById('wedding-feature-slot');
   if (weddingFeatureSlot) {
     var testImg = new Image();
     testImg.onload = function () {
       weddingFeatureSlot.classList.add('has-photo');
-      weddingFeatureSlot.querySelector('img').src = 'photos/weddings/wedding-1.jpg';
+      weddingFeatureSlot.querySelector('img').src = 'photos/wedding-featured.jpg';
     };
-    testImg.src = 'photos/weddings/wedding-1.jpg';
+    testImg.src = 'photos/wedding-featured.jpg';
   }
 
   // Auto-show firepit photo on events page if it exists in photos/ folder
