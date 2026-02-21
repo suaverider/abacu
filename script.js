@@ -87,70 +87,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 100);
   }
 
-  // --- Auto-loading photo galleries ---
-  // Loads numbered photos from a folder automatically.
-  // Just drop files named "catch-1.jpg", "catch-2.jpg", etc. into photos/catches/
-  // or "wedding-1.jpg", "wedding-2.jpg", etc. into photos/weddings/
-  // The first photo is always the big featured one.
-  function loadGallery(gridId, emptyId, folder, prefix, altText) {
-    var grid = document.getElementById(gridId);
-    var emptyMsg = document.getElementById(emptyId);
-    if (!grid) return;
-
-    var count = 0;
-
-    function tryLoad(num) {
-      var img = new Image();
-      img.onload = function () {
-        count++;
-        var card = document.createElement('div');
-        card.className = 'gallery-card has-photo';
-        if (num === 1) card.className += ' featured';
-        var photo = document.createElement('img');
-        photo.src = folder + prefix + num + '.jpg';
-        photo.alt = altText + ' #' + num;
-        card.appendChild(photo);
-        grid.appendChild(card);
-        tryLoad(num + 1);
-      };
-      img.onerror = function () {
-        if (count === 0 && emptyMsg) {
-          emptyMsg.style.display = 'block';
-        }
-      };
-      img.src = folder + prefix + num + '.jpg';
-    }
-
-    tryLoad(1);
-  }
-
-  // Fishing catches gallery (photos/catches/catch-1.jpg, catch-2.jpg, ...)
-  loadGallery('catches-gallery', 'catches-empty', 'photos/catches/', 'catch-', 'Fish caught at Rooster Run');
-
-  // Weddings gallery (photos/weddings/wedding-1.jpg, wedding-2.jpg, ...)
-  loadGallery('weddings-gallery', 'weddings-empty', 'photos/weddings/', 'wedding-', 'Wedding at Rooster Run');
-
-  // Auto-show wedding feature photo at top of weddings page
-  // Uses its own separate file: photos/wedding-featured.jpg
-  // This is NOT connected to the wedding gallery — it's its own photo.
-  var weddingFeatureSlot = document.getElementById('wedding-feature-slot');
-  if (weddingFeatureSlot) {
-    var testImg = new Image();
-    testImg.onload = function () {
-      weddingFeatureSlot.classList.add('has-photo');
-      weddingFeatureSlot.querySelector('img').src = 'photos/wedding-featured.jpg';
-    };
-    testImg.src = 'photos/wedding-featured.jpg';
-  }
-
-  // Auto-show firepit photo on events page if it exists in photos/ folder
-  var firepitSlot = document.getElementById('firepit-slot');
-  if (firepitSlot) {
-    var firepitImg = new Image();
-    firepitImg.onload = function () {
-      firepitSlot.classList.add('has-photo');
-    };
-    firepitImg.src = 'photos/firepit.jpg';
-  }
+  // --- Photo galleries and photo slots ---
+  // Photos are now handled directly in the HTML with onload/onerror attributes.
+  // No JavaScript needed — just drop correctly named .jpg files into the photos/ folder.
+  // See the HTML comments in each page for the exact filenames.
 
 });

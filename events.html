@@ -205,13 +205,13 @@
           <li>Owner-operated&mdash;talk to a real person, not a booking system</li>
         </ul>
       </div>
-      <!-- PHOTO: Drop a photo named "firepit.jpg" into the photos/ folder to show it here -->
+      <!-- PHOTO: Save a fire pit photo as "photos/firepit.jpg" and it appears here automatically -->
       <div class="split-image">
-        <div class="photo-slot" id="firepit-slot">
-          <img src="photos/firepit.jpg" alt="Stone fire pit with log seating at Rooster Run">
+        <div class="photo-slot">
+          <img src="photos/firepit.jpg" alt="Stone fire pit with log seating at Rooster Run" onload="this.parentElement.classList.add('has-photo')" onerror="">
           <div class="photo-slot-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Your Fire Pit Photo Here</span>
+            <span>Save as: photos/firepit.jpg</span>
           </div>
         </div>
       </div>

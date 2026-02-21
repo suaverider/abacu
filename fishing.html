@@ -64,14 +64,13 @@
         <p>Buffalo Creek is a spring-fed creek, so the water stays cool year-round&mdash;even in the warmer months. It&rsquo;s a beautiful stretch of water and a great spot to spend a morning, an afternoon, or an entire weekend with a rod in hand.</p>
         <p>Whether you want a quiet morning solo session, a father-son weekend, or a multi-day trip with friends, you have a private base camp with a cabin, a campfire, and creek access steps from your door.</p>
       </div>
-      <!-- PHOTO: Replace with a real photo of Buffalo Creek on the property -->
+      <!-- PHOTO: Save a creek photo as "photos/creek.jpg" and it appears here automatically -->
       <div class="split-image">
         <div class="photo-slot">
-          <!-- To add a photo: add class "has-photo" to the div above, then set the img src below -->
-          <img src="" alt="Buffalo Creek at Rooster Run">
+          <img src="photos/creek.jpg" alt="Buffalo Creek at Rooster Run" onload="this.parentElement.classList.add('has-photo')" onerror="">
           <div class="photo-slot-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Your Creek Photo Here</span>
+            <span>Save as: photos/creek.jpg</span>
           </div>
         </div>
       </div>
@@ -95,13 +94,13 @@
           <li>Contact <a href="https://www.tn.gov/twra.html" target="_blank" rel="noopener">TWRA</a> or call <a href="tel:+18003320900">1-800-332-0900</a> for fishing rules and licensing info</li>
         </ul>
       </div>
-      <!-- PHOTO: Replace with a photo of someone fishing on the property -->
+      <!-- PHOTO: Save a fishing photo as "photos/fishing.jpg" and it appears here automatically -->
       <div class="split-image">
         <div class="photo-slot">
-          <img src="" alt="Fishing on Buffalo Creek">
+          <img src="photos/fishing.jpg" alt="Fishing on Buffalo Creek" onload="this.parentElement.classList.add('has-photo')" onerror="">
           <div class="photo-slot-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Your Fishing Photo Here</span>
+            <span>Save as: photos/fishing.jpg</span>
           </div>
         </div>
       </div>
@@ -199,13 +198,13 @@
 
         <a href="index.html#contact" class="btn btn-primary">Reserve the Cabin</a>
       </div>
-      <!-- PHOTO: Replace with a real photo of the cabin -->
+      <!-- PHOTO: Save a cabin photo as "photos/cabin.jpg" and it appears here automatically -->
       <div class="split-image">
         <div class="photo-slot">
-          <img src="" alt="The sleeper cabin at Rooster Run">
+          <img src="photos/cabin.jpg" alt="The sleeper cabin at Rooster Run" onload="this.parentElement.classList.add('has-photo')" onerror="">
           <div class="photo-slot-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Your Cabin Photo Here</span>
+            <span>Save as: photos/cabin.jpg</span>
           </div>
         </div>
       </div>
@@ -219,14 +218,24 @@
       <h2 style="color: var(--cream);">Catches at Rooster Run</h2>
       <p class="gallery-intro" style="color: rgba(245,240,232,0.7);">Real catches from real trips at Rooster Run. Have a photo from your visit? Send it to us and we may feature it here.</p>
       <!--
-        AUTO-LOADING GALLERY
-        To add photos: Drop .jpg files into the "photos/catches/" folder.
-        Name them: catch-1.jpg, catch-2.jpg, catch-3.jpg, etc.
-        The first photo (catch-1) will be the big featured photo.
-        They MUST be numbered in order with no gaps (1, 2, 3, 4...).
+        HOW TO ADD CATCH PHOTOS:
+        1. Name your photos: catch-1.jpg, catch-2.jpg, catch-3.jpg, etc. (up to catch-8.jpg)
+        2. Drop them into the "photos/catches/" folder on your hosting
+        3. Refresh the page — they appear automatically. No code changes needed.
+        catch-1 is the big featured photo. The rest are smaller grid photos.
+        Files MUST be .jpg format.
       -->
-      <div class="photo-gallery-grid" id="catches-gallery"></div>
-      <p class="gallery-empty" id="catches-empty" style="display:none; text-align:center; color: rgba(245,240,232,0.5); font-style:italic; padding: 40px 0;">Photos coming soon &mdash; send us your catch photos and we&rsquo;ll add them here!</p>
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/catches/catch-1.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-2.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-3.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-4.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-5.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-6.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-7.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/catches/catch-8.jpg" alt="Fish caught at Rooster Run" onload="this.parentElement.classList.add('has-photo');document.getElementById('catches-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+      </div>
+      <p class="gallery-empty" id="catches-empty" style="text-align:center; color: rgba(245,240,232,0.5); font-style:italic; padding: 40px 0;">Photos coming soon &mdash; send us your catch photos and we&rsquo;ll add them here!</p>
     </div>
   </section>
 
