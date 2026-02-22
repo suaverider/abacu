@@ -2275,37 +2275,6 @@ a {
 }
 
 /* ===========================
-   GALLERY TEASER (homepage)
-   =========================== */
-.gallery-teaser-section {
-  background: var(--green-dark);
-  text-align: center;
-}
-
-.gallery-teaser-section h2 {
-  color: var(--cream);
-}
-
-.gallery-teaser-section .section-tagline {
-  color: rgba(245,240,232,0.7);
-}
-
-/* ===========================
-   GALLERY PAGE CATEGORIES
-   =========================== */
-.gallery-category-section {
-  text-align: center;
-}
-
-.gallery-category-section h2 {
-  margin-bottom: 12px;
-}
-
-.gallery-category-section .section-tagline {
-  margin-bottom: 36px;
-}
-
-/* ===========================
    SCROLL ANIMATIONS
    =========================== */
 .animate-ready {
