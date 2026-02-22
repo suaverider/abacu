@@ -2003,6 +2003,11 @@ a {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .gallery-card.featured {
+    grid-column: span 2;
+    grid-row: span 1;
+    aspect-ratio: 2/1;
+  }
 
   .photo-slot {
     height: 280px;
@@ -2251,6 +2256,12 @@ a {
 
 .gallery-card.has-photo:hover .gallery-caption {
   opacity: 1;
+}
+
+/* Featured card (fishing catches & wedding galleries) */
+.gallery-card.featured {
+  grid-column: span 2;
+  grid-row: span 2;
 }
 
 /* Lightbox */
