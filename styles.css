@@ -2275,6 +2275,22 @@ a {
 }
 
 /* ===========================
+   GALLERY TEASER (homepage)
+   =========================== */
+.gallery-teaser-section {
+  background: var(--green-dark);
+  text-align: center;
+}
+
+.gallery-teaser-section h2 {
+  color: var(--cream);
+}
+
+.gallery-teaser-section .section-tagline {
+  color: rgba(245,240,232,0.7);
+}
+
+/* ===========================
    SCROLL ANIMATIONS
    =========================== */
 .animate-ready {
