@@ -161,6 +161,86 @@
     </div>
   </footer>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-prev" aria-label="Previous photo">&#8249;</button>
+    <img src="" alt="Rooster Run property" id="lightboxImg">
+    <button class="lightbox-next" aria-label="Next photo">&#8250;</button>
+  </div>
+
   <script src="script.js"></script>
+  <script>
+  (function () {
+    var overlay = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    var photos = [];
+    var currentIndex = 0;
+
+    // Collect all visible gallery photos
+    document.querySelectorAll('.gallery-card').forEach(function (card) {
+      var img = card.querySelector('img');
+      if (!img) return;
+
+      img.addEventListener('load', function () {
+        // Rebuild list each time a photo loads so order stays correct
+        photos = [];
+        document.querySelectorAll('.gallery-card.has-photo img').forEach(function (i) {
+          photos.push(i.src);
+        });
+      });
+
+      card.addEventListener('click', function () {
+        if (!card.classList.contains('has-photo')) return;
+        photos = [];
+        document.querySelectorAll('.gallery-card.has-photo img').forEach(function (i) {
+          photos.push(i.src);
+        });
+        currentIndex = photos.indexOf(img.src);
+        lbImg.src = img.src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function showPrev() {
+      if (photos.length === 0) return;
+      currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+      lbImg.src = photos[currentIndex];
+    }
+
+    function showNext() {
+      if (photos.length === 0) return;
+      currentIndex = (currentIndex + 1) % photos.length;
+      lbImg.src = photos[currentIndex];
+    }
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeLightbox();
+    });
+
+    overlay.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    overlay.querySelector('.lightbox-prev').addEventListener('click', function (e) {
+      e.stopPropagation();
+      showPrev();
+    });
+    overlay.querySelector('.lightbox-next').addEventListener('click', function (e) {
+      e.stopPropagation();
+      showNext();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+  })();
+  </script>
 </body>
 </html>
