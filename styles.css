@@ -458,6 +458,20 @@ a {
     linear-gradient(180deg, rgba(13,31,21,0.2) 0%, rgba(13,31,21,0.5) 100%);
 }
 
+/* Gallery hero */
+.page-hero-gallery {
+  background:
+    linear-gradient(135deg, rgba(20,45,30,0.85), rgba(35,65,45,0.75)),
+    url('images/hero-forest.jpg')
+    center center / cover no-repeat;
+}
+
+.page-hero-gallery .page-hero-overlay {
+  background:
+    radial-gradient(ellipse at 40% 50%, rgba(200,164,90,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(13,31,21,0.25) 0%, rgba(13,31,21,0.55) 100%);
+}
+
 /* ===========================
    BUTTONS
    =========================== */
@@ -2258,6 +2272,37 @@ a {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ===========================
+   GALLERY TEASER (homepage)
+   =========================== */
+.gallery-teaser-section {
+  background: var(--green-dark);
+  text-align: center;
+}
+
+.gallery-teaser-section h2 {
+  color: var(--cream);
+}
+
+.gallery-teaser-section .section-tagline {
+  color: rgba(245,240,232,0.7);
+}
+
+/* ===========================
+   GALLERY PAGE CATEGORIES
+   =========================== */
+.gallery-category-section {
+  text-align: center;
+}
+
+.gallery-category-section h2 {
+  margin-bottom: 12px;
+}
+
+.gallery-category-section .section-tagline {
+  margin-bottom: 36px;
 }
 
 /* ===========================

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — See the Property | Rooster Run — Rutledge, TN</title>
+  <meta name="description" content="See what Rooster Run looks like in person. Photos of the cabin, Buffalo Creek, the covered pavilion, fire pit, and the beautiful Grainger County countryside in Rutledge, TN.">
+  <meta property="og:title" content="Gallery | Rooster Run — Rutledge, TN">
+  <meta property="og:description" content="Browse photos of our creekside property on Buffalo Creek. The cabin, pavilion, creek, fire pit, and East Tennessee countryside.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://roosterrunvenue.com/gallery">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-text">Rooster Run</span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="fishing.html">Fishing</a>
+        <a href="weddings.html">Weddings</a>
+        <a href="events.html">Events</a>
+        <div class="mobile-contact-info">
+          <span>Contact:</span>
+          <a href="tel:+14237368821">Billie 423-736-8821</a>
+          <a href="tel:+14237368820">Victor 423-736-8820</a>
+          <a href="mailto:roosterrunvenue@gmail.com">roosterrunvenue@gmail.com</a>
+        </div>
+      </nav>
+      <div class="header-phones">
+        <span class="header-contact-label">Contact:</span>
+        <a href="tel:+14237368821" class="header-phone-link">Billie 423-736-8821</a>
+        <a href="tel:+14237368820" class="header-phone-link">Victor 423-736-8820</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero page-hero-gallery">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <span class="section-label">Gallery</span>
+      <h1>See the Property</h1>
+      <p>Browse photos of Rooster Run&mdash;the cabin, Buffalo Creek, the covered pavilion, the fire pit, and the beautiful East Tennessee countryside that surrounds it all.</p>
+    </div>
+  </section>
+
+  <!--
+    =====================================================
+    HOW TO ADD GALLERY PHOTOS — SIMPLE INSTRUCTIONS
+    =====================================================
+
+    1. Put your photo files into the "photos/gallery/" folder
+       - Any name works: cabin.jpg, creek-morning.jpg, IMG_4521.jpg, etc.
+       - JPG, PNG, or WEBP all work
+
+    2. Add the filename to the list below in the section where it fits best
+       - Just copy one of the existing lines and change the filename and caption
+       - Photos show up in the order they are listed
+       - The FIRST photo in each section is displayed larger (featured)
+
+    3. That's it — save the file, refresh the page, done.
+
+    TO REMOVE A PHOTO: Just delete its line from the list below.
+    TO REORDER: Move lines up or down within a section.
+    TO CHANGE A CAPTION: Edit the text after "caption:" on that line.
+    =====================================================
+  -->
+
+  <!-- THE CABIN -->
+  <section class="section gallery-category-section" style="background: var(--white);">
+    <div class="container">
+      <span class="section-label center">The Cabin</span>
+      <h2>Your Home Base on the Creek</h2>
+      <p class="section-tagline center-tagline">A cozy sleeper cabin with a queen bed, TV, mini-fridge, and a front porch with rocking chairs. Open the window and Buffalo Creek is right there.</p>
+      <!--
+        CABIN PHOTOS — Add your cabin photos here:
+        1. Drop photos into the "photos/gallery/" folder
+        2. Add a line below for each photo (copy an existing line and change the filename)
+        3. The first photo will be displayed larger as the featured image
+      -->
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/gallery/cabin-exterior.jpg" alt="The cabin at Rooster Run" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">The cabin exterior</span></div>
+        <div class="gallery-card"><img src="photos/gallery/cabin-interior.jpg" alt="Inside the cabin" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Inside the cabin</span></div>
+        <div class="gallery-card"><img src="photos/gallery/cabin-porch.jpg" alt="Front porch with rocking chairs" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Front porch</span></div>
+        <div class="gallery-card"><img src="photos/gallery/cabin-view.jpg" alt="View from the cabin" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">View from the cabin</span></div>
+      </div>
+      <p class="gallery-empty" style="text-align:center; color: var(--text-light); font-style:italic; padding: 40px 0;">Cabin photos coming soon</p>
+    </div>
+  </section>
+
+  <!-- BUFFALO CREEK -->
+  <section class="section gallery-category-section" style="background: var(--cream-light);">
+    <div class="container">
+      <span class="section-label center">Buffalo Creek</span>
+      <h2>800 Feet of Creekside Waterfront</h2>
+      <p class="section-tagline center-tagline">Spring-fed and cool year-round, Buffalo Creek runs right through the property with walk-out access from the cabin.</p>
+      <!--
+        CREEK PHOTOS — Add your creek photos here:
+        Same process — drop into photos/gallery/, add a line below.
+      -->
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/gallery/creek-wide.jpg" alt="Buffalo Creek at Rooster Run" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Buffalo Creek</span></div>
+        <div class="gallery-card"><img src="photos/gallery/creek-rocks.jpg" alt="Creek rocks and water" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Creek rocks</span></div>
+        <div class="gallery-card"><img src="photos/gallery/creek-trees.jpg" alt="Trees along the creek" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Trees along the creek</span></div>
+        <div class="gallery-card"><img src="photos/gallery/creek-fishing.jpg" alt="Fishing on Buffalo Creek" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Fishing on the creek</span></div>
+        <div class="gallery-card"><img src="photos/gallery/creek-morning.jpg" alt="Morning on the creek" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Morning on the creek</span></div>
+      </div>
+      <p class="gallery-empty" style="text-align:center; color: var(--text-light); font-style:italic; padding: 40px 0;">Creek photos coming soon</p>
+    </div>
+  </section>
+
+  <!-- THE PAVILION & VENUE -->
+  <section class="section gallery-category-section" style="background: var(--white);">
+    <div class="container">
+      <span class="section-label center">The Pavilion &amp; Venue</span>
+      <h2>30&times;40 Covered Pavilion with Stage</h2>
+      <p class="section-tagline center-tagline">A spacious covered pavilion with an attached 12&times;20 stage, restroom, fire pit, and open field. Room for weddings, receptions, and gatherings up to 100 people.</p>
+      <!--
+        PAVILION / VENUE PHOTOS — Add your pavilion and venue photos here:
+      -->
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/gallery/pavilion-wide.jpg" alt="The covered pavilion at Rooster Run" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">The covered pavilion</span></div>
+        <div class="gallery-card"><img src="photos/gallery/pavilion-inside.jpg" alt="Inside the pavilion" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Inside the pavilion</span></div>
+        <div class="gallery-card"><img src="photos/gallery/stage.jpg" alt="The stage at the pavilion" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">The stage</span></div>
+        <div class="gallery-card"><img src="photos/gallery/firepit.jpg" alt="Fire pit area" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Fire pit area</span></div>
+        <div class="gallery-card"><img src="photos/gallery/restroom.jpg" alt="On-site restroom" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">On-site restroom</span></div>
+        <div class="gallery-card"><img src="photos/gallery/field.jpg" alt="Open field and parking area" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Open field</span></div>
+      </div>
+      <p class="gallery-empty" style="text-align:center; color: var(--text-light); font-style:italic; padding: 40px 0;">Pavilion photos coming soon</p>
+    </div>
+  </section>
+
+  <!-- THE LAND & SURROUNDINGS -->
+  <section class="section gallery-category-section" style="background: var(--cream-light);">
+    <div class="container">
+      <span class="section-label center">The Land &amp; Surroundings</span>
+      <h2>Grainger County, East Tennessee</h2>
+      <p class="section-tagline center-tagline">Rolling hills, big skies, and the kind of quiet you can only find in rural Tennessee. About 45 minutes from Knoxville&mdash;a world away.</p>
+      <!--
+        LAND / SCENERY PHOTOS — Add your landscape and scenery photos here:
+      -->
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/gallery/land-wide.jpg" alt="The property at Rooster Run" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">The property</span></div>
+        <div class="gallery-card"><img src="photos/gallery/trees.jpg" alt="Trees on the property" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Trees on the property</span></div>
+        <div class="gallery-card"><img src="photos/gallery/sunset.jpg" alt="Sunset at Rooster Run" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Sunset</span></div>
+        <div class="gallery-card"><img src="photos/gallery/entrance.jpg" alt="Property entrance" onload="this.parentElement.classList.add('has-photo');this.closest('.gallery-category-section').querySelector('.gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"><span class="gallery-caption">Property entrance</span></div>
+      </div>
+      <p class="gallery-empty" style="text-align:center; color: var(--text-light); font-style:italic; padding: 40px 0;">Scenery photos coming soon</p>
+    </div>
+  </section>
+
+  <!-- HAVE PHOTOS? SEND THEM -->
+  <section class="section" style="background: var(--cream); text-align: center;">
+    <div class="container">
+      <h2>Have Photos from Your Visit?</h2>
+      <p class="section-tagline center-tagline">We love seeing photos from guests who&rsquo;ve stayed at the property, fished the creek, or celebrated here. Send them our way and we may add them to the site.</p>
+      <a href="mailto:roosterrunvenue@gmail.com?subject=Photos%20from%20our%20visit%20to%20Rooster%20Run" class="btn btn-primary">Email Us Your Photos</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container cta-content">
+      <h2>Like What You See?</h2>
+      <p>Call, text, or email to plan a fishing trip, book a wedding, or rent the venue for your next event. We&rsquo;d love to have you out.</p>
+      <div class="cta-buttons">
+        <a href="tel:+14237368821" class="btn btn-primary">Call Billie 423-736-8821</a>
+        <a href="tel:+14237368820" class="btn btn-primary">Call Victor 423-736-8820</a>
+        <a href="mailto:roosterrunvenue@gmail.com" class="btn btn-secondary-dark">Email Us</a>
+        <a href="https://www.google.com/maps/dir//351+Tampico+Church+Rd,+Rutledge,+TN" class="btn btn-secondary-dark" target="_blank" rel="noopener">Get Directions</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo-text footer-logo">Rooster Run</span>
+          <p>351 Tampico Church Rd &bull; Rutledge, TN 37861</p>
+          <p><a href="tel:+14237368821">423-736-8821</a> &nbsp;|&nbsp; <a href="tel:+14237368820">423-736-8820</a></p>
+          <p><a href="mailto:roosterrunvenue@gmail.com">roosterrunvenue@gmail.com</a></p>
+        </div>
+        <div class="footer-links">
+          <a href="gallery.html">Gallery</a>
+          <a href="fishing.html">Fishing</a>
+          <a href="weddings.html">Weddings</a>
+          <a href="events.html">Events</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+        <p class="footer-legal">Rooster Run is a private venue in Rutledge, TN.</p>
+        <p class="footer-copy">&copy; 2026 Rooster Run Venue. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

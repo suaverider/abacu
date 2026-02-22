@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var animateElements = document.querySelectorAll(
     '.amenity-card, .area-card, .event-card, .event-showcase-card, .step-card, .intro-card, ' +
     '.split-text, .split-image, .cabin-feature, .offering-card, .schedule-card, .rule-card, ' +
-    '.value-card, .wedding-feature, .faq-item, .event-amenity, .lake-stat, .timeline-item'
+    '.value-card, .wedding-feature, .faq-item, .event-amenity, .lake-stat, .timeline-item, ' +
+    '.gallery-category-section .photo-gallery-grid'
   );
 
   if ('IntersectionObserver' in window) {
