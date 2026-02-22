@@ -64,15 +64,15 @@
     2. Drop them into the "photos/gallery/" folder
     3. That's it. Refresh the page and they appear automatically.
 
-    - gallery-1 is the big featured photo (shows larger than the rest)
-    - gallery-2 through gallery-20 fill in the grid after it
+    - All photos display at equal size in a clean grid
+    - gallery-1 through gallery-20 fill in left to right, row by row
     - Any missing numbers are simply skipped (no blank spaces)
     - Photos appear in numbered order: 1, 2, 3, 4...
     - Files MUST be .jpg format and lowercase (gallery-1.jpg, not Gallery-1.JPG)
     - To reorder: just rename/renumber the files
 
     SUGGESTED ORDER (just a guide — put them in whatever order looks best):
-    gallery-1.jpg  = Best overall property photo (this one shows BIG)
+    gallery-1.jpg  = Best overall property photo
     gallery-2.jpg  = The cabin
     gallery-3.jpg  = Buffalo Creek
     gallery-4.jpg  = Pavilion wide shot
@@ -99,7 +99,7 @@
   <section class="section photo-gallery-section" style="background: var(--white);">
     <div class="container">
       <div class="photo-gallery-grid">
-        <div class="gallery-card featured"><img src="photos/gallery/gallery-1.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/gallery/gallery-1.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
         <div class="gallery-card"><img src="photos/gallery/gallery-2.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
         <div class="gallery-card"><img src="photos/gallery/gallery-3.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
         <div class="gallery-card"><img src="photos/gallery/gallery-4.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('gallery-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
