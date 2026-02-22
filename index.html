@@ -174,6 +174,52 @@
     </div>
   </section>
 
+  <!-- PROPERTY PHOTO GALLERY -->
+  <section class="section photo-gallery-section" id="property-photos">
+    <div class="container">
+      <span class="section-label center">Take a Look Around</span>
+      <h2>See the Property</h2>
+      <p class="gallery-intro">The pavilion, the creek, the cabin, the field&mdash;here&rsquo;s what Rooster Run looks like in person. Have photos from your visit? Send them to us.</p>
+      <!--
+        HOW TO ADD PROPERTY PHOTOS:
+        1. Name your photos: property-1.jpg, property-2.jpg, property-3.jpg, etc. (up to property-12.jpg)
+        2. Drop them into the "photos/property/" folder on your hosting
+        3. Refresh the page — they appear automatically. No code changes needed.
+        property-1 is the big featured photo. The rest are smaller grid photos.
+        Files MUST be lowercase .jpg format.
+
+        SUGGESTED PHOTO GUIDE:
+        property-1.jpg  = Pavilion from a distance (featured/large)
+        property-2.jpg  = Pavilion close-up / underneath
+        property-3.jpg  = Restroom
+        property-4.jpg  = Creek view
+        property-5.jpg  = Open field area
+        property-6.jpg  = Cabin exterior
+        property-7.jpg  = Fire pit area
+        property-8.jpg  = Another creek angle
+        property-9.jpg  = Pavilion stage area
+        property-10.jpg = Parking / entrance
+        property-11.jpg = Scenery / trees / nature
+        property-12.jpg = Your choice
+      -->
+      <div class="photo-gallery-grid">
+        <div class="gallery-card featured"><img src="photos/property/property-1.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-2.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-3.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-4.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-5.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-6.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-7.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-8.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-9.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-10.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-11.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+        <div class="gallery-card"><img src="photos/property/property-12.jpg" alt="Rooster Run property" onload="this.parentElement.classList.add('has-photo');document.getElementById('property-empty').style.display='none';" onerror="this.parentElement.style.display='none';"></div>
+      </div>
+      <p class="gallery-empty" id="property-empty" style="text-align:center; color: var(--text-light); font-style:italic; padding: 40px 0;">Property photos coming soon &mdash; check back to see the venue!</p>
+    </div>
+  </section>
+
   <!-- AREA HIGHLIGHTS -->
   <section class="section area-section" id="area">
     <div class="container">
