@@ -2,114 +2,1316 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burrow - Underground Adventure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>FlipCalc - Free Reseller Toolkit</title>
+    <meta name="description" content="Free reseller profit calculator. Compare fees across eBay, Mercari, Poshmark, Facebook Marketplace, Depop, Etsy, OfferUp. Track inventory and profits.">
     <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #232733;
+            --border: #2d3140;
+            --text: #e4e6ef;
+            --text2: #8b90a5;
+            --accent: #6c5ce7;
+            --accent2: #a29bfe;
+            --green: #00d67e;
+            --green-bg: rgba(0,214,126,0.1);
+            --red: #ff6b6b;
+            --red-bg: rgba(255,107,107,0.1);
+            --yellow: #ffd43b;
+            --yellow-bg: rgba(255,212,59,0.1);
+            --blue: #4dabf7;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #1a0a00;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        /* Top Nav */
+        .top-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        #gameCanvas {
-            border: 2px solid #3a2010;
-            border-radius: 4px;
-            cursor: none;
-            image-rendering: auto;
-        }
-        #ui-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
+        .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent2); }
+        .top-bar-right { display: flex; gap: 8px; align-items: center; }
+
+        /* Tab Navigation */
+        .tab-nav {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
-        #start-screen, #death-screen {
-            pointer-events: auto;
-            text-align: center;
-            color: #e8d4b0;
-            background: rgba(20, 8, 0, 0.92);
-            padding: 40px 60px;
-            border-radius: 12px;
-            border: 2px solid #5a3a1a;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-        }
-        #start-screen h1, #death-screen h1 {
-            font-size: 48px;
-            margin-bottom: 8px;
-            color: #c89050;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-        #start-screen h2 {
-            font-size: 18px;
-            color: #9a7a50;
-            margin-bottom: 24px;
-            font-weight: normal;
-            font-style: italic;
-        }
-        .controls-info {
-            font-size: 14px;
-            color: #8a7a60;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-        .controls-info kbd {
-            background: #2a1a08;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid #5a3a1a;
-            font-family: monospace;
-            color: #c89050;
-        }
-        button {
-            background: linear-gradient(180deg, #6a4a20, #4a3010);
-            color: #e8d4b0;
-            border: 2px solid #8a6a30;
-            padding: 12px 36px;
-            font-size: 18px;
-            border-radius: 8px;
+        .tab-nav::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 8px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text2);
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            white-space: nowrap;
+            text-align: center;
             font-family: inherit;
         }
-        button:hover {
-            background: linear-gradient(180deg, #8a6a30, #6a4a20);
-            border-color: #aa8a40;
-            transform: scale(1.05);
+        .tab-btn.active {
+            color: var(--accent2);
+            border-bottom-color: var(--accent2);
         }
-        #death-screen { display: none; }
-        #death-screen .score { font-size: 24px; color: #c89050; margin: 12px 0; }
+        .tab-btn:hover { color: var(--text); }
+        .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+        /* Main Content */
+        .main { padding: 16px; max-width: 800px; margin: 0 auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+        .input-row {
+            display: flex;
+            gap: 12px;
+        }
+        .input-row .input-group { flex: 1; }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+        input[type="number"] {
+            font-variant-numeric: tabular-nums;
+        }
+        .input-prefix {
+            position: relative;
+        }
+        .input-prefix::before {
+            content: '$';
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text2);
+            font-size: 16px;
+            z-index: 1;
+        }
+        .input-prefix input {
+            padding-left: 28px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: #5a4bd6; }
+        .btn-full { width: 100%; }
+        .btn-sm { padding: 8px 16px; font-size: 13px; }
+        .btn-outline {
+            background: transparent;
+            color: var(--text2);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--text2); color: var(--text); }
+        .btn-danger {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid transparent;
+        }
+        .btn-danger:hover { border-color: var(--red); }
+        .btn-success {
+            background: var(--green);
+            color: #000;
+        }
+        .btn-success:hover { background: #00c472; }
+
+        /* Platform Results */
+        .platform-results {
+            display: grid;
+            gap: 10px;
+        }
+        .platform-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 16px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+        .platform-row.best {
+            border-color: var(--green);
+            background: var(--green-bg);
+        }
+        .platform-row.loss {
+            border-color: var(--red);
+            background: var(--red-bg);
+            opacity: 0.7;
+        }
+        .platform-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .platform-name small {
+            display: block;
+            font-weight: 400;
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+        .platform-fees, .platform-profit, .platform-roi {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        .platform-fees { color: var(--text2); font-size: 13px; }
+        .platform-profit { font-weight: 700; font-size: 16px; }
+        .platform-profit.positive { color: var(--green); }
+        .platform-profit.negative { color: var(--red); }
+        .platform-roi { font-size: 12px; color: var(--text2); }
+        .platform-roi.good { color: var(--green); }
+        .platform-roi.bad { color: var(--red); }
+        .best-badge {
+            display: inline-block;
+            background: var(--green);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* Verdict */
+        .verdict {
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+        .verdict.buy {
+            background: var(--green-bg);
+            border: 1px solid var(--green);
+        }
+        .verdict.skip {
+            background: var(--red-bg);
+            border: 1px solid var(--red);
+        }
+        .verdict.maybe {
+            background: var(--yellow-bg);
+            border: 1px solid var(--yellow);
+        }
+        .verdict-label {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .verdict.buy .verdict-label { color: var(--green); }
+        .verdict.skip .verdict-label { color: var(--red); }
+        .verdict.maybe .verdict-label { color: var(--yellow); }
+        .verdict-detail { font-size: 14px; color: var(--text2); }
+
+        /* Inventory Table */
+        .inventory-list { display: grid; gap: 10px; }
+        .inv-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+        }
+        .inv-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .inv-item-name { font-weight: 700; font-size: 15px; }
+        .inv-item-status {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .status-listed { background: var(--yellow-bg); color: var(--yellow); }
+        .status-sold { background: var(--green-bg); color: var(--green); }
+        .status-unlisted { background: rgba(139,144,165,0.1); color: var(--text2); }
+        .inv-item-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text2);
+            flex-wrap: wrap;
+        }
+        .inv-item-meta strong { color: var(--text); }
+        .inv-item-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .stat-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+        }
+        .stat-value.green { color: var(--green); }
+        .stat-value.red { color: var(--red); }
+        .stat-value.blue { color: var(--blue); }
+        .stat-value.yellow { color: var(--yellow); }
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 4px;
+        }
+
+        /* Recent Sales */
+        .sale-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .sale-row:last-child { border-bottom: none; }
+        .sale-info { font-size: 14px; }
+        .sale-info small { display: block; color: var(--text2); font-size: 12px; }
+        .sale-profit { font-weight: 700; font-variant-numeric: tabular-nums; }
+        .sale-profit.positive { color: var(--green); }
+        .sale-profit.negative { color: var(--red); }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius) var(--radius) 0 0;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text2);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text2);
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; margin-bottom: 16px; }
+
+        /* Shipping quick calc */
+        .ship-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .ship-result {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            text-align: center;
+        }
+        .ship-result .carrier { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .ship-result .price { font-size: 20px; font-weight: 800; color: var(--accent2); }
+        .ship-result .note { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+        /* Responsive */
+        @media (min-width: 600px) {
+            .platform-row {
+                grid-template-columns: 180px 1fr 1fr 100px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .modal {
+                border-radius: var(--radius);
+                margin: auto;
+            }
+            .modal-overlay { align-items: center; }
+        }
+
+        /* Utility */
+        .mt-8 { margin-top: 8px; }
+        .mt-12 { margin-top: 12px; }
+        .mt-16 { margin-top: 16px; }
+        .mb-8 { margin-bottom: 8px; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text2); }
+        .text-sm { font-size: 13px; }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .hidden { display: none !important; }
+
+        /* Checkbox toggle */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .toggle-row label { font-size: 14px; }
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle.on { background: var(--accent); }
+        .toggle::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+        .toggle.on::after { transform: translateX(20px); }
+
+        /* Quick entry bar */
+        .quick-entry {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quick-entry input {
+            flex: 1;
+        }
+
+        /* Print styles */
+        @media print {
+            .top-bar, .tab-nav, .btn { display: none; }
+            body { background: white; color: black; }
+            .card { border: 1px solid #ddd; }
+        }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div id="ui-overlay">
-        <div id="start-screen">
-            <h1>BURROW</h1>
-            <h2>An Underground Adventure</h2>
-            <div class="controls-info">
-                <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or Arrow Keys to move<br>
-                <kbd>SPACE</kbd> to boost dig speed<br>
-                Eat food to grow bigger and score points<br>
-                Avoid dangers lurking in the earth!
-            </div>
-            <button id="startBtn">Start Burrowing</button>
-        </div>
-        <div id="death-screen">
-            <h1>GAME OVER</h1>
-            <div class="score" id="finalScore">Score: 0</div>
-            <div class="score" id="finalSize">Size reached: 1x</div>
-            <div style="margin: 12px 0; color: #8a7a60;" id="deathReason"></div>
-            <button id="restartBtn">Try Again</button>
+    <div class="top-bar">
+        <div class="logo">Flip<span>Calc</span></div>
+        <div class="top-bar-right">
+            <button class="btn btn-sm btn-outline" onclick="exportData()">Export</button>
+            <button class="btn btn-sm btn-outline" onclick="showImportModal()">Import</button>
         </div>
     </div>
-    <script src="game.js"></script>
+
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="calc">
+            <span class="tab-icon">&#9874;</span>Analyze
+        </button>
+        <button class="tab-btn" data-tab="inventory">
+            <span class="tab-icon">&#9783;</span>Inventory
+        </button>
+        <button class="tab-btn" data-tab="dashboard">
+            <span class="tab-icon">&#9733;</span>Dashboard
+        </button>
+        <button class="tab-btn" data-tab="shipping">
+            <span class="tab-icon">&#9993;</span>Shipping
+        </button>
+    </nav>
+
+    <div class="main">
+        <!-- ============ DEAL ANALYZER ============ -->
+        <div id="tab-calc" class="tab-content active">
+            <div class="card">
+                <div class="card-title">Deal Analyzer</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Your Cost</label>
+                        <div class="input-prefix">
+                            <input type="number" id="itemCost" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Sell Price</label>
+                        <div class="input-prefix">
+                            <input type="number" id="sellPrice" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Shipping Cost</label>
+                        <div class="input-prefix">
+                            <input type="number" id="shipCost" placeholder="0.00" step="0.01" min="0" value="0" inputmode="decimal">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Sales Tax Paid</label>
+                        <div class="input-prefix">
+                            <input type="number" id="taxPaid" placeholder="0.00" step="0.01" min="0" value="0" inputmode="decimal">
+                        </div>
+                    </div>
+                </div>
+                <div class="toggle-row">
+                    <label>Buyer pays shipping</label>
+                    <div class="toggle on" id="buyerPaysShip" onclick="this.classList.toggle('on'); calculate();"></div>
+                </div>
+                <button class="btn btn-primary btn-full mt-12" onclick="calculate()">Calculate Profit</button>
+            </div>
+
+            <div id="verdictArea" class="hidden"></div>
+            <div id="resultsArea" class="hidden">
+                <div class="card">
+                    <div class="card-title">Profit by Platform <span class="text-sm text-muted">(best to worst)</span></div>
+                    <div id="platformResults" class="platform-results"></div>
+                </div>
+            </div>
+
+            <div id="addToInventoryArea" class="hidden">
+                <button class="btn btn-outline btn-full" onclick="showAddFromCalc()">+ Add This Deal to Inventory</button>
+            </div>
+        </div>
+
+        <!-- ============ INVENTORY ============ -->
+        <div id="tab-inventory" class="tab-content">
+            <div class="flex-between mb-8">
+                <div class="card-title" style="margin:0">Your Inventory</div>
+                <button class="btn btn-sm btn-primary" onclick="showAddItemModal()">+ Add Item</button>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+                <button class="btn btn-sm btn-outline filter-btn active" data-filter="all" onclick="filterInventory('all',this)">All</button>
+                <button class="btn btn-sm btn-outline filter-btn" data-filter="unlisted" onclick="filterInventory('unlisted',this)">Unlisted</button>
+                <button class="btn btn-sm btn-outline filter-btn" data-filter="listed" onclick="filterInventory('listed',this)">Listed</button>
+                <button class="btn btn-sm btn-outline filter-btn" data-filter="sold" onclick="filterInventory('sold',this)">Sold</button>
+            </div>
+
+            <div id="inventoryList" class="inventory-list"></div>
+        </div>
+
+        <!-- ============ DASHBOARD ============ -->
+        <div id="tab-dashboard" class="tab-content">
+            <div id="dashStats" class="stats-grid"></div>
+
+            <div class="card">
+                <div class="card-title">Platform Breakdown</div>
+                <div id="platformBreakdown"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Recent Sales</div>
+                <div id="recentSales"></div>
+            </div>
+        </div>
+
+        <!-- ============ SHIPPING ESTIMATOR ============ -->
+        <div id="tab-shipping" class="tab-content">
+            <div class="card">
+                <div class="card-title">Shipping Estimator</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Weight (lbs)</label>
+                        <input type="number" id="shipWeight" placeholder="1" step="0.1" min="0.1" value="1" inputmode="decimal">
+                    </div>
+                    <div class="input-group">
+                        <label>Package Size</label>
+                        <select id="shipSize">
+                            <option value="envelope">Envelope / Flat</option>
+                            <option value="small" selected>Small Box</option>
+                            <option value="medium">Medium Box</option>
+                            <option value="large">Large Box</option>
+                            <option value="oversized">Oversized</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-full mt-12" onclick="estimateShipping()">Estimate Costs</button>
+            </div>
+            <div id="shippingResults" class="hidden"></div>
+
+            <div class="card">
+                <div class="card-title">Quick Reference</div>
+                <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+                    <strong style="color:var(--text)">USPS First Class</strong> — Under 1 lb, cheapest option ($3-5)<br>
+                    <strong style="color:var(--text)">USPS Priority Mail</strong> — 1-70 lbs, includes tracking + insurance ($8-15)<br>
+                    <strong style="color:var(--text)">USPS Flat Rate</strong> — Any weight that fits the box ($9-22)<br>
+                    <strong style="color:var(--text)">UPS Ground</strong> — Heavier items, 1-150 lbs ($10-30)<br>
+                    <strong style="color:var(--text)">FedEx SmartPost</strong> — Budget option for light packages ($7-12)<br>
+                    <strong style="color:var(--text)">Pirate Ship</strong> — Discounted USPS/UPS rates, free to use<br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal-overlay" id="addItemModal">
+        <div class="modal">
+            <div class="modal-title">
+                <span id="modalTitle">Add Item</span>
+                <button class="modal-close" onclick="closeModal('addItemModal')">&times;</button>
+            </div>
+            <div class="input-group">
+                <label>Item Name</label>
+                <input type="text" id="modalItemName" placeholder="e.g. Nike Air Max 90">
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Cost (what you paid)</label>
+                    <div class="input-prefix">
+                        <input type="number" id="modalItemCost" placeholder="0.00" step="0.01" inputmode="decimal">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Expected Sell Price</label>
+                    <div class="input-prefix">
+                        <input type="number" id="modalItemPrice" placeholder="0.00" step="0.01" inputmode="decimal">
+                    </div>
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Platform</label>
+                    <select id="modalItemPlatform">
+                        <option value="">Not listed yet</option>
+                        <option value="ebay">eBay</option>
+                        <option value="mercari">Mercari</option>
+                        <option value="poshmark">Poshmark</option>
+                        <option value="facebook">Facebook Marketplace</option>
+                        <option value="depop">Depop</option>
+                        <option value="etsy">Etsy</option>
+                        <option value="offerup">OfferUp</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="modalItemStatus">
+                        <option value="unlisted">Unlisted</option>
+                        <option value="listed">Listed</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-group" id="soldPriceGroup" style="display:none">
+                <label>Actual Sold Price</label>
+                <div class="input-prefix">
+                    <input type="number" id="modalSoldPrice" placeholder="0.00" step="0.01" inputmode="decimal">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Notes (optional)</label>
+                <textarea id="modalItemNotes" rows="2" placeholder="Where you found it, condition, etc."></textarea>
+            </div>
+            <input type="hidden" id="modalEditId" value="">
+            <button class="btn btn-success btn-full mt-12" onclick="saveItem()" id="modalSaveBtn">Add to Inventory</button>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal">
+            <div class="modal-title">
+                <span>Import Data</span>
+                <button class="modal-close" onclick="closeModal('importModal')">&times;</button>
+            </div>
+            <div class="input-group">
+                <label>Paste exported JSON data</label>
+                <textarea id="importData" rows="6" placeholder='Paste your exported data here...'></textarea>
+            </div>
+            <button class="btn btn-primary btn-full mt-12" onclick="importData()">Import</button>
+        </div>
+    </div>
+
+    <script>
+    // ============ PLATFORM FEE STRUCTURES ============
+    const PLATFORMS = {
+        ebay: {
+            name: 'eBay',
+            color: '#e53238',
+            calc: (price, ship, buyerPaysShip) => {
+                const total = price + (buyerPaysShip ? ship : 0);
+                const fvf = total * 0.1325;
+                const processing = 0.30;
+                return fvf + processing;
+            },
+            feeDesc: '13.25% + $0.30'
+        },
+        mercari: {
+            name: 'Mercari',
+            color: '#4dc1e8',
+            calc: (price, ship, buyerPaysShip) => {
+                const sellFee = price * 0.10;
+                const processing = price * 0.029 + 0.50;
+                return sellFee + processing;
+            },
+            feeDesc: '10% + 2.9% + $0.50'
+        },
+        poshmark: {
+            name: 'Poshmark',
+            color: '#7b2c44',
+            calc: (price) => {
+                return price < 15 ? 2.95 : price * 0.20;
+            },
+            feeDesc: '$2.95 (<$15) or 20%'
+        },
+        facebook: {
+            name: 'FB Marketplace',
+            color: '#1877f2',
+            calc: (price) => {
+                return 0; // Local pickup is free
+            },
+            feeDesc: 'Free (local pickup)'
+        },
+        facebook_ship: {
+            name: 'FB Marketplace',
+            color: '#1877f2',
+            calc: (price) => {
+                return Math.max(price * 0.05, 0.40);
+            },
+            feeDesc: '5% shipped ($0.40 min)',
+            subLabel: '(shipped)'
+        },
+        depop: {
+            name: 'Depop',
+            color: '#ff2300',
+            calc: (price) => {
+                return price * 0.033 + 0.45;
+            },
+            feeDesc: '3.3% + $0.45'
+        },
+        etsy: {
+            name: 'Etsy',
+            color: '#f1641e',
+            calc: (price) => {
+                const transaction = price * 0.065;
+                const processing = price * 0.03 + 0.25;
+                const listing = 0.20;
+                return transaction + processing + listing;
+            },
+            feeDesc: '6.5% + 3% + $0.25 + $0.20'
+        },
+        offerup: {
+            name: 'OfferUp',
+            color: '#00ab80',
+            calc: (price) => {
+                return 0; // Local is free
+            },
+            feeDesc: 'Free (local)'
+        },
+        offerup_ship: {
+            name: 'OfferUp',
+            color: '#00ab80',
+            calc: (price) => {
+                return Math.max(price * 0.129, 1.99);
+            },
+            feeDesc: '12.9% shipped ($1.99 min)',
+            subLabel: '(shipped)'
+        }
+    };
+
+    // ============ STATE ============
+    let inventory = JSON.parse(localStorage.getItem('flipcalc_inventory') || '[]');
+    let currentFilter = 'all';
+
+    // ============ TAB NAVIGATION ============
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            if (btn.dataset.tab === 'dashboard') renderDashboard();
+            if (btn.dataset.tab === 'inventory') renderInventory();
+        });
+    });
+
+    // ============ DEAL ANALYZER ============
+    function calculate() {
+        const cost = parseFloat(document.getElementById('itemCost').value) || 0;
+        const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+        const shipCost = parseFloat(document.getElementById('shipCost').value) || 0;
+        const taxPaid = parseFloat(document.getElementById('taxPaid').value) || 0;
+        const buyerPaysShip = document.getElementById('buyerPaysShip').classList.contains('on');
+
+        if (cost <= 0 && sellPrice <= 0) return;
+
+        const totalCost = cost + taxPaid + (buyerPaysShip ? 0 : shipCost);
+
+        const results = [];
+        for (const [key, platform] of Object.entries(PLATFORMS)) {
+            const fees = platform.calc(sellPrice, shipCost, buyerPaysShip);
+            const revenue = sellPrice;
+            const profit = revenue - fees - totalCost;
+            const roi = totalCost > 0 ? (profit / totalCost * 100) : 0;
+            results.push({
+                key,
+                name: platform.name,
+                subLabel: platform.subLabel || '',
+                feeDesc: platform.feeDesc,
+                fees,
+                profit,
+                roi,
+                revenue
+            });
+        }
+
+        results.sort((a, b) => b.profit - a.profit);
+        const bestProfit = results[0].profit;
+
+        // Verdict
+        const verdictArea = document.getElementById('verdictArea');
+        verdictArea.classList.remove('hidden');
+        let verdictClass, verdictText, verdictDetail;
+
+        if (bestProfit > totalCost * 0.3) {
+            verdictClass = 'buy';
+            verdictText = 'BUY IT';
+            verdictDetail = `Best profit: $${bestProfit.toFixed(2)} on ${results[0].name} (${results[0].roi.toFixed(0)}% ROI)`;
+        } else if (bestProfit > 0) {
+            verdictClass = 'maybe';
+            verdictText = 'MAYBE';
+            verdictDetail = `Slim margin: $${bestProfit.toFixed(2)} on ${results[0].name} (${results[0].roi.toFixed(0)}% ROI)`;
+        } else {
+            verdictClass = 'skip';
+            verdictText = 'SKIP IT';
+            verdictDetail = `You'd lose $${Math.abs(bestProfit).toFixed(2)} even on the best platform`;
+        }
+
+        verdictArea.innerHTML = `
+            <div class="verdict ${verdictClass}">
+                <div class="verdict-label">${verdictText}</div>
+                <div class="verdict-detail">${verdictDetail}</div>
+            </div>`;
+
+        // Platform results
+        const resultsArea = document.getElementById('resultsArea');
+        resultsArea.classList.remove('hidden');
+
+        const html = results.map((r, i) => {
+            const isBest = i === 0 && r.profit > 0;
+            const isLoss = r.profit < 0;
+            return `
+                <div class="platform-row ${isBest ? 'best' : ''} ${isLoss ? 'loss' : ''}">
+                    <div class="platform-name">
+                        ${r.name}${r.subLabel ? ' <small>' + r.subLabel + '</small>' : ''}
+                        ${isBest ? '<span class="best-badge">BEST</span>' : ''}
+                    </div>
+                    <div class="platform-fees">-$${r.fees.toFixed(2)}<br><span style="font-size:11px">${r.feeDesc}</span></div>
+                    <div class="platform-profit ${r.profit >= 0 ? 'positive' : 'negative'}">
+                        ${r.profit >= 0 ? '+' : '-'}$${Math.abs(r.profit).toFixed(2)}
+                    </div>
+                    <div class="platform-roi ${r.roi > 20 ? 'good' : r.roi < 0 ? 'bad' : ''}">${r.roi.toFixed(0)}% ROI</div>
+                </div>`;
+        }).join('');
+
+        document.getElementById('platformResults').innerHTML = html;
+        document.getElementById('addToInventoryArea').classList.remove('hidden');
+    }
+
+    // Auto-calculate on input change
+    ['itemCost', 'sellPrice', 'shipCost', 'taxPaid'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+            const cost = document.getElementById('itemCost').value;
+            const price = document.getElementById('sellPrice').value;
+            if (cost && price) calculate();
+        });
+    });
+
+    // ============ INVENTORY MANAGEMENT ============
+    function saveInventory() {
+        localStorage.setItem('flipcalc_inventory', JSON.stringify(inventory));
+    }
+
+    function showAddItemModal() {
+        document.getElementById('modalEditId').value = '';
+        document.getElementById('modalTitle').textContent = 'Add Item';
+        document.getElementById('modalSaveBtn').textContent = 'Add to Inventory';
+        document.getElementById('modalItemName').value = '';
+        document.getElementById('modalItemCost').value = '';
+        document.getElementById('modalItemPrice').value = '';
+        document.getElementById('modalItemPlatform').value = '';
+        document.getElementById('modalItemStatus').value = 'unlisted';
+        document.getElementById('modalSoldPrice').value = '';
+        document.getElementById('modalItemNotes').value = '';
+        document.getElementById('soldPriceGroup').style.display = 'none';
+        openModal('addItemModal');
+    }
+
+    function showAddFromCalc() {
+        showAddItemModal();
+        document.getElementById('modalItemCost').value = document.getElementById('itemCost').value;
+        document.getElementById('modalItemPrice').value = document.getElementById('sellPrice').value;
+    }
+
+    function editItem(id) {
+        const item = inventory.find(i => i.id === id);
+        if (!item) return;
+        document.getElementById('modalEditId').value = id;
+        document.getElementById('modalTitle').textContent = 'Edit Item';
+        document.getElementById('modalSaveBtn').textContent = 'Save Changes';
+        document.getElementById('modalItemName').value = item.name;
+        document.getElementById('modalItemCost').value = item.cost;
+        document.getElementById('modalItemPrice').value = item.expectedPrice;
+        document.getElementById('modalItemPlatform').value = item.platform || '';
+        document.getElementById('modalItemStatus').value = item.status;
+        document.getElementById('modalSoldPrice').value = item.soldPrice || '';
+        document.getElementById('modalItemNotes').value = item.notes || '';
+        document.getElementById('soldPriceGroup').style.display = item.status === 'sold' ? 'block' : 'none';
+        openModal('addItemModal');
+    }
+
+    function saveItem() {
+        const editId = document.getElementById('modalEditId').value;
+        const name = document.getElementById('modalItemName').value.trim();
+        const cost = parseFloat(document.getElementById('modalItemCost').value) || 0;
+        const expectedPrice = parseFloat(document.getElementById('modalItemPrice').value) || 0;
+        const platform = document.getElementById('modalItemPlatform').value;
+        const status = document.getElementById('modalItemStatus').value;
+        const soldPrice = parseFloat(document.getElementById('modalSoldPrice').value) || 0;
+        const notes = document.getElementById('modalItemNotes').value.trim();
+
+        if (!name) {
+            document.getElementById('modalItemName').style.borderColor = 'var(--red)';
+            return;
+        }
+
+        if (editId) {
+            const item = inventory.find(i => i.id === editId);
+            if (item) {
+                Object.assign(item, { name, cost, expectedPrice, platform, status, soldPrice, notes, updatedAt: Date.now() });
+            }
+        } else {
+            inventory.push({
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+                name, cost, expectedPrice, platform, status, soldPrice, notes,
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            });
+        }
+
+        saveInventory();
+        closeModal('addItemModal');
+        renderInventory();
+    }
+
+    function deleteItem(id) {
+        if (!confirm('Delete this item?')) return;
+        inventory = inventory.filter(i => i.id !== id);
+        saveInventory();
+        renderInventory();
+    }
+
+    function markSold(id) {
+        const item = inventory.find(i => i.id === id);
+        if (!item) return;
+        const soldPrice = prompt('What did it sell for? (just the number)', item.expectedPrice);
+        if (soldPrice === null) return;
+        item.status = 'sold';
+        item.soldPrice = parseFloat(soldPrice) || 0;
+        item.soldDate = Date.now();
+        item.updatedAt = Date.now();
+        saveInventory();
+        renderInventory();
+    }
+
+    function filterInventory(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        renderInventory();
+    }
+
+    function renderInventory() {
+        const container = document.getElementById('inventoryList');
+        let items = [...inventory].sort((a, b) => b.updatedAt - a.updatedAt);
+
+        if (currentFilter !== 'all') {
+            items = items.filter(i => i.status === currentFilter);
+        }
+
+        if (items.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">&#128230;</div>
+                    <p>${currentFilter === 'all' ? 'No items yet. Start adding deals!' : 'No ' + currentFilter + ' items.'}</p>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = items.map(item => {
+            const platformName = item.platform ? (PLATFORMS[item.platform]?.name || item.platform) : 'No platform';
+            const statusClass = 'status-' + item.status;
+
+            let profitHtml = '';
+            if (item.status === 'sold' && item.soldPrice) {
+                const fees = item.platform && PLATFORMS[item.platform] ? PLATFORMS[item.platform].calc(item.soldPrice, 0, true) : 0;
+                const profit = item.soldPrice - fees - item.cost;
+                const cls = profit >= 0 ? 'positive' : 'negative';
+                profitHtml = `<span>Profit: <strong class="sale-profit ${cls}">${profit >= 0 ? '+' : '-'}$${Math.abs(profit).toFixed(2)}</strong></span>`;
+            } else if (item.expectedPrice && item.cost) {
+                const potentialProfit = item.expectedPrice - item.cost;
+                profitHtml = `<span>Est. profit: <strong style="color:var(--text2)">~$${potentialProfit.toFixed(2)}</strong></span>`;
+            }
+
+            return `
+                <div class="inv-item">
+                    <div class="inv-item-top">
+                        <div class="inv-item-name">${escHtml(item.name)}</div>
+                        <span class="inv-item-status ${statusClass}">${item.status}</span>
+                    </div>
+                    <div class="inv-item-meta">
+                        <span>Cost: <strong>$${item.cost.toFixed(2)}</strong></span>
+                        ${item.status === 'sold' && item.soldPrice ? `<span>Sold: <strong>$${item.soldPrice.toFixed(2)}</strong></span>` : `<span>List: <strong>$${item.expectedPrice.toFixed(2)}</strong></span>`}
+                        <span>${platformName}</span>
+                        ${profitHtml}
+                    </div>
+                    ${item.notes ? `<div style="font-size:12px;color:var(--text2);margin-top:6px;font-style:italic">${escHtml(item.notes)}</div>` : ''}
+                    <div class="inv-item-actions">
+                        <button class="btn btn-sm btn-outline" onclick="editItem('${item.id}')">Edit</button>
+                        ${item.status !== 'sold' ? `<button class="btn btn-sm btn-success" onclick="markSold('${item.id}')">Mark Sold</button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="deleteItem('${item.id}')">Delete</button>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    // ============ DASHBOARD ============
+    function renderDashboard() {
+        const sold = inventory.filter(i => i.status === 'sold');
+        const listed = inventory.filter(i => i.status === 'listed');
+        const unlisted = inventory.filter(i => i.status === 'unlisted');
+
+        const totalInvested = inventory.reduce((s, i) => s + i.cost, 0);
+        const totalSoldRevenue = sold.reduce((s, i) => s + (i.soldPrice || 0), 0);
+        const totalFees = sold.reduce((s, i) => {
+            if (i.platform && PLATFORMS[i.platform]) {
+                return s + PLATFORMS[i.platform].calc(i.soldPrice || 0, 0, true);
+            }
+            return s;
+        }, 0);
+        const totalSoldCost = sold.reduce((s, i) => s + i.cost, 0);
+        const totalProfit = totalSoldRevenue - totalFees - totalSoldCost;
+        const unsoldValue = [...listed, ...unlisted].reduce((s, i) => s + (i.expectedPrice || 0), 0);
+        const unsoldCost = [...listed, ...unlisted].reduce((s, i) => s + i.cost, 0);
+
+        document.getElementById('dashStats').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-value ${totalProfit >= 0 ? 'green' : 'red'}">${totalProfit >= 0 ? '+' : '-'}$${Math.abs(totalProfit).toFixed(0)}</div>
+                <div class="stat-label">Total Profit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value blue">${sold.length}</div>
+                <div class="stat-label">Items Sold</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value yellow">$${unsoldCost.toFixed(0)}</div>
+                <div class="stat-label">Invested (unsold)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$${unsoldValue.toFixed(0)}</div>
+                <div class="stat-label">Potential Revenue</div>
+            </div>`;
+
+        // Platform breakdown
+        const platformStats = {};
+        sold.forEach(item => {
+            const p = item.platform || 'other';
+            if (!platformStats[p]) platformStats[p] = { count: 0, revenue: 0, profit: 0 };
+            const fees = PLATFORMS[p] ? PLATFORMS[p].calc(item.soldPrice || 0, 0, true) : 0;
+            platformStats[p].count++;
+            platformStats[p].revenue += item.soldPrice || 0;
+            platformStats[p].profit += (item.soldPrice || 0) - fees - item.cost;
+        });
+
+        const pbHtml = Object.entries(platformStats).map(([key, stats]) => {
+            const name = PLATFORMS[key]?.name || key;
+            return `
+                <div class="sale-row">
+                    <div class="sale-info">
+                        <strong>${name}</strong>
+                        <small>${stats.count} sales &middot; $${stats.revenue.toFixed(2)} revenue</small>
+                    </div>
+                    <div class="sale-profit ${stats.profit >= 0 ? 'positive' : 'negative'}">
+                        ${stats.profit >= 0 ? '+' : '-'}$${Math.abs(stats.profit).toFixed(2)}
+                    </div>
+                </div>`;
+        }).join('');
+
+        document.getElementById('platformBreakdown').innerHTML = pbHtml || '<div class="text-muted text-sm text-center" style="padding:20px">No sales data yet</div>';
+
+        // Recent sales
+        const recentSold = sold.sort((a, b) => (b.soldDate || b.updatedAt) - (a.soldDate || a.updatedAt)).slice(0, 10);
+        const rsHtml = recentSold.map(item => {
+            const fees = item.platform && PLATFORMS[item.platform] ? PLATFORMS[item.platform].calc(item.soldPrice || 0, 0, true) : 0;
+            const profit = (item.soldPrice || 0) - fees - item.cost;
+            const date = new Date(item.soldDate || item.updatedAt);
+            const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            return `
+                <div class="sale-row">
+                    <div class="sale-info">
+                        <strong>${escHtml(item.name)}</strong>
+                        <small>${dateStr} &middot; ${PLATFORMS[item.platform]?.name || 'Unknown'}</small>
+                    </div>
+                    <div class="sale-profit ${profit >= 0 ? 'positive' : 'negative'}">
+                        ${profit >= 0 ? '+' : '-'}$${Math.abs(profit).toFixed(2)}
+                    </div>
+                </div>`;
+        }).join('');
+
+        document.getElementById('recentSales').innerHTML = rsHtml || '<div class="text-muted text-sm text-center" style="padding:20px">No sales yet. Mark items as sold to see them here.</div>';
+    }
+
+    // ============ SHIPPING ESTIMATOR ============
+    function estimateShipping() {
+        const weight = parseFloat(document.getElementById('shipWeight').value) || 1;
+        const size = document.getElementById('shipSize').value;
+
+        // Rough estimates based on common shipping costs
+        const estimates = [];
+
+        if (weight <= 1 && (size === 'envelope' || size === 'small')) {
+            estimates.push({ carrier: 'USPS First Class', price: 3.50 + (weight * 1.5), note: 'Best for items under 1 lb' });
+        }
+
+        // USPS Priority
+        let priorityBase = size === 'envelope' ? 8.00 : size === 'small' ? 9.50 : size === 'medium' ? 14.00 : size === 'large' ? 19.00 : 25.00;
+        priorityBase += Math.max(0, weight - 2) * 1.50;
+        estimates.push({ carrier: 'USPS Priority Mail', price: priorityBase, note: 'Includes tracking + $100 insurance' });
+
+        // Flat rate options
+        if (size === 'envelope' || size === 'small') {
+            estimates.push({ carrier: 'USPS Flat Rate Envelope', price: 9.65, note: 'Any weight that fits' });
+        }
+        if (size === 'small' || size === 'medium') {
+            estimates.push({ carrier: 'USPS Flat Rate Box (S)', price: 10.40, note: '8-11/16" x 5-7/16" x 1-3/4"' });
+        }
+        if (size === 'medium' || size === 'large') {
+            estimates.push({ carrier: 'USPS Flat Rate Box (M)', price: 16.10, note: 'Two sizes available' });
+            estimates.push({ carrier: 'USPS Flat Rate Box (L)', price: 22.45, note: '12-1/4" x 12-1/4" x 6"' });
+        }
+
+        // UPS Ground
+        let upsBase = size === 'small' ? 10.50 : size === 'medium' ? 14.00 : size === 'large' ? 18.00 : 24.00;
+        upsBase += Math.max(0, weight - 1) * 1.80;
+        estimates.push({ carrier: 'UPS Ground', price: upsBase, note: '3-5 business days' });
+
+        // Pirate Ship discount estimate
+        estimates.push({ carrier: 'Pirate Ship (USPS)', price: priorityBase * 0.82, note: '~18% cheaper than retail USPS' });
+
+        estimates.sort((a, b) => a.price - b.price);
+
+        const container = document.getElementById('shippingResults');
+        container.classList.remove('hidden');
+        container.innerHTML = `
+            <div class="card">
+                <div class="card-title">Estimated Costs <span class="text-sm text-muted">(${weight} lb, ${size})</span></div>
+                <div class="ship-grid">
+                    ${estimates.map(e => `
+                        <div class="ship-result">
+                            <div class="carrier">${e.carrier}</div>
+                            <div class="price">$${e.price.toFixed(2)}</div>
+                            <div class="note">${e.note}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="text-sm text-muted mt-12 text-center">
+                    Estimates only. Actual costs vary by distance. Use Pirate Ship for best rates.
+                </div>
+            </div>`;
+    }
+
+    // ============ EXPORT / IMPORT ============
+    function exportData() {
+        const data = JSON.stringify({ inventory, exportedAt: new Date().toISOString(), version: 1 }, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `flipcalc-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function showImportModal() {
+        document.getElementById('importData').value = '';
+        openModal('importModal');
+    }
+
+    function importData() {
+        try {
+            const raw = document.getElementById('importData').value.trim();
+            const data = JSON.parse(raw);
+            if (data.inventory && Array.isArray(data.inventory)) {
+                const count = data.inventory.length;
+                if (confirm(`Import ${count} items? This will ADD to your existing inventory.`)) {
+                    inventory = [...inventory, ...data.inventory];
+                    saveInventory();
+                    renderInventory();
+                    closeModal('importModal');
+                    alert(`Imported ${count} items.`);
+                }
+            } else {
+                alert('Invalid data format.');
+            }
+        } catch (e) {
+            alert('Could not parse data. Make sure it\'s valid JSON.');
+        }
+    }
+
+    // ============ MODAL HELPERS ============
+    function openModal(id) {
+        document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('open');
+        });
+    });
+
+    // Show/hide sold price field
+    document.getElementById('modalItemStatus').addEventListener('change', (e) => {
+        document.getElementById('soldPriceGroup').style.display = e.target.value === 'sold' ? 'block' : 'none';
+    });
+
+    // ============ UTILITY ============
+    function escHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ============ INIT ============
+    renderInventory();
+    </script>
 </body>
 </html>
