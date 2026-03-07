@@ -1671,9 +1671,14 @@ $('#anzanPauseBtn').addEventListener('click',()=>{
   anzanPaused=!anzanPaused;
   $('#anzanPauseBtn').textContent=anzanPaused?'Resume':'Pause';
   $('#anzanPauseBtn').classList.toggle('btn-primary',anzanPaused);
-  // Resume flashing if we were in the middle of it
-  if(!anzanPaused&&anzanIdx<anzanCount&&anzanAnswerRow.style.display==='none'){
-    flashAnzanNumber();
+  if(anzanPaused){
+    // Cancel pending flash timeout to prevent double-flashing on resume
+    if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+  } else {
+    // Resume flashing if we were in the middle of it
+    if(anzanIdx<anzanCount&&anzanAnswerRow.style.display==='none'){
+      flashAnzanNumber();
+    }
   }
 });
 
