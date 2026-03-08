@@ -1473,11 +1473,20 @@ function buildAnzanBreakdown(){
     if(i===0) line='Start: '+item.value+' = '+sum;
     else line=(item.op==='+'?'+ ':'- ')+item.value+' = '+sum;
     if(sum>=0&&sum<=999) line+='  '+describeBeads(sum);
-    // Show technique used
+    // Show technique used for ones digit
     if(i>0){
       const onesNow=prevSum%10;
-      const tech=describeComplementTechnique(item.op,item.value%10||item.value,onesNow);
-      if(tech) line+='\n   \u2192 '+tech;
+      const onesAdd=item.value%10;
+      if(onesAdd>0){
+        const tech=describeComplementTechnique(item.op,onesAdd,onesNow);
+        if(tech) line+='\n   \u2192 Ones: '+tech;
+      }
+      const tensAdd=Math.floor(item.value/10)%10;
+      if(tensAdd>0){
+        const tensNow=Math.floor(prevSum/10)%10;
+        const tensTech=describeComplementTechnique(item.op,tensAdd,tensNow);
+        if(tensTech) line+='\n   \u2192 Tens: '+tensTech;
+      }
     }
     lines.push(line);
   });
@@ -1708,6 +1717,8 @@ function endAnzan(){
   if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   correct=anzanCorrectVal;total=anzanTotalVal;
   timeLeft=anzanTimeLeft;
+  bestSessionStreak=anzanBestStreak;
+  currentStreak=anzanStreak;
   mode='anzan';
   endSession();
 }
