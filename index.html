@@ -787,20 +787,30 @@ function generateProblem(opts){
 
 /* ===== HINTS ===== */
 function makeHintText(p){
-  const rows=['Start: set '+p.nums[0]+' on the soroban.'];
+  const rows=['Start: set '+p.nums[0]+' on the soroban. '+describeBeads(p.nums[0])];
+  let runVal=p.nums[0];
   for(let i=1;i<p.nums.length;i++){
-    const verb=p.ops[i]==='+'?'Add':'Subtract';
+    const op=p.ops[i];
+    const verb=op==='+'?'Add':'Subtract';
     const n=p.nums[i];
+    const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
     const parts=[];
-    const hundreds=Math.floor(n/100)%10;
-    const tens=Math.floor(n/10)%10;
-    const ones=n%10;
-    if(hundreds) parts.push(verb+' '+hundreds+' on the hundreds rod');
-    if(tens) parts.push((parts.length?verb.toLowerCase():verb)+' '+tens+' on the tens rod');
-    if(ones) parts.push((parts.length?verb.toLowerCase():verb)+' '+ones+' on the ones rod');
-    rows.push('Line '+(i+1)+': '+verb+' '+n+'. '+(parts.join(', ')||verb+' 0')+'. Use complements if needed.');
+    // Process ones with technique
+    if(ones>0){
+      const onesRod=runVal%10;
+      const tech=describeComplementTechnique(op,ones,onesRod);
+      parts.push(verb.toLowerCase()+' '+ones+' on ones'+(tech?' \u2014 '+tech:''));
+    }
+    if(tens>0){
+      const tensRod=Math.floor(runVal/10)%10;
+      const tech=describeComplementTechnique(op,tens,tensRod);
+      parts.push(verb.toLowerCase()+' '+tens+' on tens'+(tech?' \u2014 '+tech:''));
+    }
+    if(huns>0) parts.push(verb.toLowerCase()+' '+huns+' on hundreds');
+    runVal=op==='+'?runVal+n:runVal-n;
+    rows.push('Line '+(i+1)+': '+verb+' '+n+'. '+(parts.length?parts.join('; '):verb+' 0')+'. Result: '+runVal+' '+describeBeads(runVal));
   }
-  rows.push('Read the beads for the final answer.');
+  rows.push('\nFinal answer: '+runVal);
   return rows.join('\n');
 }
 
@@ -988,20 +998,31 @@ function getCoachExplanation(p,lineIdx){
   // Compute running value up to previous line
   let runVal=p.nums[0];
   for(let i=1;i<lineIdx;i++) runVal=p.ops[i]==='+'?runVal+p.nums[i]:runVal-p.nums[i];
-  // Explain per-rod technique
+  // Explain per-rod technique, processing ones first to detect carries
   const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
+  const onesRod=runVal%10,tensRod=Math.floor(runVal/10)%10;
   const parts=[];
-  if(huns>0) parts.push((op==='+'?'+':'-')+huns+' on hundreds');
-  if(tens>0){
-    const tensRod=Math.floor(runVal/10)%10;
-    const tensTech=describeComplementTechnique(op,tens,tensRod);
-    parts.push((op==='+'?'+':'-')+tens+' on tens'+(tensTech?' ('+tensTech+')':''));
-  }
+  // Process ones first to detect carry/borrow
+  let onesCarry=0;
   if(ones>0){
-    const onesRod=runVal%10;
+    const onesResult=op==='+'?onesRod+ones:onesRod-ones;
+    if(onesResult>=10) onesCarry=1;
+    else if(onesResult<0) onesCarry=-1;
     const onesTech=describeComplementTechnique(op,ones,onesRod);
     parts.push((op==='+'?'+':'-')+ones+' on ones'+(onesTech?' ('+onesTech+')':''));
   }
+  // Process tens, accounting for carry from ones
+  if(tens>0){
+    const effectiveTensRod=clamp(tensRod+onesCarry,0,9);
+    const tensTech=describeComplementTechnique(op,tens,effectiveTensRod);
+    const carryNote=onesCarry!==0?' (after carry from ones)':'';
+    parts.unshift((op==='+'?'+':'-')+tens+' on tens'+(tensTech?' ('+tensTech+')':'')+carryNote);
+  } else if(onesCarry===1){
+    parts.unshift('+1 carry to tens');
+  } else if(onesCarry===-1){
+    parts.unshift('-1 borrow from tens');
+  }
+  if(huns>0) parts.unshift((op==='+'?'+':'-')+huns+' on hundreds');
   return (op==='+'?'Add ':'Sub ')+n+': '+parts.join(', ');
 }
 
@@ -1018,7 +1039,15 @@ function updateStepTag(p,idx){
           const colName=['ones','tens','hundreds','thousands'][width-1-c]||'col '+(width-c);
           stepTagEl.textContent=(op==='+'?'Add':'Sub')+' '+colName;
           stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
-          soroCaptionEl.textContent=(op==='+'?'Add ':'Subtract ')+p.nums[i]+', working on '+colName+' rod.';
+          // Show technique tip for this specific column
+          const colDigit=numberToDigits(p.nums[i],width)[c];
+          let microCaption=(op==='+'?'Add ':'Subtract ')+p.nums[i]+', working on '+colName+' rod.';
+          if(colDigit>0){
+            const rodDigit=numberToDigits(frames[k-1]||0,width)[c];
+            const tech=describeComplementTechnique(op,colDigit,rodDigit);
+            if(tech) microCaption+='\n'+tech;
+          }
+          soroCaptionEl.textContent=microCaption;
           return;
         }
       }
@@ -1339,23 +1368,20 @@ function renderBeadRod(num,container){
 
 function renderBeadRodMulti(num,container){
   container.innerHTML='';
-  if(num<0||num>99) return;
+  if(num<0||num>999) return;
   if(num<=9){renderBeadRod(num,container);return}
-  const tens=Math.floor(num/10),ones=num%10;
+  const digits=String(num).split('').map(Number);
+  const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
   const wrap=document.createElement('div');
   wrap.style.cssText='display:flex;gap:20px;align-items:flex-start';
-  const tensDiv=document.createElement('div');
-  tensDiv.style.textAlign='center';
-  renderBeadRod(tens,tensDiv);
-  const tensLbl=tensDiv.querySelector('.bead-rod-label');
-  if(tensLbl) tensLbl.textContent='tens';
-  wrap.appendChild(tensDiv);
-  const onesDiv=document.createElement('div');
-  onesDiv.style.textAlign='center';
-  renderBeadRod(ones,onesDiv);
-  const onesLbl=onesDiv.querySelector('.bead-rod-label');
-  if(onesLbl) onesLbl.textContent='ones';
-  wrap.appendChild(onesDiv);
+  digits.forEach((d,i)=>{
+    const div=document.createElement('div');
+    div.style.textAlign='center';
+    renderBeadRod(d,div);
+    const lbl=div.querySelector('.bead-rod-label');
+    if(lbl) lbl.textContent=labels[i];
+    wrap.appendChild(div);
+  });
   const outer=document.createElement('div');
   outer.className='bead-rod';
   outer.appendChild(wrap);
@@ -1719,7 +1745,7 @@ function submitAnzan(){
 
   anzanBreakdownContent.textContent=buildAnzanBreakdown();
   anzanBreakdown.classList.remove('hidden');
-  if(anzanShowBeads&&anzanAnswer>=0&&anzanAnswer<=99){
+  if(anzanShowBeads&&anzanAnswer>=0&&anzanAnswer<=999){
     anzanBeadRod.classList.remove('hidden');
     if(anzanAnswer<=9) renderBeadRod(anzanAnswer,anzanBeadRod);
     else renderBeadRodMulti(anzanAnswer,anzanBeadRod);
