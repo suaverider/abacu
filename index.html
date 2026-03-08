@@ -1450,7 +1450,6 @@ function getAnzanCoachTip(idx,item,runningSum){
   }
   // Process tens, accounting for carry from ones
   const effectiveTensNow=tensNow+onesCarry;
-  const totalTensAdd=addTens+(onesCarry!==0?0:0); // carry already handled in complement
   if(addTens>0||onesCarry!==0){
     const tensAdjust=addTens;
     if(tensAdjust>0){
