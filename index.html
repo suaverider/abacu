@@ -196,6 +196,15 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 .history-detail{color:var(--ink3);font-size:.8rem}
 .history-acc{font-weight:800;font-size:1.1rem;font-family:monospace}
 
+/* ===== PERSONAL BEST ===== */
+.pb-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:3px 10px;border-radius:999px;font-size:.75rem;animation:pulse .6s ease}
+
+/* ===== MULTIPLICATION DRILL ===== */
+.mult-display{display:flex;align-items:center;justify-content:center;gap:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mult-num{font-size:3.5rem;font-weight:800;color:var(--teal)}
+.mult-op{font-size:2.5rem;color:var(--ink3);font-weight:700}
+.mult-input{font-size:2.5rem;width:160px}
+
 /* ===== FOOTER ===== */
 .footer{text-align:center;padding:24px 0;font-size:.75rem;color:var(--ink3);border-top:1px solid var(--ring);margin-top:24px}
 
@@ -205,6 +214,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 @keyframes flash-green{0%{box-shadow:0 0 0 0 rgba(0,230,118,.6)}100%{box-shadow:0 0 0 20px rgba(0,230,118,0)}}
 @keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(255,82,82,.6)}100%{box-shadow:0 0 0 20px rgba(255,82,82,0)}}
 @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
 .animate-in{animation:fadeIn .3s ease}
 .flash-correct{animation:flash-green .5s ease}
 .flash-wrong{animation:flash-red .5s ease}
@@ -217,6 +227,10 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 /* ===== ERROR DISPLAY ===== */
 #err{display:none;position:fixed;bottom:20px;right:20px;background:var(--bad);color:#fff;padding:10px 16px;border-radius:var(--radius-sm);font-size:.85rem;z-index:1000;max-width:400px}
 #err.shown{display:block}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:999px;font-weight:700;font-size:.9rem;z-index:1001;opacity:0;transition:opacity .3s;pointer-events:none}
+#toast.shown{opacity:1}
 
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:8px}
@@ -231,11 +245,12 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
   <div class="header flex justify-between items-center wrap gap-md">
     <div>
       <h1>Soroban Trainer Pro</h1>
-      <div class="subtitle">Daily abacus drills — Japanese classroom style</div>
+      <div class="subtitle">Daily abacus drills &mdash; Japanese classroom style</div>
     </div>
     <div class="flex items-center gap-sm">
       <div class="streak-badge" id="streakBadge"><span id="streakIcon">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
-      <span class="version" id="buildBadge">v2.0.0</span>
+      <span id="pbBadge" class="pb-badge hidden">PB</span>
+      <span class="version" id="buildBadge">v3.0.0</span>
     </div>
   </div>
 
@@ -250,6 +265,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="btn-group" style="flex-direction:column">
             <button class="btn btn-active" data-mode="standard">Standard Drill</button>
             <button class="btn" data-mode="anzan">Anzan (Mental Math)</button>
+            <button class="btn" data-mode="multiplication">Multiplication Drill</button>
             <button class="btn" data-mode="sprint10">Sprint: Friends of 10</button>
             <button class="btn" data-mode="sprint5">Sprint: Friends of 5</button>
           </div>
@@ -261,6 +277,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
             <button class="btn" data-diff="beginner">Beginner (1-digit)</button>
             <button class="btn btn-active" data-diff="intermediate">Intermediate (2-digit)</button>
             <button class="btn" data-diff="advanced">Advanced (3-digit)</button>
+            <button class="btn" data-diff="expert">Expert (4-digit)</button>
           </div>
         </div>
         <!-- Options -->
@@ -268,12 +285,15 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="setup-label">Options</div>
           <label class="toggle"><input type="checkbox" id="under100" checked/><span class="track"></span> Stay under 100</label>
           <label class="toggle"><input type="checkbox" id="adaptive" checked/><span class="track"></span> Adaptive chain length</label>
+          <label class="toggle"><input type="checkbox" id="negatives"/><span class="track"></span> Allow negatives</label>
           <label class="toggle"><input type="checkbox" id="practiceMisses"/><span class="track"></span> Practice missed set (<span id="missCount">0</span>)</label>
         </div>
         <!-- Duration & Technique -->
         <div class="setup-section">
           <div class="setup-label">Duration</div>
           <div class="btn-group">
+            <button class="btn dur" data-min="5">5 min</button>
+            <button class="btn dur" data-min="10">10 min</button>
             <button class="btn dur" data-min="15">15 min</button>
             <button class="btn dur btn-active" data-min="20">20 min</button>
             <button class="btn dur" data-min="30">30 min</button>
@@ -301,7 +321,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           </div>
         </div>
         <div id="anzanLevelDesc" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-size:.85rem;color:var(--ink2)">
-          <b style="color:var(--gold)">Beginner:</b> Addition only, single rod — total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.
+          <b style="color:var(--gold)">Beginner:</b> Addition only, single rod &mdash; total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.
         </div>
         <div class="flex wrap gap-md items-center">
           <div class="flex-col gap-xs">
@@ -333,6 +353,22 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
         </div>
       </div>
 
+      <!-- Multiplication settings (hidden by default) -->
+      <div id="multSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
+        <div class="setup-label" style="margin-bottom:10px">Multiplication Settings</div>
+        <div class="flex wrap gap-md items-center">
+          <div class="flex-col gap-xs">
+            <label class="tip">Table range</label>
+            <div class="btn-group">
+              <button class="btn btn-active" data-multrng="basic">2-9</button>
+              <button class="btn" data-multrng="extended">2-12</button>
+              <button class="btn" data-multrng="hard">2-20</button>
+            </div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="multReverse"/><span class="track"></span> Reverse (answer &times; ? = product)</label>
+        </div>
+      </div>
+
       <div class="setup-footer">
         <div class="tip">Tip: 20-30 minutes daily builds speed and accuracy fastest.</div>
         <button id="startBtn" class="btn btn-primary" style="font-size:1rem;padding:12px 28px">Start Session</button>
@@ -354,6 +390,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
             <div class="stat">Correct: <b id="scoreCorrect">0</b> / <span id="scoreTotal">0</span></div>
             <div class="stat">Acc: <b class="mono" id="acc">0%</b></div>
             <div class="stat">PPM: <b class="mono" id="ppm">0</b></div>
+            <div class="stat">Best: <b class="mono" id="bestStreak">0</b></div>
           </div>
           <div class="flex items-center gap-xs">
             <button class="btn btn-sm" id="hintBtn">Hint</button>
@@ -498,6 +535,44 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
 
+  <!-- ===== MULTIPLICATION SESSION ===== -->
+  <div id="multLive" class="hidden" style="margin-top:16px">
+    <div class="card animate-in">
+      <div class="status-bar">
+        <div class="flex items-center gap-sm">
+          <span class="clock" id="multClock">00:00</span>
+          <button class="btn btn-sm" id="multPauseBtn">Pause</button>
+        </div>
+        <div class="flex items-center gap-md">
+          <div class="stat">Correct: <b id="multCorrectEl">0</b> / <span id="multTotalEl">0</span></div>
+          <div class="stat">Acc: <b class="mono" id="multAccEl">0%</b></div>
+          <div class="stat">PPM: <b class="mono" id="multPPMEl">0</b></div>
+        </div>
+        <button class="btn btn-sm btn-ghost" id="multEndBtn">End Session</button>
+        <button class="btn btn-sm btn-ghost" id="multHomeBtn" style="color:var(--ink3)">Back</button>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0">
+          <div class="problem-label">Problem <span id="multProbNum">#1</span></div>
+          <div class="mult-display">
+            <span class="mult-num" id="multA">0</span>
+            <span class="mult-op">&times;</span>
+            <span class="mult-num" id="multB">0</span>
+          </div>
+          <div class="answer-row">
+            <span class="eq">=</span>
+            <input id="multInput" class="input mono mult-input" placeholder="?" inputmode="numeric" autocomplete="off"/>
+          </div>
+          <div class="feedback" id="multFeedback"></div>
+          <div class="flex gap-xs">
+            <button class="btn btn-primary" id="multSubmitBtn">Submit</button>
+            <button class="btn btn-ghost" id="multSkipBtn">Skip</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== SUMMARY ===== -->
   <div id="summary" class="hidden" style="margin-top:16px">
     <div class="card animate-in">
@@ -509,7 +584,9 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
           <div class="summary-stat"><span class="label">Accuracy</span><span class="value" id="sumAcc">0%</span></div>
           <div class="summary-stat"><span class="label">Problems/min</span><span class="value" id="sumPPM">0</span></div>
           <div class="summary-stat"><span class="label">Hints Used</span><span class="value" id="sumHints">0</span></div>
+          <div class="summary-stat"><span class="label">Best Streak</span><span class="value" id="sumBestStreak">0</span></div>
         </div>
+        <div id="sumPB" class="hidden" style="text-align:center;padding:12px;margin-top:8px"><span class="pb-badge" style="font-size:1rem;padding:8px 20px">New Personal Best!</span></div>
         <div id="sumMessage" style="text-align:center;padding:12px;margin-top:12px;font-size:1rem;font-weight:600;color:var(--gold)"></div>
         <div id="missWrap" class="hidden" style="margin-top:20px">
           <div style="font-weight:700;margin-bottom:8px">Missed Problems (<span id="missLen">0</span>)</div>
@@ -524,14 +601,15 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
       </div>
     </div>
     <div id="historyCard" class="card hidden" style="margin-top:16px">
-      <div class="card-header">Practice History</div>
+      <div class="card-header flex justify-between"><span>Practice History</span><button class="btn btn-sm btn-ghost" id="clearHistBtn">Clear</button></div>
       <div class="card-body" id="historyList"></div>
     </div>
   </div>
 
-  <div class="footer">Soroban Trainer Pro v2.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
+  <div class="footer">Soroban Trainer Pro v3.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
 </div>
 <div id="err"></div>
+<div id="toast"></div>
 
 <script>
 (()=>{
@@ -541,36 +619,51 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 const errEl=document.getElementById('err');
 window.addEventListener('error',e=>{errEl.textContent='Error: '+(e.message||e.error);errEl.className='shown';setTimeout(()=>errEl.className='',5000)});
 
+/* ===== TOAST ===== */
+const toastEl=document.getElementById('toast');
+function showToast(msg,color){
+  toastEl.textContent=msg;
+  toastEl.style.background=color||'var(--good)';
+  toastEl.style.color=color==='var(--gold)'?'#000':'#fff';
+  toastEl.className='shown';
+  setTimeout(()=>toastEl.className='',2000);
+}
+
 /* ===== CONSTANTS ===== */
 const DIFFICULTIES={
   beginner:{label:'Beginner (1-digit)',digits:1,chain:[3,4]},
   intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
-  advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]}
+  advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
+  expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v2.0.0';
+const BUILD='v3.0.0';
 
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
-let adaptive=true,stayUnder100=true,minutes=20,chainBoost=0;
+let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
 let running=false,timeLeft=0,correct=0,total=0,hintsUsed=0;
 let problem=null,problemCount=0;
 let isPaused=false,timerId=null,sessionStartTime=0;
 let frames=[],frameIdx=0,playTimer=null,playSpeed=1;
 let bpManual=false,bpPersist=false,bpMicro=false,bpHide=false,steppingLock=false;
 let persistedMisses=load('soroban_misses',[]),practiceMissesMode=false;
+let currentStreak=0,bestSessionStreak=0;
 // Sprint state
 let spTarget=0,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null;
 let spTimerId=null,spElapsed=0;
 // Anzan state
 let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
-let anzanIdx=0,anzanTimer=null,anzanCorrect=0,anzanTotal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
+let anzanIdx=0,anzanTimer=null,anzanCorrectVal=0,anzanTotalVal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
 let anzanLevel='beginner',anzanAddOnly=true,anzanAutoNext=false,anzanShowBeads=true;
 const ANZAN_LEVELS={
-  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod — total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.'},
+  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod \u2014 total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.'},
   intermediate:{label:'Intermediate',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
   advanced:{label:'Advanced',speed:1000,count:7,maxNum:50,addOnly:false,desc:'Add and subtract, numbers up to 50, 7 numbers, normal speed (1s). Full mental soroban with tens and ones rods. Aim for automatic bead visualization.'}
 };
-// Session misses (for this session only)
+// Multiplication state
+let multRange='basic',multReverse=false,multA=0,multB=0,multAnswer=0;
+let multCorrect=0,multTotal=0,multTimeLeft=0,multTimerId=null,multPaused=false,multCount=0;
+// Session misses
 let sessionMisses=[];
 
 /* ===== HELPERS ===== */
@@ -597,12 +690,13 @@ function leftPad(num,width){
 /* ===== STORAGE ===== */
 function loadHist(){return load('soroban_history',[])}
 function saveHist(h){save('soroban_history',h)}
+function loadPB(){return load('soroban_pb',{accuracy:0,ppm:0,streak:0})}
+function savePB(pb){save('soroban_pb',pb)}
 
 function calcStreak(history){
   if(!history.length) return 0;
   const dates=[...new Set(history.map(h=>h.date))].sort();
   const today=todayISO();
-  // If most recent session isn't today or yesterday, streak is 0
   const last=dates[dates.length-1];
   const diffFromToday=Math.floor((new Date(today)-new Date(last))/(86400000));
   if(diffFromToday>1) return 0;
@@ -630,14 +724,13 @@ function generateProblem(opts){
   const width=stayUnder100?Math.min(2,digits):digits;
   const chainLen=randInt(chainMin,chainMax);
 
-  // Determine value ranges
   const maxVal=stayUnder100?99:Math.pow(10,width)-1;
+  const minVal=allowNegatives?-maxVal:0;
   const startMin=width>=2?10:1;
   const startMax=stayUnder100?Math.min(80,maxVal):maxVal;
 
   let runningVal=randInt(startMin,startMax);
   const ops=['+'],nums=[runningVal];
-  const lines=[];
 
   for(let i=1;i<chainLen;i++){
     let op;
@@ -645,23 +738,23 @@ function generateProblem(opts){
     else if(technique==='sub') op='-';
     else op=Math.random()<0.55?'+':'-';
 
-    // Generate operand
     let next;
     if(stayUnder100){
       if(op==='+'){
         const room=maxVal-runningVal;
-        if(room<1){op='-';next=randInt(1,Math.min(runningVal,45))}
+        if(room<1){op='-';next=randInt(1,Math.min(Math.abs(runningVal-minVal),45))}
         else next=randInt(1,Math.min(room,45));
       } else {
-        if(runningVal<1){op='+';next=randInt(1,Math.min(maxVal-runningVal,45))}
-        else next=randInt(1,Math.min(runningVal,45));
+        const room=runningVal-minVal;
+        if(room<1){op='+';next=randInt(1,Math.min(maxVal-runningVal,45))}
+        else next=randInt(1,Math.min(room,45));
       }
     } else {
       next=randInt(1,Math.pow(10,width)-1);
       if(op==='+' && runningVal+next>maxVal) op='-';
-      if(op==='-' && runningVal-next<0) op='+';
+      if(op==='-' && runningVal-next<minVal) op='+';
       if(op==='+') next=Math.min(next,maxVal-runningVal);
-      else next=Math.min(next,runningVal);
+      else next=Math.min(next,runningVal-minVal);
       next=Math.max(1,next);
     }
 
@@ -670,9 +763,8 @@ function generateProblem(opts){
     nums.push(next);
   }
 
-  // Build display lines with consistent width
   const displayWidth=Math.max(2,...nums.map(n=>String(n).length));
-  lines.push(leftPad(nums[0],displayWidth));
+  const lines=[leftPad(nums[0],displayWidth)];
   for(let i=1;i<nums.length;i++){
     lines.push(ops[i]+' '+leftPad(nums[i],displayWidth-1));
   }
@@ -700,15 +792,14 @@ function makeHintText(p){
 }
 
 /* ===== SOROBAN RENDERING ===== */
-function renderSoroban(el,beads,prevBeads,opts={}){
+function renderSoroban(el,beads,prevBeads,opts){
+  opts=opts||{};
   el.innerHTML='';
-  const colCount=beads.length;
   beads.forEach((b,idx)=>{
     const prev=prevBeads?prevBeads[idx]:null;
     const col=document.createElement('div');
     col.className='soroban-col';
 
-    // Heaven section
     const heaven=document.createElement('div');
     heaven.className='soroban-heaven';
     const hBead=document.createElement('div');
@@ -717,12 +808,10 @@ function renderSoroban(el,beads,prevBeads,opts={}){
     heaven.appendChild(hBead);
     col.appendChild(heaven);
 
-    // Bar
     const bar=document.createElement('div');
     bar.className='soroban-bar';
     col.appendChild(bar);
 
-    // Earth section
     const earth=document.createElement('div');
     earth.className='soroban-earth';
     for(let i=1;i<=4;i++){
@@ -734,17 +823,14 @@ function renderSoroban(el,beads,prevBeads,opts={}){
     }
     col.appendChild(earth);
 
-    // Digit label
     const label=document.createElement('div');
     label.className='soroban-digit';
-    const val=b.heaven*5+b.earth;
-    label.textContent=String(val);
+    label.textContent=String(b.heaven*5+b.earth);
     col.appendChild(label);
 
     el.appendChild(col);
   });
 
-  // Clear moved highlights after animation
   if(!opts.persistHighlight){
     setTimeout(()=>{el.querySelectorAll('.bead.moved').forEach(x=>x.classList.remove('moved'))},600);
   }
@@ -794,6 +880,7 @@ const clockEl=$('#clock'),scoreCorrectEl=$('#scoreCorrect'),scoreTotalEl=$('#sco
 const soroEl=$('#soroban'),stepTagEl=$('#stepTag'),soroCaptionEl=$('#soroCaption');
 const pauseBtn=$('#pauseBtn');
 const problemNumEl=$('#problemNum');
+const bestStreakEl=$('#bestStreak');
 
 // Sprint refs
 const spTagEl=$('#spTag'),spGridEl=$('#spGrid');
@@ -814,6 +901,7 @@ function setScreen(which){
   $('#setup').classList.toggle('hidden',which!=='setup');
   $('#live').classList.toggle('hidden',which!=='live');
   $('#anzanLive').classList.toggle('hidden',which!=='anzan');
+  $('#multLive').classList.toggle('hidden',which!=='mult');
   $('#summary').classList.toggle('hidden',which!=='summary');
 }
 
@@ -823,15 +911,10 @@ function updateScores(){
   scoreTotalEl.textContent=total;
   const a=total>0?Math.round(correct/total*1000)/10:0;
   accEl.textContent=a+'%';
-  // Problems per minute
   const elapsed=minutes*60-timeLeft;
   const ppmVal=elapsed>0?Math.round(total/(elapsed/60)*10)/10:0;
   ppmEl.textContent=ppmVal;
-}
-
-function setFeedback(el,isCorrect,msg){
-  el.className='feedback '+(isCorrect?'correct':'wrong');
-  el.textContent=msg;
+  bestStreakEl.textContent=bestSessionStreak;
 }
 
 /* ===== CLOCK ===== */
@@ -957,10 +1040,9 @@ function beginProblem(){
   if(!running) return;
   let p;
   if(practiceMissesMode&&persistedMisses.length>0){
-    // Replay from missed problems, cycling through them
     const missIdx=problemCount%persistedMisses.length;
     const miss=persistedMisses[missIdx];
-    p={lines:miss.lines,answer:miss.answer};
+    p={lines:miss.lines,answer:miss.answer,ops:miss.ops||['+'],nums:miss.nums||[miss.answer]};
   } else {
     const conf=DIFFICULTIES[difficulty];
     const boost=adaptive?chainBoost:0;
@@ -980,7 +1062,7 @@ function beginProblem(){
   revealArea.style.display='none';revealArea.textContent='';
   ansEl.value='';feedbackEl.textContent='';feedbackEl.className='feedback';
   ansEl.focus();
-  buildFrames(p);
+  if(p.ops&&p.nums) buildFrames(p);
 }
 
 function submitAnswer(){
@@ -991,25 +1073,26 @@ function submitAnswer(){
   if(isNaN(v)) return;
   const ok=v===problem.answer;
   total++;
-  const encourageMsg=['Correct!','Nice!','Well done!','Great work!','Right on!'];
+  const encourageMsg=['Correct!','Nice!','Well done!','Great work!','Right on!','Excellent!','Sharp!','Perfect!'];
   if(ok){
     correct++;
+    currentStreak++;
+    if(currentStreak>bestSessionStreak) bestSessionStreak=currentStreak;
     feedbackEl.className='feedback correct';
-    feedbackEl.textContent=encourageMsg[randInt(0,encourageMsg.length-1)];
+    feedbackEl.textContent=encourageMsg[randInt(0,encourageMsg.length-1)]+(currentStreak>=3?' ('+currentStreak+' in a row!)':'');
     $('#problemArea').classList.add('flash-correct');
     setTimeout(()=>$('#problemArea').classList.remove('flash-correct'),500);
   } else {
+    currentStreak=0;
     feedbackEl.className='feedback wrong';
     feedbackEl.textContent='Not quite. The answer was '+problem.answer;
     $('#problemArea').classList.add('flash-wrong');
     setTimeout(()=>$('#problemArea').classList.remove('flash-wrong'),500);
-    sessionMisses.push({lines:problem.lines,answer:problem.answer});
-    persistedMisses.push({lines:problem.lines,answer:problem.answer});
-    // Keep only the 10 most recent misses
+    sessionMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
+    persistedMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
     if(persistedMisses.length>10) persistedMisses=persistedMisses.slice(-10);
     save('soroban_misses',persistedMisses);
   }
-  // Adaptive difficulty
   if(adaptive&&total%5===0){
     const accVal=total>0?(correct/total)*100:0;
     if(accVal>=90) chainBoost=Math.min(chainBoost+1,3);
@@ -1032,13 +1115,13 @@ function revealAnswer(){
 
 function startSession(){
   correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
+  currentStreak=0;bestSessionStreak=0;
   timeLeft=minutes*60;
   updateScores();
   setScreen('live');
   isPaused=false;setPausedUI(false);
   startTimer();
   beginProblem();
-  // Initialize sprint keypad
   ensureKeypad();
 }
 
@@ -1059,22 +1142,31 @@ function endSession(){
   $('#sumAcc').className='value '+(accVal>=80?'good':accVal>=60?'warn':'bad');
   $('#sumPPM').textContent=ppmVal;
   $('#sumHints').textContent=hintsUsed;
+  $('#sumBestStreak').textContent=bestSessionStreak;
 
-  // Motivational message
+  // Personal best check
+  const pb=loadPB();
+  let newPB=false;
+  if(total>=5){
+    if(accVal>pb.accuracy){pb.accuracy=accVal;newPB=true}
+    if(ppmVal>pb.ppm){pb.ppm=ppmVal;newPB=true}
+    if(bestSessionStreak>pb.streak){pb.streak=bestSessionStreak;newPB=true}
+    if(newPB){savePB(pb);showToast('New Personal Best!','var(--gold)')}
+  }
+  $('#sumPB').classList.toggle('hidden',!newPB);
+
   const msgs=accVal>=90?['Outstanding! Your bead work is razor sharp.','Excellent session! You are building real speed.','Sensei-level accuracy! Keep this streak going.']:
              accVal>=70?['Good work! Consistency is the key to mastery.','Solid session. Focus on the ones you missed.','You are improving. Try the missed set for extra practice.']:
              accVal>=50?['Keep going! Every session builds your mental soroban.','Practice makes progress. Try slowing down for accuracy.','Not bad! Focus on complement pairs to speed up.']:
              ['Tough session. Try the complement sprint to strengthen your basics.','Every expert was once a beginner. Keep practicing daily!','Slow down and focus on visualizing each bead movement.'];
   $('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
 
-  // Save history
   const hist=loadHist();
-  hist.push({date:todayISO(),mode,difficulty,minutes,accuracy:accVal,correct,total,hints:hintsUsed,ppm:ppmVal});
+  hist.push({date:todayISO(),mode,difficulty,minutes,accuracy:accVal,correct,total,hints:hintsUsed,ppm:ppmVal,bestStreak:bestSessionStreak});
   saveHist(hist);
   $('#streakVal').textContent=calcStreak(hist);
   renderHistory(hist);
 
-  // Missed problems
   $('#missLen').textContent=sessionMisses.length;
   if(sessionMisses.length){
     $('#missWrap').classList.remove('hidden');
@@ -1101,7 +1193,6 @@ function endSession(){
   } else {
     $('#missWrap').classList.add('hidden');
   }
-  // Update miss count for setup
   $('#missCount').textContent=persistedMisses.length;
 }
 
@@ -1123,7 +1214,6 @@ function resetSprintStats(){
   spScoreEl.textContent='0';spTotalEl.textContent='0';
   spNEl.textContent='-';spAnsEl.textContent='?';
   spFeedbackEl.textContent='';
-  // Reset and start count-up timer
   spElapsed=0;
   if(spTimerId){clearInterval(spTimerId);spTimerId=null}
   const spClockEl=$('#spClock');
@@ -1171,33 +1261,26 @@ function checkSprint(x){
 }
 
 /* ===== ANZAN (MENTAL VISUALIZATION) ===== */
-
-// Render a single-rod bead visualization for a number 0-9
 function renderBeadRod(num,container){
   container.innerHTML='';
   if(num<0||num>9) return;
-  const heaven=num>=5?1:0; // 1=active(down), 0=away(up)
-  const earth=num>=5?num-5:num; // number of earth beads pushed up
+  const heaven=num>=5?1:0;
+  const earth=num>=5?num-5:num;
   const col=document.createElement('div');
   col.className='bead-col';
-  // Vertical rod line for spatial anchoring
   const rodLine=document.createElement('div');
   rodLine.className='rod-line';
   col.appendChild(rodLine);
-  // Heaven zone
   const hz=document.createElement('div');
   hz.className='heaven-zone';
   const hb=document.createElement('div');
   hb.className='bead heaven '+(heaven?'active':'away');
   hz.appendChild(hb);
   col.appendChild(hz);
-  // Earth zone - 4 beads, top ones are active
   const ez=document.createElement('div');
   ez.className='earth-zone';
   for(let i=0;i<4;i++){
     const eb=document.createElement('div');
-    // Beads are numbered 0-3 from top. Active beads are pushed up (closest to bar)
-    // If earth=3, beads 0,1,2 are active (pushed up), bead 3 is away
     eb.className='bead earth '+(i<earth?'active':'away');
     ez.appendChild(eb);
   }
@@ -1212,7 +1295,6 @@ function renderBeadRod(num,container){
   container.appendChild(wrap);
 }
 
-// Render multi-rod breakdown for numbers > 9 (tens + ones)
 function renderBeadRodMulti(num,container){
   container.innerHTML='';
   if(num<0||num>99) return;
@@ -1278,7 +1360,6 @@ function buildAnzanBreakdown(){
   const lines=[];
   const showBeadDesc=anzanLevel==='beginner';
   anzanNumbers.forEach((item,i)=>{
-    const prev=sum;
     sum=item.op==='+'?sum+item.value:sum-item.value;
     let line;
     if(i===0) line='Start: '+item.value+' = '+sum;
@@ -1290,7 +1371,7 @@ function buildAnzanBreakdown(){
 }
 
 function startAnzan(){
-  anzanCorrect=0;anzanTotal=0;
+  anzanCorrectVal=0;anzanTotalVal=0;
   anzanTimeLeft=minutes*60;
   anzanPaused=false;
   setScreen('anzan');
@@ -1357,7 +1438,6 @@ function nextAnzanRound(){
   $('#anzanInstruction').textContent=anzanShowBeads?
     'Watch each number and the beads. Try to see the beads in your mind too...':
     'Watch each number. Visualize the soroban beads moving in your mind...';
-  // Reset bead display
   anzanBeadRod.innerHTML='';
   anzanBeadRod.classList.toggle('hidden',!anzanShowBeads);
 
@@ -1367,7 +1447,6 @@ function nextAnzanRound(){
 function flashAnzanNumber(){
   if(anzanIdx>=anzanCount){
     anzanNumberEl.innerHTML='&nbsp;';
-    // Hide beads when answering - user must recall from memory
     anzanBeadRod.classList.add('hidden');
     anzanCoachTip.textContent='Now read the beads on your mental soroban. What was the final total?';
     anzanAnswerRow.style.display='flex';
@@ -1380,19 +1459,16 @@ function flashAnzanNumber(){
   anzanNumberEl.textContent=prefix+item.value;
   anzanNumberEl.style.opacity='1';
 
-  // Compute running sum up to and including this number for bead display
   let runSum=0;
   for(let j=0;j<=anzanIdx;j++){
     runSum=anzanNumbers[j].op==='+'?runSum+anzanNumbers[j].value:runSum-anzanNumbers[j].value;
   }
-  // Running sum before this number for coach tip
   let runSumBefore=0;
   for(let j=0;j<anzanIdx;j++){
     runSumBefore=anzanNumbers[j].op==='+'?runSumBefore+anzanNumbers[j].value:runSumBefore-anzanNumbers[j].value;
   }
   anzanCoachTip.textContent=getAnzanCoachTip(anzanIdx,item,runSumBefore);
 
-  // Show bead rod if scaffold is enabled
   if(anzanShowBeads&&runSum>=0){
     anzanBeadRod.classList.remove('hidden');
     if(runSum<=9) renderBeadRod(runSum,anzanBeadRod);
@@ -1421,25 +1497,23 @@ function submitAnzan(){
   if(!val) return;
   const v=Number(val);
   if(isNaN(v)) return;
-  anzanTotal++;
+  anzanTotalVal++;
   const ok=v===anzanAnswer;
   if(ok){
-    anzanCorrect++;
+    anzanCorrectVal++;
     anzanFeedbackEl.className='feedback correct';
     anzanFeedbackEl.textContent='Correct! The answer is '+anzanAnswer;
   } else {
     anzanFeedbackEl.className='feedback wrong';
     anzanFeedbackEl.textContent='Wrong. The answer was '+anzanAnswer;
   }
-  anzanCorrectEl.textContent=anzanCorrect;
-  anzanTotalEl.textContent=anzanTotal;
-  const a=anzanTotal>0?Math.round(anzanCorrect/anzanTotal*1000)/10:0;
+  anzanCorrectEl.textContent=anzanCorrectVal;
+  anzanTotalEl.textContent=anzanTotalVal;
+  const a=anzanTotalVal>0?Math.round(anzanCorrectVal/anzanTotalVal*1000)/10:0;
   anzanAccEl.textContent=a+'%';
 
-  // Show breakdown with bead visualization of correct answer
   anzanBreakdownContent.textContent=buildAnzanBreakdown();
   anzanBreakdown.classList.remove('hidden');
-  // Show the correct bead state so user can see what they should have visualized
   if(anzanShowBeads&&anzanAnswer>=0&&anzanAnswer<=99){
     anzanBeadRod.classList.remove('hidden');
     if(anzanAnswer<=9) renderBeadRod(anzanAnswer,anzanBeadRod);
@@ -1462,9 +1536,95 @@ function endAnzan(){
   running=false;
   if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
   if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
-  correct=anzanCorrect;total=anzanTotal;
+  correct=anzanCorrectVal;total=anzanTotalVal;
   timeLeft=anzanTimeLeft;
   mode='anzan';
+  endSession();
+}
+
+/* ===== MULTIPLICATION DRILL ===== */
+function getMultRange(){
+  if(multRange==='extended') return 12;
+  if(multRange==='hard') return 20;
+  return 9;
+}
+
+function nextMultProblem(){
+  const max=getMultRange();
+  multA=randInt(2,max);
+  multB=randInt(2,max);
+  multAnswer=multA*multB;
+  multCount++;
+  $('#multProbNum').textContent='#'+multCount;
+  if(multReverse){
+    $('#multA').textContent=multAnswer;
+    $('#multB').textContent='?';
+    // Show as: product / a = ?
+    // Actually let's do: ? x B = product, user answers ?
+    $('#multA').textContent='?';
+    $('#multB').textContent=multB;
+    // answer is multA
+  } else {
+    $('#multA').textContent=multA;
+    $('#multB').textContent=multB;
+  }
+  $('#multInput').value='';
+  $('#multFeedback').textContent='';
+  $('#multFeedback').className='feedback';
+  $('#multInput').focus();
+}
+
+function submitMult(){
+  const val=$('#multInput').value.trim();
+  if(!val) return;
+  const v=Number(val);
+  if(isNaN(v)) return;
+  const correctAns=multReverse?multA:multAnswer;
+  const ok=v===correctAns;
+  multTotal++;
+  if(ok){
+    multCorrect++;
+    $('#multFeedback').className='feedback correct';
+    $('#multFeedback').textContent='Correct!';
+  } else {
+    $('#multFeedback').className='feedback wrong';
+    $('#multFeedback').textContent='Wrong. Answer: '+correctAns;
+  }
+  $('#multCorrectEl').textContent=multCorrect;
+  $('#multTotalEl').textContent=multTotal;
+  const a=multTotal>0?Math.round(multCorrect/multTotal*1000)/10:0;
+  $('#multAccEl').textContent=a+'%';
+  const elapsed=minutes*60-multTimeLeft;
+  const ppmVal=elapsed>0?Math.round(multTotal/(elapsed/60)*10)/10:0;
+  $('#multPPMEl').textContent=ppmVal;
+  setTimeout(nextMultProblem,ok?350:800);
+}
+
+function startMult(){
+  multCorrect=0;multTotal=0;multCount=0;
+  multTimeLeft=minutes*60;
+  multPaused=false;
+  setScreen('mult');
+  updateClockDisplay($('#multClock'),multTimeLeft);
+  $('#multCorrectEl').textContent='0';$('#multTotalEl').textContent='0';
+  $('#multAccEl').textContent='0%';$('#multPPMEl').textContent='0';
+  if(multTimerId) clearInterval(multTimerId);
+  multTimerId=setInterval(()=>{
+    if(multPaused) return;
+    multTimeLeft=Math.max(0,multTimeLeft-1);
+    updateClockDisplay($('#multClock'),multTimeLeft);
+    if(multTimeLeft<=0){clearInterval(multTimerId);multTimerId=null;endMult()}
+  },1000);
+  running=true;
+  nextMultProblem();
+}
+
+function endMult(){
+  running=false;
+  if(multTimerId){clearInterval(multTimerId);multTimerId=null}
+  correct=multCorrect;total=multTotal;
+  timeLeft=multTimeLeft;
+  mode='multiplication';
   endSession();
 }
 
@@ -1480,9 +1640,10 @@ function renderHistory(hist){
     row.className='history-item';
     const modeLabel=h.mode==='standard'?DIFFICULTIES[h.difficulty]?.label||'Standard':
                     h.mode==='anzan'?'Anzan':
+                    h.mode==='multiplication'?'Multiplication':
                     'Sprint '+(h.mode==='sprint10'?'10':'5');
     row.innerHTML='<div><div class="history-date">'+h.date+' \u2014 '+modeLabel+'</div>'+
-      '<div class="history-detail">'+h.minutes+' min \u00b7 '+h.correct+'/'+h.total+' \u00b7 Hints: '+(h.hints||0)+(h.ppm?' \u00b7 '+h.ppm+' PPM':'')+'</div></div>'+
+      '<div class="history-detail">'+h.minutes+' min \u00b7 '+h.correct+'/'+h.total+' \u00b7 Hints: '+(h.hints||0)+(h.ppm?' \u00b7 '+h.ppm+' PPM':'')+(h.bestStreak?' \u00b7 Streak: '+h.bestStreak:'')+'</div></div>'+
       '<span class="history-acc" style="color:'+(h.accuracy>=80?'var(--good)':h.accuracy>=60?'var(--gold)':'var(--bad)')+'">'+h.accuracy+'%</span>';
     list.appendChild(row);
   });
@@ -1496,8 +1657,8 @@ $$('.btn[data-mode]').forEach(btn=>{
     $$('.btn[data-mode]').forEach(b=>b.classList.remove('btn-active'));
     btn.classList.add('btn-active');
     mode=btn.dataset.mode;
-    // Show/hide anzan settings
     $('#anzanSetup').classList.toggle('hidden',mode!=='anzan');
+    $('#multSetup').classList.toggle('hidden',mode!=='multiplication');
   });
 });
 
@@ -1528,9 +1689,20 @@ $$('.btn.tech').forEach(btn=>{
   });
 });
 
+// Multiplication range buttons
+$$('.btn[data-multrng]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('.btn[data-multrng]').forEach(b=>b.classList.remove('btn-active'));
+    btn.classList.add('btn-active');
+    multRange=btn.dataset.multrng;
+  });
+});
+$('#multReverse').addEventListener('change',e=>multReverse=e.target.checked);
+
 // Toggles
 $('#under100').addEventListener('change',e=>stayUnder100=e.target.checked);
 $('#adaptive').addEventListener('change',e=>adaptive=e.target.checked);
+$('#negatives').addEventListener('change',e=>allowNegatives=e.target.checked);
 $('#practiceMisses').addEventListener('change',e=>practiceMissesMode=e.target.checked);
 
 // Anzan level buttons
@@ -1541,7 +1713,6 @@ $$('.btn[data-anzlvl]').forEach(btn=>{
     anzanLevel=btn.dataset.anzlvl;
     const lvl=ANZAN_LEVELS[anzanLevel];
     $('#anzanLevelDesc').innerHTML='<b style="color:var(--gold)">'+lvl.label+':</b> '+lvl.desc;
-    // Set recommended defaults
     $('#anzanSpeed').value=lvl.speed;
     $('#anzanCount').value=lvl.count;
     $('#anzanAddOnly').checked=lvl.addOnly;
@@ -1561,6 +1732,7 @@ $('#startBtn').addEventListener('click',()=>{
   anzanAutoNext=$('#anzanAutoNext').checked;
   anzanShowBeads=$('#anzanShowBeads').checked;
   if(mode==='anzan'){startAnzan();return}
+  if(mode==='multiplication'){startMult();return}
   if(mode==='sprint5'||mode==='sprint10'){
     spTarget=mode==='sprint10'?10:5;
     spTagEl.textContent=mode==='sprint10'?'Friends of 10':'Friends of 5';
@@ -1574,10 +1746,8 @@ $('#startBtn').addEventListener('click',()=>{
   startSession();
 });
 
-// Submit - only from button click (not from global keydown to prevent double-fire)
+// Submit
 $('#submitBtn').addEventListener('click',submitAnswer);
-
-// Answer input Enter key - the ONLY Enter handler for the answer field
 ansEl.addEventListener('keydown',e=>{
   if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitAnswer()}
 });
@@ -1618,6 +1788,12 @@ $('#practiceMissBtn').addEventListener('click',()=>{
   practiceMissesMode=true;
   setScreen('setup');
   $('#practiceMisses').checked=true;
+});
+$('#clearHistBtn').addEventListener('click',()=>{
+  if(!confirm('Clear all practice history?')) return;
+  saveHist([]);
+  $('#historyCard').classList.add('hidden');
+  $('#streakVal').textContent='0';
 });
 
 // Coach toggles
@@ -1672,29 +1848,44 @@ $('#anzanPauseBtn').addEventListener('click',()=>{
   $('#anzanPauseBtn').textContent=anzanPaused?'Resume':'Pause';
   $('#anzanPauseBtn').classList.toggle('btn-primary',anzanPaused);
   if(anzanPaused){
-    // Cancel pending flash timeout to prevent double-flashing on resume
     if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   } else {
-    // Resume flashing if we were in the middle of it
     if(anzanIdx<anzanCount&&anzanAnswerRow.style.display==='none'){
       flashAnzanNumber();
     }
   }
 });
 
+// Multiplication controls
+$('#multSubmitBtn').addEventListener('click',submitMult);
+$('#multInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitMult()}
+});
+$('#multSkipBtn').addEventListener('click',()=>{if(running&&!multPaused)nextMultProblem()});
+$('#multEndBtn').addEventListener('click',endMult);
+$('#multHomeBtn').addEventListener('click',()=>{
+  if(!confirm('Leave session and go back to setup?')) return;
+  running=false;multPaused=false;
+  if(multTimerId){clearInterval(multTimerId);multTimerId=null}
+  setScreen('setup');
+});
+$('#multPauseBtn').addEventListener('click',()=>{
+  multPaused=!multPaused;
+  $('#multPauseBtn').textContent=multPaused?'Resume':'Pause';
+  $('#multPauseBtn').classList.toggle('btn-primary',multPaused);
+  $('#multInput').disabled=multPaused;
+});
+
 // Stop playback on tab hide
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPlayback()});
 
-// Global hotkeys - only for non-input keys while in standard mode
+// Global hotkeys
 document.addEventListener('keydown',e=>{
   if(!running||isPaused) return;
-  // Anzan: press Enter to advance to next round when Next button is visible
   if(e.key==='Enter'&&!anzanNextBtn.classList.contains('hidden')){
     e.preventDefault();nextAnzanRound();return;
   }
-  // Don't intercept if actively typing in an input
   if(document.activeElement&&document.activeElement.tagName==='INPUT') {
-    // Only handle arrow keys for coach when in input
     if(e.key==='ArrowLeft'){e.preventDefault();$('#bpPrev').click()}
     else if(e.key==='ArrowRight'){e.preventDefault();$('#bpNext').click()}
     return;
