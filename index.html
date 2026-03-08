@@ -215,6 +215,11 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 @keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(255,82,82,.6)}100%{box-shadow:0 0 0 20px rgba(255,82,82,0)}}
 @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
 @keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
+@keyframes countPulse{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:.8}}
+.anzan-countdown{font-size:5rem;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(240,192,64,.4);animation:countPulse .7s ease;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.anzan-streak-bar{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink2)}
+.anzan-streak-bar b{color:var(--gold)}
+.level-up-hint{background:linear-gradient(135deg,rgba(240,192,64,.15),rgba(255,152,0,.1));border:1px solid rgba(240,192,64,.3);color:var(--gold);padding:8px 16px;border-radius:999px;font-size:.85rem;font-weight:600;animation:pulse .8s ease}
 .animate-in{animation:fadeIn .3s ease}
 .flash-correct{animation:flash-green .5s ease}
 .flash-wrong{animation:flash-red .5s ease}
@@ -250,7 +255,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
     <div class="flex items-center gap-sm">
       <div class="streak-badge" id="streakBadge"><span id="streakIcon">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
       <span id="pbBadge" class="pb-badge hidden">PB</span>
-      <span class="version" id="buildBadge">v3.0.0</span>
+      <span class="version" id="buildBadge">v4.0.0</span>
     </div>
   </div>
 
@@ -514,8 +519,10 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
       </div>
       <div class="card-body">
         <div class="anzan-display">
+          <div class="anzan-streak-bar" id="anzanStreakBar">Streak: <b id="anzanStreakVal">0</b> &middot; Best: <b id="anzanBestStreakVal">0</b><span id="anzanLevelUpHint" class="level-up-hint hidden">Level up?</span></div>
           <div class="tip" id="anzanInstruction">Watch each number flash, then add them in your mind.</div>
           <div class="tip" id="anzanCoachTip" style="color:var(--teal);font-style:normal;font-weight:600;min-height:20px"></div>
+          <div class="anzan-countdown hidden" id="anzanCountdown"></div>
           <div class="anzan-number" id="anzanNumber">&nbsp;</div>
           <div class="anzan-progress" id="anzanDots"></div>
           <div id="anzanBeadRod" class="bead-rod-wrap hidden"></div>
@@ -529,7 +536,10 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
             <div style="font-weight:700;color:var(--gold);margin-bottom:4px">Step-by-step breakdown:</div>
             <div id="anzanBreakdownContent" class="mono" style="color:var(--ink2)"></div>
           </div>
-          <button class="btn btn-gold hidden" id="anzanNextBtn" style="margin-top:8px">Next Round</button>
+          <div class="flex gap-xs" style="margin-top:8px">
+            <button class="btn hidden" id="anzanReplayBtn">Replay</button>
+            <button class="btn btn-gold hidden" id="anzanNextBtn">Next Round</button>
+          </div>
         </div>
       </div>
     </div>
@@ -606,7 +616,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
 
-  <div class="footer">Soroban Trainer Pro v3.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
+  <div class="footer">Soroban Trainer Pro v4.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
 </div>
 <div id="err"></div>
 <div id="toast"></div>
@@ -636,7 +646,7 @@ const DIFFICULTIES={
   advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
   expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v3.0.0';
+const BUILD='v4.0.0';
 
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
@@ -655,6 +665,7 @@ let spTimerId=null,spElapsed=0;
 let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrectVal=0,anzanTotalVal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
 let anzanLevel='beginner',anzanAddOnly=true,anzanAutoNext=false,anzanShowBeads=true;
+let anzanStreak=0,anzanBestStreak=0;
 const ANZAN_LEVELS={
   beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod \u2014 total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.'},
   intermediate:{label:'Intermediate',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
@@ -967,9 +978,34 @@ function renderProblem(p){
 }
 
 /* ===== BEAD COACH ===== */
+function getCoachExplanation(p,lineIdx){
+  // For coarse (line) mode: explain the technique for this line
+  if(lineIdx===0) return 'Set '+p.nums[0]+' on the soroban.';
+  const op=p.ops[lineIdx];
+  const n=p.nums[lineIdx];
+  // Compute running value up to previous line
+  let runVal=p.nums[0];
+  for(let i=1;i<lineIdx;i++) runVal=p.ops[i]==='+'?runVal+p.nums[i]:runVal-p.nums[i];
+  // Explain per-rod technique
+  const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
+  const parts=[];
+  if(huns>0) parts.push((op==='+'?'+':'-')+huns+' on hundreds');
+  if(tens>0){
+    const tensRod=Math.floor(runVal/10)%10;
+    const tensTech=describeComplementTechnique(op,tens,tensRod);
+    parts.push((op==='+'?'+':'-')+tens+' on tens'+(tensTech?' ('+tensTech+')':''));
+  }
+  if(ones>0){
+    const onesRod=runVal%10;
+    const onesTech=describeComplementTechnique(op,ones,onesRod);
+    parts.push((op==='+'?'+':'-')+ones+' on ones'+(onesTech?' ('+onesTech+')':''));
+  }
+  return (op==='+'?'Add ':'Sub ')+n+': '+parts.join(', ');
+}
+
 function updateStepTag(p,idx){
   if(bpMicro){
-    if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';return}
+    if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';soroCaptionEl.textContent='Set '+p.nums[0]+' on the soroban.';return}
     const width=Math.max(p.width,String(Math.max(...p.nums,p.answer)).length,2);
     let k=0;
     for(let i=1;i<p.nums.length;i++){
@@ -977,18 +1013,22 @@ function updateStepTag(p,idx){
         k++;
         if(k===idx){
           const op=p.ops[i];
-          stepTagEl.textContent=(op==='+'?'Add':'Sub')+' col '+(width-c);
+          const colName=['ones','tens','hundreds','thousands'][width-1-c]||'col '+(width-c);
+          stepTagEl.textContent=(op==='+'?'Add':'Sub')+' '+colName;
           stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
+          soroCaptionEl.textContent=(op==='+'?'Add ':'Subtract ')+p.nums[i]+', working on '+colName+' rod.';
           return;
         }
       }
     }
     stepTagEl.textContent='Done';stepTagEl.className='step-tag';
+    soroCaptionEl.textContent='Final answer: '+p.answer;
   } else {
-    if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';return}
+    if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';soroCaptionEl.textContent='Set '+p.nums[0]+' on the soroban.';return}
     const op=p.ops[idx];
     stepTagEl.textContent='Line '+(idx+1)+' / '+p.nums.length+' \u2014 '+(op==='+'?'Add':'Sub');
     stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
+    soroCaptionEl.textContent=getCoachExplanation(p,idx);
   }
 }
 
@@ -1324,47 +1364,121 @@ function renderBeadRodMulti(num,container){
   container.appendChild(outer);
 }
 
+function describeComplementTechnique(op,value,rodVal){
+  // Explains the actual soroban finger technique
+  const newVal=op==='+'?rodVal+value:rodVal-value;
+  if(op==='+'){
+    // Simple add: enough room on earth beads
+    if(rodVal<5&&newVal<5&&value<=4-rodVal%5) return null; // direct add
+    if(rodVal>=5&&newVal>=5&&newVal<=9&&value<=(4-(rodVal-5))) return null; // direct add above 5
+    // Friend of 5: adding N where N>room below bar, use +5 -complement
+    if(rodVal<5&&newVal>=5&&newVal<=9){
+      const comp=5-value;
+      if(comp>0) return 'Add 5 (drop heaven), subtract '+(5-value)+' (friend of 5)';
+      if(comp===0) return 'Drop the heaven bead (add 5)';
+    }
+    // Friend of 10: adding N, carry to next rod
+    if(newVal>=10){
+      const comp=10-value;
+      return 'Add 10 (carry to tens), subtract '+comp+' (complement of '+value+')';
+    }
+    // If we cross 5 but within same rod
+    if(rodVal%5+value>4&&newVal<10&&newVal>=5){
+      const comp=5-value;
+      if(comp>0) return 'Drop heaven bead, pull back '+(5-value)+' earth (friend of 5: '+value+'+'+(5-value)+'=5)';
+    }
+  } else {
+    // Subtraction
+    if(rodVal>=5&&newVal>=5&&value<=(rodVal-5)) return null; // direct subtract above 5
+    if(rodVal<5&&value<=rodVal) return null; // direct subtract below 5
+    // Friend of 5: subtracting N, need to lift heaven
+    if(rodVal>=5&&newVal<5){
+      const give=5-value;
+      if(give>0) return 'Lift heaven bead (-5), push '+(5-value)+' earth up (friend of 5)';
+      if(give===0) return 'Lift the heaven bead (-5)';
+    }
+    // Friend of 10: borrow from tens rod
+    if(newVal<0||rodVal<value){
+      const comp=10-value;
+      return 'Borrow from tens (-10), add '+comp+' (complement of '+value+': 10-'+value+'='+comp+')';
+    }
+  }
+  return null;
+}
+
 function getAnzanCoachTip(idx,item,runningSum){
+  const newSum=item.op==='+'?runningSum+item.value:runningSum-item.value;
   if(anzanLevel==='beginner'){
-    const newSum=item.op==='+'?runningSum+item.value:runningSum-item.value;
     if(idx===0){
       if(item.value>=5) return 'See the rod: drop the heaven bead'+(item.value>5?', push '+(item.value-5)+' earth up':'')+'. Hold this image.';
       return 'See one rod. Push '+item.value+' earth bead'+(item.value>1?'s':'')+' up. Hold this picture clearly.';
     }
+    const onesVal=runningSum%10;
+    const tech=describeComplementTechnique(item.op,item.value,onesVal);
     if(item.op==='+'){
-      if(runningSum<5&&newSum>=5) return 'Adding '+item.value+' crosses 5. Drop the heaven bead, set '+(newSum-5)+' earth. See it change.';
-      if(newSum<5) return 'Push '+item.value+' more up. See '+newSum+' earth beads against the bar.';
-      return 'Push '+item.value+' more up. See the beads clearly: '+(newSum>=5?'heaven down, '+(newSum-5)+' earth':newSum+' earth')+'.';
+      if(runningSum<5&&newSum>=5) return 'Adding '+item.value+' crosses 5. '+(tech||'Drop heaven, set '+(newSum-5)+' earth')+'. See it change.';
+      if(tech) return item.op==='+'?'Add '+item.value+': '+tech+'. Now see '+newSum+'.':'Subtract '+item.value+': '+tech+'. Now see '+newSum+'.';
+      return 'Push '+item.value+' more up. See the beads: '+(newSum>=5?'heaven down, '+(newSum-5)+' earth':newSum+' earth')+'.';
     }
-    if(runningSum>=5&&newSum<5) return 'Subtract '+item.value+'. Lift heaven bead back up, set '+(newSum)+' earth. Watch it shift.';
+    if(runningSum>=5&&newSum<5){
+      return 'Subtract '+item.value+'. '+(tech||'Lift heaven, set '+newSum+' earth')+'. Watch it shift.';
+    }
+    if(tech) return 'Subtract '+item.value+': '+tech+'. See '+newSum+' remaining.';
     return 'Pull '+item.value+' earth bead'+(item.value>1?'s':'')+' away. See '+newSum+' remaining.';
   }
-  if(idx===0) return 'Set '+item.value+' on your mental soroban. See the bead positions clearly.';
-  return (item.op==='+'?'Add ':'Subtract ')+item.value+'. Use complements if needed. Focus on the image.';
+  // Intermediate & Advanced: give real technique advice
+  if(idx===0){
+    const ones=item.value%10,tens=Math.floor(item.value/10)%10;
+    if(item.value<=9) return 'Set '+item.value+' on ones rod. '+(item.value>=5?'Heaven down, '+(item.value-5)+' earth.':item.value+' earth beads up.')+' Hold the image.';
+    return 'Set '+tens+' on tens rod, '+ones+' on ones rod. See both rods clearly.';
+  }
+  // Build technique description per rod
+  const onesNow=runningSum%10, tensNow=Math.floor(runningSum/10)%10;
+  const addVal=item.value;
+  const addOnes=addVal%10, addTens=Math.floor(addVal/10)%10;
+  const parts=[];
+  if(addTens>0){
+    const tensTech=describeComplementTechnique(item.op,addTens,tensNow);
+    parts.push('Tens: '+(item.op==='+'?'+':'-')+addTens+(tensTech?' ('+tensTech+')':''));
+  }
+  if(addOnes>0){
+    const onesTech=describeComplementTechnique(item.op,addOnes,onesNow);
+    parts.push('Ones: '+(item.op==='+'?'+':'-')+addOnes+(onesTech?' ('+onesTech+')':''));
+  }
+  if(parts.length) return (item.op==='+'?'Add ':'Sub ')+addVal+'. '+parts.join('. ')+'. See '+newSum+'.';
+  return (item.op==='+'?'Add ':'Subtract ')+addVal+'. Result: '+newSum+'. Focus on the image.';
 }
 
+function describeOneRod(d){
+  if(d===0) return 'heaven up, 0 earth';
+  if(d<5) return 'heaven up, '+d+' earth';
+  if(d===5) return 'heaven DOWN, 0 earth';
+  return 'heaven DOWN, '+(d-5)+' earth';
+}
 function describeBeads(n){
-  if(n<0||n>99) return '';
-  if(n<=9){
-    if(n===0) return '[heaven up, 0 earth]';
-    if(n<5) return '[heaven up, '+n+' earth]';
-    if(n===5) return '[heaven DOWN, 0 earth]';
-    return '[heaven DOWN, '+(n-5)+' earth]';
-  }
-  const t=Math.floor(n/10),o=n%10;
-  return '[tens:'+t+' ones:'+o+']';
+  if(n<0||n>999) return '';
+  if(n<=9) return '['+describeOneRod(n)+']';
+  const digits=String(n).split('').map(Number);
+  const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
+  return digits.map((d,i)=>'['+labels[i]+': '+describeOneRod(d)+']').join(' ');
 }
 
 function buildAnzanBreakdown(){
   let sum=0;
   const lines=[];
-  const showBeadDesc=anzanLevel==='beginner';
   anzanNumbers.forEach((item,i)=>{
+    const prevSum=sum;
     sum=item.op==='+'?sum+item.value:sum-item.value;
     let line;
     if(i===0) line='Start: '+item.value+' = '+sum;
     else line=(item.op==='+'?'+ ':'- ')+item.value+' = '+sum;
-    if(showBeadDesc&&sum>=0&&sum<=99) line+='  '+describeBeads(sum);
+    if(sum>=0&&sum<=999) line+='  '+describeBeads(sum);
+    // Show technique used
+    if(i>0){
+      const onesNow=prevSum%10;
+      const tech=describeComplementTechnique(item.op,item.value%10||item.value,onesNow);
+      if(tech) line+='\n   \u2192 '+tech;
+    }
     lines.push(line);
   });
   return lines.join('\n');
@@ -1372,12 +1486,15 @@ function buildAnzanBreakdown(){
 
 function startAnzan(){
   anzanCorrectVal=0;anzanTotalVal=0;
+  anzanStreak=0;anzanBestStreak=0;
   anzanTimeLeft=minutes*60;
   anzanPaused=false;
   setScreen('anzan');
   anzanLevelDisplay.textContent=ANZAN_LEVELS[anzanLevel].label;
   updateClockDisplay(anzanClockEl,anzanTimeLeft);
   anzanCorrectEl.textContent='0';anzanTotalEl.textContent='0';anzanAccEl.textContent='0%';
+  $('#anzanStreakVal').textContent='0';$('#anzanBestStreakVal').textContent='0';
+  $('#anzanLevelUpHint').classList.add('hidden');
   if(anzanTimerId) clearInterval(anzanTimerId);
   anzanTimerId=setInterval(()=>{
     if(anzanPaused) return;
@@ -1389,16 +1506,17 @@ function startAnzan(){
   nextAnzanRound();
 }
 
-function nextAnzanRound(){
-  if(anzanTimeLeft<=0) return;
+function generateAnzanNumbers(){
   const lvl=ANZAN_LEVELS[anzanLevel];
   const maxNum=lvl.maxNum;
   const useAddOnly=anzanAddOnly;
-
-  anzanNumbers=[];
-  let sum=0;
   const singleRod=lvl.singleRod||false;
   const upperCap=singleRod?9:stayUnder100?99:Infinity;
+  const nums=[];
+  let sum=0;
+
+  // Technique-aware generation: prefer numbers that exercise complements
+  const complementNums=[4,3,6,7,8,9]; // numbers that trigger complement techniques on soroban
   for(let i=0;i<anzanCount;i++){
     let n,op;
     if(i===0){
@@ -1407,19 +1525,54 @@ function nextAnzanRound(){
       op='+';sum=n;
     } else {
       op=useAddOnly?'+':Math.random()<0.55?'+':'-';
+      // Bias toward complement-triggering numbers ~40% of the time
+      const useComplement=!singleRod&&Math.random()<0.4;
       if(op==='+'){
         const cap=Math.min(upperCap-sum,maxNum);
         if(cap<1){op='-';n=randInt(1,Math.min(sum,maxNum))}
-        else n=randInt(1,cap);
+        else if(useComplement){
+          const candidates=complementNums.filter(c=>c<=cap);
+          n=candidates.length?candidates[randInt(0,candidates.length-1)]:randInt(1,cap);
+        } else n=randInt(1,cap);
       } else {
         if(sum<2){op='+';n=randInt(1,Math.min(upperCap-sum,maxNum))}
-        else n=randInt(1,Math.min(sum,maxNum));
+        else if(useComplement){
+          const candidates=complementNums.filter(c=>c<=Math.min(sum,maxNum));
+          n=candidates.length?candidates[randInt(0,candidates.length-1)]:randInt(1,Math.min(sum,maxNum));
+        } else n=randInt(1,Math.min(sum,maxNum));
       }
       sum=op==='+'?sum+n:sum-n;
     }
-    anzanNumbers.push({value:n,op});
+    nums.push({value:n,op});
   }
-  anzanAnswer=sum;
+  return{numbers:nums,answer:sum};
+}
+
+function runCountdown(callback){
+  const cdEl=$('#anzanCountdown');
+  cdEl.classList.remove('hidden');
+  anzanNumberEl.innerHTML='&nbsp;';
+  const steps=['3','2','1','Go!'];
+  let si=0;
+  function tick(){
+    if(anzanPaused){setTimeout(tick,100);return}
+    if(si>=steps.length){cdEl.classList.add('hidden');callback();return}
+    cdEl.textContent=steps[si];
+    cdEl.style.animation='none';cdEl.offsetHeight;cdEl.style.animation='countPulse .7s ease';
+    si++;
+    setTimeout(tick,si===steps.length?400:700);
+  }
+  tick();
+}
+
+function nextAnzanRound(replay){
+  if(anzanTimeLeft<=0) return;
+
+  if(!replay){
+    const gen=generateAnzanNumbers();
+    anzanNumbers=gen.numbers;
+    anzanAnswer=gen.answer;
+  }
   anzanIdx=0;
 
   anzanDotsEl.innerHTML='';
@@ -1431,17 +1584,18 @@ function nextAnzanRound(){
 
   anzanAnswerRow.style.display='none';
   anzanNextBtn.classList.add('hidden');
+  $('#anzanReplayBtn').classList.add('hidden');
   anzanFeedbackEl.textContent='';anzanFeedbackEl.className='feedback';
   anzanBreakdown.classList.add('hidden');
   anzanInputEl.value='';
-  anzanCoachTip.textContent='';
+  anzanCoachTip.textContent='Get ready...';
   $('#anzanInstruction').textContent=anzanShowBeads?
     'Watch each number and the beads. Try to see the beads in your mind too...':
     'Watch each number. Visualize the soroban beads moving in your mind...';
   anzanBeadRod.innerHTML='';
   anzanBeadRod.classList.toggle('hidden',!anzanShowBeads);
 
-  flashAnzanNumber();
+  runCountdown(()=>flashAnzanNumber());
 }
 
 function flashAnzanNumber(){
@@ -1501,12 +1655,27 @@ function submitAnzan(){
   const ok=v===anzanAnswer;
   if(ok){
     anzanCorrectVal++;
+    anzanStreak++;
+    if(anzanStreak>anzanBestStreak) anzanBestStreak=anzanStreak;
     anzanFeedbackEl.className='feedback correct';
-    anzanFeedbackEl.textContent='Correct! The answer is '+anzanAnswer;
+    const msgs=['Correct!','Nice!','Sharp!','Well done!','Excellent!'];
+    anzanFeedbackEl.textContent=msgs[randInt(0,msgs.length-1)]+' The answer is '+anzanAnswer+(anzanStreak>=3?' ('+anzanStreak+' streak!)':'');
   } else {
+    anzanStreak=0;
     anzanFeedbackEl.className='feedback wrong';
-    anzanFeedbackEl.textContent='Wrong. The answer was '+anzanAnswer;
+    anzanFeedbackEl.textContent='Wrong. The answer was '+anzanAnswer+'. Your answer: '+v;
   }
+  $('#anzanStreakVal').textContent=anzanStreak;
+  $('#anzanBestStreakVal').textContent=anzanBestStreak;
+  // Level-up suggestion
+  const nextLevels={beginner:'intermediate',intermediate:'advanced'};
+  if(anzanStreak>=5&&nextLevels[anzanLevel]){
+    $('#anzanLevelUpHint').classList.remove('hidden');
+    $('#anzanLevelUpHint').textContent='Try '+ANZAN_LEVELS[nextLevels[anzanLevel]].label+'?';
+  } else {
+    $('#anzanLevelUpHint').classList.add('hidden');
+  }
+
   anzanCorrectEl.textContent=anzanCorrectVal;
   anzanTotalEl.textContent=anzanTotalVal;
   const a=anzanTotalVal>0?Math.round(anzanCorrectVal/anzanTotalVal*1000)/10:0;
@@ -1520,15 +1689,16 @@ function submitAnzan(){
     else renderBeadRodMulti(anzanAnswer,anzanBeadRod);
     anzanCoachTip.textContent=ok?'This is what the beads look like. Did your mental image match?':'Study this bead pattern. This is what you should have seen on your mental soroban.';
   } else {
-    anzanCoachTip.textContent='';
+    anzanCoachTip.textContent=ok?'':'Study the breakdown below to see where you lost track.';
   }
 
   anzanAnswerRow.style.display='none';
   anzanInputEl.blur();
   if(anzanAutoNext&&ok){
-    setTimeout(nextAnzanRound,1200);
+    setTimeout(()=>nextAnzanRound(),1200);
   } else {
     anzanNextBtn.classList.remove('hidden');
+    if(!ok) $('#anzanReplayBtn').classList.remove('hidden');
   }
 }
 
@@ -1834,7 +2004,22 @@ $('#anzanSubmitBtn').addEventListener('click',submitAnzan);
 anzanInputEl.addEventListener('keydown',e=>{
   if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitAnzan()}
 });
-anzanNextBtn.addEventListener('click',nextAnzanRound);
+anzanNextBtn.addEventListener('click',()=>nextAnzanRound());
+$('#anzanReplayBtn').addEventListener('click',()=>nextAnzanRound(true));
+$('#anzanLevelUpHint').addEventListener('click',()=>{
+  const nextLevels={beginner:'intermediate',intermediate:'advanced'};
+  const next=nextLevels[anzanLevel];
+  if(!next) return;
+  anzanLevel=next;
+  const lvl=ANZAN_LEVELS[anzanLevel];
+  anzanLevelDisplay.textContent=lvl.label;
+  anzanSpeed=lvl.speed;
+  anzanCount=lvl.count;
+  anzanAddOnly=lvl.addOnly;
+  $('#anzanLevelUpHint').classList.add('hidden');
+  showToast('Level up! Now playing '+lvl.label,'var(--gold)');
+  nextAnzanRound();
+});
 $('#anzanEndBtn').addEventListener('click',endAnzan);
 $('#anzanHomeBtn').addEventListener('click',()=>{
   if(!confirm('Leave session and go back to setup? Progress will be lost.')) return;
