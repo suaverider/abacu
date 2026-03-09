@@ -255,7 +255,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
     <div class="flex items-center gap-sm">
       <div class="streak-badge" id="streakBadge"><span id="streakIcon">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
       <span id="pbBadge" class="pb-badge hidden">PB</span>
-      <span class="version" id="buildBadge">v4.0.0</span>
+      <span class="version" id="buildBadge">v4.2.0</span>
     </div>
   </div>
 
@@ -618,7 +618,7 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
     </div>
   </div>
 
-  <div class="footer">Soroban Trainer Pro v4.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
+  <div class="footer">Soroban Trainer Pro v4.2.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
 </div>
 <div id="err"></div>
 <div id="toast"></div>
@@ -648,7 +648,7 @@ const DIFFICULTIES={
   advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
   expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v4.0.0';
+const BUILD='v4.2.0';
 
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
@@ -795,16 +795,25 @@ function makeHintText(p){
     const n=p.nums[i];
     const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
     const parts=[];
-    // Process ones with technique
+    // Process ones first to detect carry/borrow
+    let onesCarry=0;
     if(ones>0){
       const onesRod=runVal%10;
+      const onesResult=op==='+'?onesRod+ones:onesRod-ones;
+      if(onesResult>=10) onesCarry=1;
+      else if(onesResult<0) onesCarry=-1;
       const tech=describeComplementTechnique(op,ones,onesRod);
       parts.push(verb.toLowerCase()+' '+ones+' on ones'+(tech?' \u2014 '+tech:''));
     }
     if(tens>0){
-      const tensRod=Math.floor(runVal/10)%10;
+      const tensRod=clamp(Math.floor(runVal/10)%10+onesCarry,0,9);
       const tech=describeComplementTechnique(op,tens,tensRod);
-      parts.push(verb.toLowerCase()+' '+tens+' on tens'+(tech?' \u2014 '+tech:''));
+      const carryNote=onesCarry!==0?' (after carry from ones)':'';
+      parts.push(verb.toLowerCase()+' '+tens+' on tens'+(tech?' \u2014 '+tech:'')+carryNote);
+    } else if(onesCarry===1){
+      parts.push('+1 carry to tens');
+    } else if(onesCarry===-1){
+      parts.push('-1 borrow from tens');
     }
     if(huns>0) parts.push(verb.toLowerCase()+' '+huns+' on hundreds');
     runVal=op==='+'?runVal+n:runVal-n;
@@ -1397,7 +1406,7 @@ function describeComplementTechnique(op,value,rodVal){
   const newVal=op==='+'?rodVal+value:rodVal-value;
   if(op==='+'){
     // Simple add: enough room on earth beads
-    if(rodVal<5&&newVal<5&&value<=4-rodVal%5) return null; // direct add
+    if(rodVal<5&&newVal<5&&value<=4-rodVal) return null; // direct add
     if(rodVal>=5&&newVal>=5&&newVal<=9&&value<=(4-(rodVal-5))) return null; // direct add above 5
     // Friend of 5: adding N where N>room below bar, use +5 -complement
     if(rodVal<5&&newVal>=5&&newVal<=9){
@@ -1563,7 +1572,7 @@ function generateAnzanNumbers(){
   const maxNum=lvl.maxNum;
   const useAddOnly=anzanAddOnly;
   const singleRod=lvl.singleRod||false;
-  const upperCap=singleRod?9:stayUnder100?99:Infinity;
+  const upperCap=singleRod?9:stayUnder100?99:999;
   const nums=[];
   let sum=0;
 
@@ -1685,9 +1694,11 @@ function flashAnzanNumber(){
     rtEl.classList.add('hidden');
   }
 
-  if(anzanShowBeads&&runSum>=0){
+  if(anzanShowBeads){
     anzanBeadRod.classList.remove('hidden');
-    if(runSum<=9) renderBeadRod(runSum,anzanBeadRod);
+    if(runSum<0){
+      anzanBeadRod.innerHTML='<div class="bead-rod"><div class="bead-rod-label" style="color:var(--bad);font-size:.9rem">Negative: '+runSum+'</div></div>';
+    } else if(runSum<=9) renderBeadRod(runSum,anzanBeadRod);
     else renderBeadRodMulti(runSum,anzanBeadRod);
   }
 
@@ -1791,13 +1802,9 @@ function nextMultProblem(){
   multCount++;
   $('#multProbNum').textContent='#'+multCount;
   if(multReverse){
-    $('#multA').textContent=multAnswer;
-    $('#multB').textContent='?';
-    // Show as: product / a = ?
-    // Actually let's do: ? x B = product, user answers ?
+    // Show as: ? x B = product, user answers ?
     $('#multA').textContent='?';
     $('#multB').textContent=multB;
-    // answer is multA
   } else {
     $('#multA').textContent=multA;
     $('#multB').textContent=multB;
@@ -2034,7 +2041,7 @@ $('#clearHistBtn').addEventListener('click',()=>{
 
 // Coach toggles
 $('#bpMicro').addEventListener('change',e=>{bpMicro=e.target.checked;if(problem)buildFrames(problem)});
-$('#bpManual').addEventListener('change',e=>{bpManual=e.target.checked;if(!bpManual&&playTimer){}else stopPlayback()});
+$('#bpManual').addEventListener('change',e=>{bpManual=e.target.checked;if(bpManual)stopPlayback()});
 $('#bpPersist').addEventListener('change',e=>{bpPersist=e.target.checked;showFrame(frameIdx)});
 $('#bpHide').addEventListener('change',e=>{bpHide=e.target.checked;showFrame(frameIdx)});
 $('#bpPeek').addEventListener('click',()=>{
@@ -2102,6 +2109,8 @@ $('#anzanPauseBtn').addEventListener('click',()=>{
     if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   } else {
     if(anzanIdx<anzanCount&&anzanAnswerRow.style.display==='none'){
+      // Advance to next number to avoid re-flashing the same one
+      anzanIdx++;
       flashAnzanNumber();
     }
   }
