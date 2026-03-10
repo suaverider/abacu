@@ -3,35 +3,33 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Soroban Trainer Pro v5.0</title>
+<title>Soroban Trainer Pro</title>
 <style>
 /* ===== RESET & FOUNDATIONS ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
-  --surface:#1c2128;--surface2:#2d333b;--surface3:#373e47;
-  --ink:#e6edf3;--ink2:#8b949e;--ink3:#6e7681;
+  --bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;
+  --surface:#1e2746;--surface2:#253256;--surface3:#2d3a66;
+  --ink:#e8eaf6;--ink2:#b0b8d1;--ink3:#7b87a8;
   --accent:#e94560;--accent2:#ff6b6b;
   --gold:#f0c040;--gold2:#ffd700;
-  --good:#3fb950;--bad:#f85149;
-  --teal:#39d2c0;--teal2:#58e6d6;
-  --purple:#a371f7;--blue:#58a6ff;
+  --good:#00e676;--bad:#ff5252;
+  --teal:#00bcd4;--teal2:#26c6da;
   --wood1:#8d6e63;--wood2:#6d4c41;--wood3:#4e342e;
-  --bead-earth:#cdd9e5;--bead-earth-active:#58a6ff;
-  --bead-heaven:#cdd9e5;--bead-heaven-active:#f85149;
-  --ring:rgba(255,255,255,.06);
-  --ring2:rgba(255,255,255,.12);
-  --shadow:0 8px 32px rgba(0,0,0,.4);
-  --radius:14px;--radius-sm:8px;
+  --bead-earth:#e0e0e0;--bead-earth-active:#42a5f5;
+  --bead-heaven:#e0e0e0;--bead-heaven-active:#ef5350;
+  --ring:rgba(255,255,255,.08);
+  --ring2:rgba(255,255,255,.15);
+  --shadow:0 8px 32px rgba(0,0,0,.3);
+  --radius:16px;--radius-sm:10px;
   font-size:16px;
 }
-html,body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;overflow-x:hidden}
+html,body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;overflow-x:hidden}
 ::selection{background:var(--accent);color:#fff}
-input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-button:focus:not(:focus-visible){outline:none}
+input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 
 /* ===== LAYOUT ===== */
-.container{max-width:1200px;margin:0 auto;padding:16px}
+.container{max-width:1200px;margin:0 auto;padding:20px}
 .flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
 .gap-xs{gap:6px}.gap-sm{gap:10px}.gap-md{gap:16px}.gap-lg{gap:24px}
 .wrap{flex-wrap:wrap}
@@ -39,20 +37,19 @@ button:focus:not(:focus-visible){outline:none}
 .text-center{text-align:center}
 
 /* ===== HEADER ===== */
-.header{padding:20px 0 14px;border-bottom:1px solid var(--ring)}
-.header h1{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.header .subtitle{color:var(--ink3);font-size:.85rem;margin-top:2px}
-.streak-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:5px 12px;border-radius:999px;font-size:.8rem}
-.version{color:var(--ink3);font-size:.7rem;padding:3px 8px;border:1px solid var(--ring);border-radius:999px}
-.dan-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-weight:700;padding:5px 12px;border-radius:999px;font-size:.8rem}
+.header{padding:24px 0 16px;border-bottom:1px solid var(--ring)}
+.header h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .subtitle{color:var(--ink3);font-size:.9rem;margin-top:2px}
+.streak-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:6px 14px;border-radius:999px;font-size:.85rem}
+.version{color:var(--ink3);font-size:.75rem;padding:4px 10px;border:1px solid var(--ring);border-radius:999px}
 
 /* ===== CARDS ===== */
 .card{background:var(--surface);border:1px solid var(--ring);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-.card-header{padding:14px 18px;border-bottom:1px solid var(--ring);font-weight:700;font-size:.95rem;display:flex;align-items:center;gap:8px}
-.card-body{padding:18px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--ring);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px}
 
 /* ===== BUTTONS ===== */
-.btn{appearance:none;border:1px solid var(--ring2);background:var(--surface2);color:var(--ink);padding:9px 14px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:.85rem;transition:all .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;user-select:none}
+.btn{appearance:none;border:1px solid var(--ring2);background:var(--surface2);color:var(--ink);padding:10px 16px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:.875rem;transition:all .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 .btn:hover:not(:disabled){background:var(--surface3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .btn:active:not(:disabled){transform:translateY(0)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
@@ -61,197 +58,190 @@ button:focus:not(:focus-visible){outline:none}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#ff9800);border-color:transparent;color:#000}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--ink2)}
 .btn-success{background:var(--good);border-color:transparent;color:#000}
-.btn-sm{padding:5px 10px;font-size:.78rem;border-radius:6px}
+.btn-sm{padding:6px 12px;font-size:.8rem;border-radius:8px}
 .btn-active{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
 .btn-group{display:flex;gap:6px;flex-wrap:wrap}
 
 /* ===== TOGGLE SWITCH ===== */
-.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.85rem;color:var(--ink2);padding:3px 0}
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.875rem;color:var(--ink2);padding:4px 0}
 .toggle input{display:none}
-.toggle .track{width:38px;height:20px;background:var(--surface3);border-radius:999px;position:relative;transition:background .2s;flex-shrink:0}
+.toggle .track{width:40px;height:22px;background:var(--surface3);border-radius:999px;position:relative;transition:background .2s}
 .toggle input:checked+.track{background:var(--accent)}
-.toggle .track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle .track::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s}
 .toggle input:checked+.track::after{transform:translateX(18px)}
 
 /* ===== INPUTS ===== */
-.input{background:var(--surface3);border:2px solid var(--ring2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--ink);font-size:1.5rem;text-align:center;font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .15s}
+.input{background:var(--surface3);border:2px solid var(--ring2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--ink);font-size:1.5rem;text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .15s}
 .input:focus{border-color:var(--accent)}
 .input::placeholder{color:var(--ink3)}
 
 /* ===== SETUP SCREEN ===== */
-.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.setup-section{display:flex;flex-direction:column;gap:8px}
-.setup-label{font-weight:700;font-size:.8rem;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
-.setup-footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--ring);margin-top:8px}
-.tip{color:var(--ink3);font-size:.82rem;font-style:italic}
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.setup-section{display:flex;flex-direction:column;gap:10px}
+.setup-label{font-weight:700;font-size:.85rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em}
+.setup-footer{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--ring);margin-top:8px}
+.tip{color:var(--ink3);font-size:.85rem;font-style:italic}
 
 /* ===== LIVE SESSION ===== */
-.live-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:14px}
+.live-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:16px}
 @media(max-width:900px){.live-grid{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.setup-grid{grid-template-columns:1fr}}
 
 /* Status bar */
-.status-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 16px;border-bottom:1px solid var(--ring);background:rgba(0,0,0,.2)}
-.clock{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.2rem;font-weight:700;color:var(--teal)}
-.stat{display:flex;align-items:center;gap:4px;font-size:.85rem;color:var(--ink2)}
+.status-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 20px;border-bottom:1px solid var(--ring);background:rgba(0,0,0,.15)}
+.clock{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.3rem;font-weight:700;color:var(--teal)}
+.stat{display:flex;align-items:center;gap:4px;font-size:.9rem;color:var(--ink2)}
 .stat b{color:var(--ink)}
 
 /* Problem display */
-.problem-area{border:2px solid var(--bg3);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--surface2));padding:18px}
-.problem-label{font-weight:700;color:var(--gold);font-size:.82rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.problem-lines{display:flex;flex-direction:column;align-items:center;padding:14px 0}
-.problem-line{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2.6rem;font-weight:700;line-height:1.3;white-space:pre;letter-spacing:.05em}
-.problem-divider{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:2rem;color:var(--ink3);letter-spacing:.15em}
-.answer-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}
+.problem-area{border:2px solid var(--bg3);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--surface2));padding:20px}
+.problem-label{font-weight:700;color:var(--gold);font-size:.85rem;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.problem-lines{display:flex;flex-direction:column;align-items:center;padding:16px 0}
+.problem-line{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2.8rem;font-weight:700;line-height:1.3;white-space:pre;letter-spacing:.05em}
+.problem-divider{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2rem;color:var(--ink3);letter-spacing:.15em}
+.answer-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
 .answer-row .eq{font-size:2rem;color:var(--ink3);font-weight:700}
-.reveal-badge{background:var(--surface3);color:var(--gold);padding:5px 12px;border-radius:999px;font-family:monospace;font-size:1.1rem;display:none}
+.reveal-badge{background:var(--surface3);color:var(--gold);padding:6px 14px;border-radius:999px;font-family:monospace;font-size:1.1rem;display:none}
 
 /* Rules pills */
-.rules{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.rule-pill{font-size:.72rem;padding:3px 8px;border-radius:999px;background:rgba(233,69,96,.08);color:var(--accent2);border:1px solid rgba(233,69,96,.15)}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.rule-pill{font-size:.75rem;padding:4px 10px;border-radius:999px;background:rgba(233,69,96,.1);color:var(--accent2);border:1px solid rgba(233,69,96,.2)}
 
 /* Feedback */
-.feedback{min-height:26px;margin-top:10px;font-weight:700;font-size:.95rem;text-align:center}
+.feedback{min-height:28px;margin-top:12px;font-weight:700;font-size:1rem;text-align:center}
 .feedback.correct{color:var(--good)}
 .feedback.wrong{color:var(--bad)}
 
 /* Actions row */
-.actions{display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:8px}
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:8px}
 
 /* ===== SOROBAN ABACUS ===== */
-.soroban-container{display:flex;flex-direction:column;align-items:center;gap:10px}
-.soroban{display:inline-flex;background:linear-gradient(180deg,var(--wood2),var(--wood3));border-radius:10px;padding:10px 14px;border:2px solid var(--wood1);box-shadow:inset 0 2px 8px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);gap:3px}
-.soroban-col{display:flex;flex-direction:column;align-items:center;gap:0;width:42px}
-.soroban-heaven{height:38px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:3px}
-.soroban-bar{width:100%;height:3px;background:linear-gradient(90deg,#5d4037,#8d6e63,#5d4037);border-radius:2px;flex-shrink:0}
-.soroban-earth{height:105px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding-top:3px;gap:2px}
-.bead{width:36px;height:20px;border-radius:999px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;flex-shrink:0}
+.soroban-container{display:flex;flex-direction:column;align-items:center;gap:12px}
+.soroban{display:inline-flex;background:linear-gradient(180deg,var(--wood2),var(--wood3));border-radius:12px;padding:12px 16px;border:2px solid var(--wood1);box-shadow:inset 0 2px 8px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);gap:4px}
+.soroban-col{display:flex;flex-direction:column;align-items:center;gap:0;width:44px}
+.soroban-heaven{height:40px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:4px}
+.soroban-bar{width:100%;height:4px;background:linear-gradient(90deg,#5d4037,#8d6e63,#5d4037);border-radius:2px;flex-shrink:0}
+.soroban-earth{height:110px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding-top:4px;gap:2px}
+.bead{width:38px;height:22px;border-radius:999px;transition:all .25s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;flex-shrink:0}
 .bead-heaven{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
-.bead-heaven.active{background:linear-gradient(180deg,var(--bead-heaven-active),#c62828);transform:translateY(8px);box-shadow:0 2px 8px rgba(248,81,73,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.bead-heaven.active{background:linear-gradient(180deg,var(--bead-heaven-active),#c62828);transform:translateY(8px);box-shadow:0 2px 8px rgba(239,83,80,.5),inset 0 1px 2px rgba(255,255,255,.3)}
 .bead-earth{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
-.bead-earth.active{background:linear-gradient(180deg,var(--bead-earth-active),#1565c0);transform:translateY(-4px);box-shadow:0 2px 8px rgba(88,166,255,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.bead-earth.active{background:linear-gradient(180deg,var(--bead-earth-active),#1565c0);transform:translateY(-4px);box-shadow:0 2px 8px rgba(66,165,245,.5),inset 0 1px 2px rgba(255,255,255,.3)}
 .bead.moved{box-shadow:0 0 0 2px var(--gold),0 2px 8px rgba(240,192,64,.5)!important}
-.soroban-digit{font-size:.65rem;color:var(--gold);font-weight:700;margin-top:3px;font-family:monospace}
-.soroban-hidden-msg{color:var(--ink3);font-style:italic;padding:28px 18px}
+.soroban-digit{font-size:.7rem;color:var(--gold);font-weight:700;margin-top:4px;font-family:monospace}
+.soroban-hidden-msg{color:var(--ink3);font-style:italic;padding:30px 20px}
 
 /* Coach controls */
-.coach-controls{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center}
-.step-tag{font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--ring2);background:var(--surface);color:var(--ink2)}
+.coach-controls{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.step-tag{font-size:.75rem;padding:3px 10px;border-radius:999px;border:1px solid var(--ring2);background:var(--surface);color:var(--ink2)}
 .step-tag.add{color:var(--good);border-color:var(--good)}
 .step-tag.sub{color:var(--bad);border-color:var(--bad)}
-.coach-options{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.coach-caption{font-size:.72rem;color:var(--ink3);text-align:center}
-.hotkeys{font-size:.72rem;color:var(--ink3);text-align:center;padding:3px 6px;background:rgba(0,0,0,.15);border-radius:6px}
+.coach-options{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.coach-caption{font-size:.75rem;color:var(--ink3);text-align:center}
+.hotkeys{font-size:.75rem;color:var(--ink3);text-align:center;padding:4px 8px;background:rgba(0,0,0,.15);border-radius:8px}
 
 /* ===== COMPLEMENT SPRINT ===== */
-.sprint-display{display:flex;align-items:center;justify-content:center;gap:20px;margin:14px 0}
+.sprint-display{display:flex;align-items:center;justify-content:center;gap:20px;margin:16px 0}
 .sprint-n{font-size:3rem;font-weight:800;color:var(--teal);font-family:monospace}
 .sprint-plus{font-size:2rem;color:var(--ink3)}
 .sprint-ans{font-size:3rem;font-weight:800;color:var(--gold);font-family:monospace}
-.numpad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:300px;margin:0 auto}
-.numpad .btn{height:48px;font-size:1.1rem;font-weight:700}
-.sprint-feedback{text-align:center;min-height:22px;margin-top:6px;font-weight:600}
+.numpad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:320px;margin:0 auto}
+.numpad .btn{height:50px;font-size:1.2rem;font-weight:700}
+.sprint-feedback{text-align:center;min-height:24px;margin-top:8px;font-weight:600}
 
 /* ===== ANZAN (Mental) MODE ===== */
-.anzan-display{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 0}
-.anzan-number{font-size:4.5rem;font-weight:800;font-family:'JetBrains Mono',ui-monospace,monospace;color:var(--teal);text-shadow:0 0 30px rgba(57,210,192,.3);min-height:80px;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
+.anzan-display{display:flex;flex-direction:column;align-items:center;gap:16px;padding:30px 0}
+.anzan-number{font-size:5rem;font-weight:800;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--teal);text-shadow:0 0 30px rgba(0,188,212,.3);min-height:90px;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
 .anzan-progress{display:flex;gap:4px;align-items:center}
-.anzan-dot{width:8px;height:8px;border-radius:50%;background:var(--surface3);transition:background .2s}
+.anzan-dot{width:10px;height:10px;border-radius:50%;background:var(--surface3);transition:background .2s}
 .anzan-dot.shown{background:var(--teal)}
-.anzan-dot.current{background:var(--gold);box-shadow:0 0 6px var(--gold)}
-.anzan-settings{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.anzan-dot.current{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.anzan-settings{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
 
 /* Bead rod visualization */
 .bead-rod{display:flex;flex-direction:column;align-items:center;gap:0;padding:4px 0;transition:opacity .4s}
-.bead-rod-wrap{display:flex;align-items:center;justify-content:center;gap:10px;min-height:110px}
-.bead-rod .rod-bar{width:3px;background:var(--ink3);border-radius:2px;position:absolute;top:0;bottom:0}
-.bead-rod .bead-col{display:flex;flex-direction:column;align-items:center;position:relative;width:30px}
-.bead-rod .heaven-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:3px;border-bottom:3px solid var(--gold);margin-bottom:3px;min-height:36px;justify-content:flex-end}
-.bead-rod .earth-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:3px;min-height:56px}
-.bead-rod .bead{width:26px;height:11px;border-radius:5px;transition:transform .2s,opacity .2s}
-.bead-rod .bead.heaven{background:var(--teal);box-shadow:0 0 6px rgba(57,210,192,.3)}
-.bead-rod .bead.earth{background:var(--gold);box-shadow:0 0 5px rgba(255,215,0,.2)}
+.bead-rod-wrap{display:flex;align-items:center;justify-content:center;gap:12px;min-height:120px}
+.bead-rod .rod-bar{width:4px;background:var(--ink3);border-radius:2px;position:absolute;top:0;bottom:0}
+.bead-rod .bead-col{display:flex;flex-direction:column;align-items:center;position:relative;width:32px}
+.bead-rod .heaven-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:4px;border-bottom:3px solid var(--gold);margin-bottom:4px;min-height:40px;justify-content:flex-end}
+.bead-rod .earth-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:4px;min-height:60px}
+.bead-rod .bead{width:28px;height:12px;border-radius:6px;transition:transform .2s,opacity .2s}
+.bead-rod .bead.heaven{background:var(--teal);box-shadow:0 0 8px rgba(0,188,212,.3)}
+.bead-rod .bead.earth{background:var(--gold);box-shadow:0 0 6px rgba(255,215,0,.2)}
 .bead-rod .bead.away{opacity:.2}
 .bead-rod .bead.active{opacity:1}
-.bead-rod .bead.heaven.active{transform:translateY(5px)}
+.bead-rod .bead.heaven.active{transform:translateY(6px)}
 .bead-rod .bead.earth.active{transform:translateY(-2px)}
 .bead-rod .rod-line{position:absolute;width:2px;background:var(--ink3);top:0;bottom:0;left:50%;transform:translateX(-50%);opacity:.4;border-radius:1px}
-.bead-rod-label{font-size:.65rem;color:var(--ink3);margin-top:3px;text-align:center}
-
-/* ===== MULTIPLICATION DRILL ===== */
-.mult-display{display:flex;align-items:center;justify-content:center;gap:12px;font-family:'JetBrains Mono',ui-monospace,monospace}
-.mult-num{font-size:3.2rem;font-weight:800;color:var(--teal)}
-.mult-op{font-size:2.2rem;color:var(--ink3);font-weight:700}
-.mult-input{font-size:2.2rem;width:150px}
+.bead-rod-label{font-size:.7rem;color:var(--ink3);margin-top:4px;text-align:center}
 
 /* ===== SUMMARY ===== */
-.summary-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
-.summary-stat{display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--ring)}
-.summary-stat .label{font-size:.75rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
-.summary-stat .value{font-size:1.8rem;font-weight:800;font-family:monospace}
+.summary-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+.summary-stat{display:flex;flex-direction:column;align-items:center;gap:4px;padding:20px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--ring)}
+.summary-stat .label{font-size:.8rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.summary-stat .value{font-size:2rem;font-weight:800;font-family:monospace}
 .summary-stat .value.good{color:var(--good)}
 .summary-stat .value.warn{color:var(--gold)}
 .summary-stat .value.bad{color:var(--bad)}
 
 /* Missed problems */
-.missed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:10px}
-.missed-item{background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:10px;font-family:monospace;font-size:.82rem}
-.missed-item .ans{font-weight:700;color:var(--gold);margin-top:3px}
+.missed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px}
+.missed-item{background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;font-family:monospace;font-size:.85rem}
+.missed-item .ans{font-weight:700;color:var(--gold);margin-top:4px}
 
 /* History */
-.history-item{display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--ring)}
-.history-item+.history-item{margin-top:6px}
-.history-date{font-weight:700;font-size:.85rem}
-.history-detail{color:var(--ink3);font-size:.78rem}
-.history-acc{font-weight:800;font-size:1rem;font-family:monospace}
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--ring)}
+.history-item+.history-item{margin-top:8px}
+.history-date{font-weight:700;font-size:.9rem}
+.history-detail{color:var(--ink3);font-size:.8rem}
+.history-acc{font-weight:800;font-size:1.1rem;font-family:monospace}
 
 /* ===== PERSONAL BEST ===== */
-.pb-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:3px 8px;border-radius:999px;font-size:.72rem;animation:pulse .6s ease}
+.pb-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:3px 10px;border-radius:999px;font-size:.75rem;animation:pulse .6s ease}
+
+/* ===== MULTIPLICATION DRILL ===== */
+.mult-display{display:flex;align-items:center;justify-content:center;gap:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mult-num{font-size:3.5rem;font-weight:800;color:var(--teal)}
+.mult-op{font-size:2.5rem;color:var(--ink3);font-weight:700}
+.mult-input{font-size:2.5rem;width:160px}
 
 /* ===== FOOTER ===== */
-.footer{text-align:center;padding:20px 0;font-size:.72rem;color:var(--ink3);border-top:1px solid var(--ring);margin-top:20px}
+.footer{text-align:center;padding:24px 0;font-size:.75rem;color:var(--ink3);border-top:1px solid var(--ring);margin-top:24px}
 
 /* ===== ANIMATIONS ===== */
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes flash-green{0%{box-shadow:0 0 0 0 rgba(63,185,80,.6)}100%{box-shadow:0 0 0 20px rgba(63,185,80,0)}}
-@keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(248,81,73,.6)}100%{box-shadow:0 0 0 20px rgba(248,81,73,0)}}
+@keyframes flash-green{0%{box-shadow:0 0 0 0 rgba(0,230,118,.6)}100%{box-shadow:0 0 0 20px rgba(0,230,118,0)}}
+@keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(255,82,82,.6)}100%{box-shadow:0 0 0 20px rgba(255,82,82,0)}}
 @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
-@keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-50px) rotate(360deg);opacity:0}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
 @keyframes countPulse{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:.8}}
-.anzan-countdown{font-size:4.5rem;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(240,192,64,.4);animation:countPulse .7s ease;font-family:'JetBrains Mono',ui-monospace,monospace}
-.anzan-streak-bar{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--ink2)}
+.anzan-countdown{font-size:5rem;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(240,192,64,.4);animation:countPulse .7s ease;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.anzan-streak-bar{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink2)}
 .anzan-streak-bar b{color:var(--gold)}
-.level-up-hint{background:linear-gradient(135deg,rgba(240,192,64,.15),rgba(255,152,0,.1));border:1px solid rgba(240,192,64,.3);color:var(--gold);padding:6px 14px;border-radius:999px;font-size:.82rem;font-weight:600;animation:pulse .8s ease;cursor:pointer}
+.level-up-hint{background:linear-gradient(135deg,rgba(240,192,64,.15),rgba(255,152,0,.1));border:1px solid rgba(240,192,64,.3);color:var(--gold);padding:8px 16px;border-radius:999px;font-size:.85rem;font-weight:600;animation:pulse .8s ease}
 .animate-in{animation:fadeIn .3s ease}
 .flash-correct{animation:flash-green .5s ease}
 .flash-wrong{animation:flash-red .5s ease}
 
-/* ===== DAN RANK DISPLAY ===== */
-.dan-display{text-align:center;padding:12px;margin-top:8px;background:linear-gradient(135deg,rgba(163,113,247,.1),rgba(88,166,255,.1));border:1px solid rgba(163,113,247,.2);border-radius:var(--radius-sm)}
-.dan-display .rank{font-size:1.4rem;font-weight:800;color:var(--purple)}
-.dan-display .rank-desc{font-size:.8rem;color:var(--ink2);margin-top:2px}
-
 /* ===== UTILITY ===== */
-.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .hidden{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 
-/* ===== ERROR/TOAST ===== */
-#err{display:none;position:fixed;bottom:16px;right:16px;background:var(--bad);color:#fff;padding:8px 14px;border-radius:var(--radius-sm);font-size:.82rem;z-index:1000;max-width:380px}
+/* ===== ERROR DISPLAY ===== */
+#err{display:none;position:fixed;bottom:20px;right:20px;background:var(--bad);color:#fff;padding:10px 16px;border-radius:var(--radius-sm);font-size:.85rem;z-index:1000;max-width:400px}
 #err.shown{display:block}
-#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:8px 20px;border-radius:999px;font-weight:700;font-size:.85rem;z-index:1001;opacity:0;transition:opacity .3s;pointer-events:none}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:999px;font-weight:700;font-size:.9rem;z-index:1001;opacity:0;transition:opacity .3s;pointer-events:none}
 #toast.shown{opacity:1}
 
 /* ===== SCROLLBAR ===== */
-::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:var(--ink3)}
-
-/* ===== SOUND TOGGLE ===== */
-.sound-btn{background:transparent;border:none;font-size:1.2rem;cursor:pointer;padding:4px;opacity:.6;transition:opacity .2s}
-.sound-btn:hover{opacity:1}
 </style>
 </head>
 <body>
@@ -260,19 +250,17 @@ button:focus:not(:focus-visible){outline:none}
   <div class="header flex justify-between items-center wrap gap-md">
     <div>
       <h1>Soroban Trainer Pro</h1>
-      <div class="subtitle">Japanese abacus mastery &mdash; from beginner to 10-dan</div>
+      <div class="subtitle">Daily abacus drills &mdash; Japanese classroom style</div>
     </div>
     <div class="flex items-center gap-sm">
       <div class="streak-badge" id="streakBadge"><span id="streakIcon">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
-      <span id="danBadge" class="dan-badge hidden">10-kyu</span>
       <span id="pbBadge" class="pb-badge hidden">PB</span>
-      <button class="sound-btn" id="soundToggle" title="Toggle sound">&#x1F50A;</button>
-      <span class="version" id="buildBadge">v5.0.0</span>
+      <span class="version" id="buildBadge">v4.2.0</span>
     </div>
   </div>
 
   <!-- ===== SETUP SCREEN ===== -->
-  <div id="setup" class="card animate-in" style="margin-top:16px">
+  <div id="setup" class="card animate-in" style="margin-top:20px">
     <div class="card-header">Session Setup</div>
     <div class="card-body">
       <div class="setup-grid">
@@ -315,7 +303,7 @@ button:focus:not(:focus-visible){outline:none}
             <button class="btn dur btn-active" data-min="20">20 min</button>
             <button class="btn dur" data-min="30">30 min</button>
           </div>
-          <div class="setup-label" style="margin-top:10px">Technique</div>
+          <div class="setup-label" style="margin-top:12px">Technique</div>
           <div class="btn-group">
             <button class="btn tech btn-active" data-tech="mixed">Mixed</button>
             <button class="btn tech" data-tech="add">Add only</button>
@@ -325,21 +313,20 @@ button:focus:not(:focus-visible){outline:none}
       </div>
 
       <!-- Anzan settings (hidden by default) -->
-      <div id="anzanSetup" class="hidden" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ring)">
-        <div class="setup-label" style="margin-bottom:8px">Anzan Settings</div>
-        <div class="flex wrap gap-md items-center" style="margin-bottom:10px">
+      <div id="anzanSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
+        <div class="setup-label" style="margin-bottom:10px">Anzan Settings</div>
+        <div class="flex wrap gap-md items-center" style="margin-bottom:12px">
           <div class="flex-col gap-xs">
-            <label class="tip">Anzan Level (Japanese Dan System)</label>
+            <label class="tip">Anzan Level</label>
             <div class="btn-group">
-              <button class="btn btn-active" data-anzlvl="beginner">Beginner (10-kyu)</button>
-              <button class="btn" data-anzlvl="intermediate">Intermediate (5-kyu)</button>
-              <button class="btn" data-anzlvl="advanced">Advanced (1-dan)</button>
-              <button class="btn" data-anzlvl="master">Master (3-dan+)</button>
+              <button class="btn btn-active" data-anzlvl="beginner">Beginner</button>
+              <button class="btn" data-anzlvl="intermediate">Intermediate</button>
+              <button class="btn" data-anzlvl="advanced">Advanced</button>
             </div>
           </div>
         </div>
-        <div id="anzanLevelDesc" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:10px;margin-bottom:10px;font-size:.82rem;color:var(--ink2)">
-          <b style="color:var(--gold)">Beginner (10-kyu):</b> Addition only, single rod &mdash; total stays 9 or below. 3 numbers (1-5), slow speed (3s). Bead scaffold shows positions. Focus on image clarity, not speed. This is how Japanese students start.
+        <div id="anzanLevelDesc" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-size:.85rem;color:var(--ink2)">
+          <b style="color:var(--gold)">Beginner:</b> Addition only, single rod &mdash; total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.
         </div>
         <div class="flex wrap gap-md items-center">
           <div class="flex-col gap-xs">
@@ -352,8 +339,6 @@ button:focus:not(:focus-visible){outline:none}
               <option value="1000">Normal (1s)</option>
               <option value="700">Fast (0.7s)</option>
               <option value="500">Very Fast (0.5s)</option>
-              <option value="350">Competition (0.35s)</option>
-              <option value="200">Elite (0.2s)</option>
             </select>
           </div>
           <div class="flex-col gap-xs">
@@ -365,19 +350,18 @@ button:focus:not(:focus-visible){outline:none}
               <option value="5">5 numbers</option>
               <option value="7">7 numbers</option>
               <option value="10">10 numbers</option>
-              <option value="15">15 numbers</option>
             </select>
           </div>
           <label class="toggle"><input type="checkbox" id="anzanAddOnly" checked/><span class="track"></span> Addition only</label>
           <label class="toggle"><input type="checkbox" id="anzanAutoNext"/><span class="track"></span> Auto-advance on correct</label>
           <label class="toggle"><input type="checkbox" id="anzanShowBeads" checked/><span class="track"></span> Show bead scaffold</label>
-          <label class="toggle"><input type="checkbox" id="anzanShowRunning"/><span class="track"></span> Show running total</label>
+          <label class="toggle"><input type="checkbox" id="anzanShowRunning"/><span class="track"></span> Show running total (training wheels)</label>
         </div>
       </div>
 
       <!-- Multiplication settings (hidden by default) -->
-      <div id="multSetup" class="hidden" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ring)">
-        <div class="setup-label" style="margin-bottom:8px">Multiplication Settings</div>
+      <div id="multSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
+        <div class="setup-label" style="margin-bottom:10px">Multiplication Settings</div>
         <div class="flex wrap gap-md items-center">
           <div class="flex-col gap-xs">
             <label class="tip">Table range</label>
@@ -392,15 +376,16 @@ button:focus:not(:focus-visible){outline:none}
       </div>
 
       <div class="setup-footer">
-        <div class="tip">Tip: Japanese students practice 20-30 min daily. Consistency beats intensity.</div>
-        <button id="startBtn" class="btn btn-primary" style="font-size:.95rem;padding:10px 24px">Start Session</button>
+        <div class="tip">Tip: 20-30 minutes daily builds speed and accuracy fastest.</div>
+        <button id="startBtn" class="btn btn-primary" style="font-size:1rem;padding:12px 28px">Start Session</button>
       </div>
     </div>
   </div>
 
   <!-- ===== LIVE SESSION (Standard + Sprint) ===== -->
-  <div id="live" class="hidden" style="margin-top:14px">
+  <div id="live" class="hidden" style="margin-top:16px">
     <div class="live-grid">
+      <!-- Left: Problem area -->
       <div class="card animate-in">
         <div class="status-bar">
           <div class="flex items-center gap-sm">
@@ -425,7 +410,7 @@ button:focus:not(:focus-visible){outline:none}
             <div class="problem-lines" id="problem"></div>
             <div class="answer-row">
               <span class="eq">=</span>
-              <input id="answer" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+              <input id="answer" class="input mono" style="width:160px" placeholder="?" inputmode="numeric" autocomplete="off"/>
               <span class="reveal-badge" id="revealArea"></span>
             </div>
             <div class="rules">
@@ -437,7 +422,7 @@ button:focus:not(:focus-visible){outline:none}
             </div>
             <div class="feedback" id="feedback"></div>
             <div class="actions">
-              <div class="tip">Say the answer aloud before submitting.</div>
+              <div class="tip">Say the answer out loud before submitting.</div>
               <div class="flex gap-xs">
                 <button class="btn btn-primary" id="submitBtn">Submit</button>
                 <button class="btn btn-ghost" id="endBtn">End Session</button>
@@ -448,6 +433,7 @@ button:focus:not(:focus-visible){outline:none}
         </div>
       </div>
 
+      <!-- Right: Coach & Sprint -->
       <div class="flex-col gap-md">
         <!-- Bead Coach -->
         <div class="card animate-in">
@@ -456,10 +442,10 @@ button:focus:not(:focus-visible){outline:none}
             <div class="soroban-container">
               <div class="soroban" id="soroban"></div>
               <div class="coach-options">
-                <label class="toggle"><input type="checkbox" id="bpMicro"/><span class="track"></span><span style="font-size:.78rem">Micro-steps</span></label>
-                <label class="toggle"><input type="checkbox" id="bpManual"/><span class="track"></span><span style="font-size:.78rem">Manual</span></label>
-                <label class="toggle"><input type="checkbox" id="bpPersist"/><span class="track"></span><span style="font-size:.78rem">Keep highlight</span></label>
-                <label class="toggle"><input type="checkbox" id="bpHide"/><span class="track"></span><span style="font-size:.78rem">Mental mode</span></label>
+                <label class="toggle"><input type="checkbox" id="bpMicro"/><span class="track"></span><span style="font-size:.8rem">Micro-steps</span></label>
+                <label class="toggle"><input type="checkbox" id="bpManual"/><span class="track"></span><span style="font-size:.8rem">Manual</span></label>
+                <label class="toggle"><input type="checkbox" id="bpPersist"/><span class="track"></span><span style="font-size:.8rem">Keep highlight</span></label>
+                <label class="toggle"><input type="checkbox" id="bpHide"/><span class="track"></span><span style="font-size:.8rem">Mental mode</span></label>
                 <button class="btn btn-sm" id="bpPeek">Peek</button>
               </div>
               <div class="coach-controls">
@@ -493,7 +479,7 @@ button:focus:not(:focus-visible){outline:none}
                 <button class="btn btn-sm" id="sp10">Friends of 10</button>
               </div>
               <div class="flex gap-md items-center">
-                <div class="stat"><span class="clock mono" id="spClock" style="font-size:.85rem;color:var(--teal)">0:00</span></div>
+                <div class="stat"><span class="clock mono" id="spClock" style="font-size:.9rem;color:var(--teal)">0:00</span></div>
                 <div class="stat">Done: <b id="spScore">0</b> / <span id="spTotal">0</span></div>
               </div>
             </div>
@@ -510,14 +496,14 @@ button:focus:not(:focus-visible){outline:none}
         <!-- Hint Box -->
         <div class="card animate-in hidden" id="hintBox">
           <div class="card-header">Hint</div>
-          <div class="card-body"><pre class="mono" id="hintContent" style="white-space:pre-wrap;font-size:.82rem;color:var(--ink2)"></pre></div>
+          <div class="card-body"><pre class="mono" id="hintContent" style="white-space:pre-wrap;font-size:.85rem;color:var(--ink2)"></pre></div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ===== ANZAN SESSION ===== -->
-  <div id="anzanLive" class="hidden" style="margin-top:14px">
+  <div id="anzanLive" class="hidden" style="margin-top:16px">
     <div class="card animate-in">
       <div class="status-bar">
         <div class="flex items-center gap-sm">
@@ -536,23 +522,23 @@ button:focus:not(:focus-visible){outline:none}
         <div class="anzan-display">
           <div class="anzan-streak-bar" id="anzanStreakBar">Streak: <b id="anzanStreakVal">0</b> &middot; Best: <b id="anzanBestStreakVal">0</b><span id="anzanLevelUpHint" class="level-up-hint hidden">Level up?</span></div>
           <div class="tip" id="anzanInstruction">Watch each number flash, then add them in your mind.</div>
-          <div class="tip" id="anzanCoachTip" style="color:var(--teal);font-style:normal;font-weight:600;min-height:18px"></div>
+          <div class="tip" id="anzanCoachTip" style="color:var(--teal);font-style:normal;font-weight:600;min-height:20px"></div>
           <div class="anzan-countdown hidden" id="anzanCountdown"></div>
           <div class="anzan-number" id="anzanNumber">&nbsp;</div>
-          <div id="anzanRunningTotal" class="hidden" style="font-size:1.1rem;color:var(--gold);font-weight:700;font-family:monospace;opacity:.7">Running: 0</div>
+          <div id="anzanRunningTotal" class="hidden" style="font-size:1.2rem;color:var(--gold);font-weight:700;font-family:monospace;opacity:.7">Running: 0</div>
           <div class="anzan-progress" id="anzanDots"></div>
           <div id="anzanBeadRod" class="bead-rod-wrap hidden"></div>
           <div class="answer-row" id="anzanAnswerRow" style="display:none">
             <span class="eq">=</span>
-            <input id="anzanInput" class="input mono" style="width:170px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+            <input id="anzanInput" class="input mono" style="width:180px" placeholder="?" inputmode="numeric" autocomplete="off"/>
             <button class="btn btn-primary" id="anzanSubmitBtn">Submit</button>
           </div>
           <div class="feedback" id="anzanFeedback"></div>
-          <div id="anzanBreakdown" class="hidden" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:10px;margin-top:6px;font-size:.85rem;max-width:420px">
-            <div style="font-weight:700;color:var(--gold);margin-bottom:3px">Step-by-step breakdown:</div>
+          <div id="anzanBreakdown" class="hidden" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-top:8px;font-size:.9rem;max-width:400px">
+            <div style="font-weight:700;color:var(--gold);margin-bottom:4px">Step-by-step breakdown:</div>
             <div id="anzanBreakdownContent" class="mono" style="color:var(--ink2)"></div>
           </div>
-          <div class="flex gap-xs" style="margin-top:6px">
+          <div class="flex gap-xs" style="margin-top:8px">
             <button class="btn hidden" id="anzanReplayBtn">Replay</button>
             <button class="btn btn-gold hidden" id="anzanNextBtn">Next Round</button>
           </div>
@@ -562,7 +548,7 @@ button:focus:not(:focus-visible){outline:none}
   </div>
 
   <!-- ===== MULTIPLICATION SESSION ===== -->
-  <div id="multLive" class="hidden" style="margin-top:14px">
+  <div id="multLive" class="hidden" style="margin-top:16px">
     <div class="card animate-in">
       <div class="status-bar">
         <div class="flex items-center gap-sm">
@@ -578,7 +564,7 @@ button:focus:not(:focus-visible){outline:none}
         <button class="btn btn-sm btn-ghost" id="multHomeBtn" style="color:var(--ink3)">Back</button>
       </div>
       <div class="card-body">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px 0">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0">
           <div class="problem-label">Problem <span id="multProbNum">#1</span></div>
           <div class="mult-display">
             <span class="mult-num" id="multA">0</span>
@@ -600,7 +586,7 @@ button:focus:not(:focus-visible){outline:none}
   </div>
 
   <!-- ===== SUMMARY ===== -->
-  <div id="summary" class="hidden" style="margin-top:14px">
+  <div id="summary" class="hidden" style="margin-top:16px">
     <div class="card animate-in">
       <div class="card-header">Session Complete</div>
       <div class="card-body">
@@ -612,17 +598,13 @@ button:focus:not(:focus-visible){outline:none}
           <div class="summary-stat"><span class="label">Hints Used</span><span class="value" id="sumHints">0</span></div>
           <div class="summary-stat"><span class="label">Best Streak</span><span class="value" id="sumBestStreak">0</span></div>
         </div>
-        <div id="sumPB" class="hidden" style="text-align:center;padding:10px;margin-top:6px"><span class="pb-badge" style="font-size:.95rem;padding:6px 18px">New Personal Best!</span></div>
-        <div id="sumDanRank" class="dan-display hidden">
-          <div class="rank" id="sumDanLabel">10-kyu</div>
-          <div class="rank-desc" id="sumDanDesc">Keep practicing to advance!</div>
-        </div>
-        <div id="sumMessage" style="text-align:center;padding:10px;margin-top:10px;font-size:.95rem;font-weight:600;color:var(--gold)"></div>
-        <div id="missWrap" class="hidden" style="margin-top:16px">
-          <div style="font-weight:700;margin-bottom:6px">Missed Problems (<span id="missLen">0</span>)</div>
+        <div id="sumPB" class="hidden" style="text-align:center;padding:12px;margin-top:8px"><span class="pb-badge" style="font-size:1rem;padding:8px 20px">New Personal Best!</span></div>
+        <div id="sumMessage" style="text-align:center;padding:12px;margin-top:12px;font-size:1rem;font-weight:600;color:var(--gold)"></div>
+        <div id="missWrap" class="hidden" style="margin-top:20px">
+          <div style="font-weight:700;margin-bottom:8px">Missed Problems (<span id="missLen">0</span>)</div>
           <div class="missed-grid" id="missList"></div>
         </div>
-        <div class="flex justify-between items-center wrap gap-sm" style="margin-top:16px">
+        <div class="flex justify-between items-center wrap gap-sm" style="margin-top:20px">
           <div class="flex gap-xs">
             <button class="btn" id="practiceMissBtn">Practice Missed Set</button>
           </div>
@@ -630,13 +612,13 @@ button:focus:not(:focus-visible){outline:none}
         </div>
       </div>
     </div>
-    <div id="historyCard" class="card hidden" style="margin-top:14px">
+    <div id="historyCard" class="card hidden" style="margin-top:16px">
       <div class="card-header flex justify-between"><span>Practice History</span><button class="btn btn-sm btn-ghost" id="clearHistBtn">Clear</button></div>
       <div class="card-body" id="historyList"></div>
     </div>
   </div>
 
-  <div class="footer">Soroban Trainer Pro v5.0.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
+  <div class="footer">Soroban Trainer Pro v4.2.0 &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
 </div>
 <div id="err"></div>
 <div id="toast"></div>
@@ -654,40 +636,10 @@ const toastEl=document.getElementById('toast');
 function showToast(msg,color){
   toastEl.textContent=msg;
   toastEl.style.background=color||'var(--good)';
-  toastEl.style.color=(color==='var(--gold)'||color==='var(--teal)')?'#000':'#fff';
+  toastEl.style.color=color==='var(--gold)'?'#000':'#fff';
   toastEl.className='shown';
-  setTimeout(()=>toastEl.className='',2200);
+  setTimeout(()=>toastEl.className='',2000);
 }
-
-/* ===== SOUND ENGINE ===== */
-let soundEnabled=true;
-const AudioCtx=window.AudioContext||window.webkitAudioContext;
-let audioCtx=null;
-function getAudioCtx(){if(!audioCtx)audioCtx=new AudioCtx();return audioCtx}
-function playTone(freq,dur,type){
-  if(!soundEnabled)return;
-  try{
-    const ctx=getAudioCtx();
-    const osc=ctx.createOscillator();
-    const gain=ctx.createGain();
-    osc.type=type||'sine';
-    osc.frequency.value=freq;
-    gain.gain.value=0.15;
-    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-    osc.connect(gain);gain.connect(ctx.destination);
-    osc.start();osc.stop(ctx.currentTime+dur);
-  }catch(e){}
-}
-function sndCorrect(){playTone(880,.15);setTimeout(()=>playTone(1100,.12),80)}
-function sndWrong(){playTone(220,.25,'square')}
-function sndClick(){playTone(600,.05)}
-function sndLevelUp(){playTone(523,.1);setTimeout(()=>playTone(659,.1),100);setTimeout(()=>playTone(784,.15),200)}
-
-document.getElementById('soundToggle').addEventListener('click',function(){
-  soundEnabled=!soundEnabled;
-  this.textContent=soundEnabled?'\u{1F50A}':'\u{1F507}';
-  this.title=soundEnabled?'Sound on':'Sound off';
-});
 
 /* ===== CONSTANTS ===== */
 const DIFFICULTIES={
@@ -696,40 +648,7 @@ const DIFFICULTIES={
   advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
   expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.0.0';
-
-/* ===== JAPANESE DAN RANKING SYSTEM ===== */
-const DAN_RANKS=[
-  {rank:'10-kyu',minAcc:0,minPPM:0,desc:'Absolute beginner. Learn bead positions.'},
-  {rank:'9-kyu',minAcc:50,minPPM:1,desc:'Learning the basics. Keep going!'},
-  {rank:'8-kyu',minAcc:55,minPPM:2,desc:'Getting comfortable with bead movements.'},
-  {rank:'7-kyu',minAcc:60,minPPM:3,desc:'Understanding complement techniques.'},
-  {rank:'6-kyu',minAcc:65,minPPM:4,desc:'Developing speed with accuracy.'},
-  {rank:'5-kyu',minAcc:70,minPPM:5,desc:'Solid fundamentals. Starting mental calculation.'},
-  {rank:'4-kyu',minAcc:75,minPPM:6,desc:'Good speed and mental image forming.'},
-  {rank:'3-kyu',minAcc:78,minPPM:7,desc:'Strong visualization. Approaching dan level.'},
-  {rank:'2-kyu',minAcc:80,minPPM:8,desc:'Excellent control. Almost dan rank!'},
-  {rank:'1-kyu',minAcc:83,minPPM:9,desc:'Ready for dan promotion.'},
-  {rank:'1-dan',minAcc:85,minPPM:10,desc:'Dan rank achieved! True soroban practitioner.'},
-  {rank:'2-dan',minAcc:88,minPPM:12,desc:'Advanced practitioner. Impressive speed.'},
-  {rank:'3-dan',minAcc:90,minPPM:14,desc:'Master level. Mental soroban is natural.'},
-  {rank:'4-dan',minAcc:92,minPPM:16,desc:'Expert. You see the beads without thinking.'},
-  {rank:'5-dan',minAcc:94,minPPM:18,desc:'Elite level. Competition ready.'},
-  {rank:'6-dan',minAcc:95,minPPM:20,desc:'Near-perfect accuracy at high speed.'},
-  {rank:'7-dan',minAcc:96,minPPM:22,desc:'Exceptional. World-class level.'},
-  {rank:'8-dan',minAcc:97,minPPM:24,desc:'Extraordinary mastery.'},
-  {rank:'9-dan',minAcc:98,minPPM:26,desc:'Legendary. Among the best in the world.'},
-  {rank:'10-dan',minAcc:99,minPPM:30,desc:'Grand Master. Perfect mental soroban.'}
-];
-
-function calcDanRank(accuracy,ppm){
-  let best=DAN_RANKS[0];
-  for(const r of DAN_RANKS){
-    if(accuracy>=r.minAcc && ppm>=r.minPPM) best=r;
-    else break;
-  }
-  return best;
-}
+const BUILD='v4.2.0';
 
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
@@ -749,12 +668,10 @@ let anzanSpeed=3000,anzanCount=3,anzanNumbers=[],anzanAnswer=0;
 let anzanIdx=0,anzanTimer=null,anzanCorrectVal=0,anzanTotalVal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
 let anzanLevel='beginner',anzanAddOnly=true,anzanAutoNext=false,anzanShowBeads=true,anzanShowRunning=false;
 let anzanStreak=0,anzanBestStreak=0;
-let anzanFlashing=false; // BUG FIX: track flashing state to prevent pause/resume issues
 const ANZAN_LEVELS={
-  beginner:{label:'Beginner (10-kyu)',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod \u2014 total stays 9 or below. 3 numbers (1-5), slow speed (3s). Bead scaffold shows correct bead positions. Focus on image clarity, not speed. This is how Japanese soroban students begin.'},
-  intermediate:{label:'Intermediate (5-kyu)',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
-  advanced:{label:'Advanced (1-dan)',speed:1000,count:7,maxNum:50,addOnly:false,desc:'Add and subtract, numbers up to 50, 7 numbers, normal speed (1s). Full mental soroban with tens and ones rods. Aim for automatic bead visualization.'},
-  master:{label:'Master (3-dan+)',speed:500,count:10,maxNum:99,addOnly:false,desc:'Full range numbers, 10 numbers, fast speed (0.5s). Competition-level training. Your mental soroban should move automatically. Think in bead images, not numbers.'}
+  beginner:{label:'Beginner',speed:3000,count:3,maxNum:5,addOnly:true,singleRod:true,desc:'Addition only, single rod \u2014 total stays 9 or below. 3 numbers (1-5), slow speed (3s each). Bead scaffold shows the correct bead positions as you go, so you can learn what to visualize. Focus on image clarity, not speed.'},
+  intermediate:{label:'Intermediate',speed:1500,count:5,maxNum:20,addOnly:false,desc:'Add and subtract, numbers up to 20, 5 numbers, medium speed (1.5s). Start using the tens rod. Picture the heaven bead dropping when you cross 5.'},
+  advanced:{label:'Advanced',speed:1000,count:7,maxNum:50,addOnly:false,desc:'Add and subtract, numbers up to 50, 7 numbers, normal speed (1s). Full mental soroban with tens and ones rods. Aim for automatic bead visualization.'}
 };
 // Multiplication state
 let multRange='basic',multReverse=false,multA=0,multB=0,multAnswer=0;
@@ -812,58 +729,7 @@ function numberToDigits(n,width){
   return s.padStart(Math.max(width,s.length),'0').split('').map(Number);
 }
 function digitToBeads(d){return{heaven:d>=5?1:0,earth:d%5}}
-function valueToBeads(n,width){return numberToDigits(Math.max(0,n),width).map(digitToBeads)}
-
-/* ===== COMPLEMENT TECHNIQUE DESCRIPTION ===== */
-function describeComplementTechnique(op,value,rodVal){
-  if(value===0) return null;
-  const newVal=op==='+'?rodVal+value:rodVal-value;
-  if(op==='+'){
-    // Direct add: enough room
-    if(newVal<=9 && newVal>=0){
-      if(rodVal<5 && newVal<5) return null; // simple earth add
-      if(rodVal>=5 && newVal>=5 && (newVal-5)<=(rodVal-5)+value) {
-        // Check if we can directly add earth beads above 5
-        if(value<=(4-(rodVal%5))) return null;
-      }
-    }
-    // Friend of 5: adding N crosses the 5 boundary within same rod
-    if(rodVal<5 && newVal>=5 && newVal<=9){
-      const comp=5-value;
-      if(comp>0) return 'Drop heaven bead (+5), remove '+(5-value)+' earth (friend of 5: '+value+'+'+(5-value)+'=5)';
-      if(comp===0) return 'Drop the heaven bead (add 5)';
-    }
-    // Overflow to 10+: carry to next rod
-    if(newVal>=10){
-      const comp=10-value;
-      return 'Carry +1 to next rod (+10), remove '+comp+' from this rod (complement: '+value+'+'+comp+'=10)';
-    }
-    // Edge: rod has heaven down, adding crosses within earth
-    if(rodVal>=5 && value<=(4-(rodVal%5))) return null;
-    if(rodVal>=5 && newVal>=5 && newVal<=9){
-      return 'Add '+value+' earth beads (room available above 5)';
-    }
-  } else {
-    // Subtraction
-    // Direct subtract
-    if(newVal>=0 && newVal<=9){
-      if(rodVal>=5 && newVal>=5 && value<=(rodVal%5)) return null;
-      if(rodVal<5 && value<=rodVal) return null;
-    }
-    // Friend of 5: need to lift heaven
-    if(rodVal>=5 && newVal>=0 && newVal<5){
-      const give=5-value;
-      if(give>0) return 'Lift heaven bead (-5), push '+(5-value)+' earth up (friend of 5)';
-      if(give===0) return 'Lift the heaven bead (-5)';
-    }
-    // Borrow from next rod (underflow)
-    if(newVal<0){
-      const comp=10-value;
-      return 'Borrow from next rod (-10), add '+comp+' to this rod (complement: 10-'+value+'='+comp+')';
-    }
-  }
-  return null;
-}
+function valueToBeads(n,width){return numberToDigits(n,width).map(digitToBeads)}
 
 /* ===== PROBLEM GENERATION ===== */
 function generateProblem(opts){
@@ -889,11 +755,11 @@ function generateProblem(opts){
     if(stayUnder100){
       if(op==='+'){
         const room=maxVal-runningVal;
-        if(room<1){op='-';next=randInt(1,Math.max(1,Math.min(Math.abs(runningVal-minVal),45)))}
+        if(room<1){op='-';next=randInt(1,Math.min(Math.abs(runningVal-minVal),45))}
         else next=randInt(1,Math.min(room,45));
       } else {
         const room=runningVal-minVal;
-        if(room<1){op='+';next=randInt(1,Math.max(1,Math.min(maxVal-runningVal,45)))}
+        if(room<1){op='+';next=randInt(1,Math.min(maxVal-runningVal,45))}
         else next=randInt(1,Math.min(room,45));
       }
     } else {
@@ -920,22 +786,7 @@ function generateProblem(opts){
 }
 
 /* ===== HINTS ===== */
-function describeOneRod(d){
-  if(d===0) return 'heaven up, 0 earth';
-  if(d<5) return 'heaven up, '+d+' earth';
-  if(d===5) return 'heaven DOWN, 0 earth';
-  return 'heaven DOWN, '+(d-5)+' earth';
-}
-function describeBeads(n){
-  if(n<0||n>999) return '';
-  if(n<=9) return '['+describeOneRod(n)+']';
-  const digits=String(n).split('').map(Number);
-  const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
-  return digits.map((d,i)=>'['+labels[i]+': '+describeOneRod(d)+']').join(' ');
-}
-
 function makeHintText(p){
-  if(!p||!p.nums||!p.ops) return 'No hint available.';
   const rows=['Start: set '+p.nums[0]+' on the soroban. '+describeBeads(p.nums[0])];
   let runVal=p.nums[0];
   for(let i=1;i<p.nums.length;i++){
@@ -944,6 +795,7 @@ function makeHintText(p){
     const n=p.nums[i];
     const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
     const parts=[];
+    // Process ones first to detect carry/borrow
     let onesCarry=0;
     if(ones>0){
       const onesRod=runVal%10;
@@ -1022,19 +874,19 @@ function computeCoarseFrames(p){
   let t=p.nums[0];
   for(let i=1;i<p.nums.length;i++){
     t=p.ops[i]==='+'?t+p.nums[i]:t-p.nums[i];
-    fr.push(Math.max(0,t)); // BUG FIX: clamp to 0 to avoid negative bead rendering
+    fr.push(t);
   }
   return fr;
 }
 
 function computeMicroFrames(p){
   const fr=[];
-  const width=Math.max(p.width,String(Math.max(...p.nums,Math.abs(p.answer))).length,2);
+  const width=Math.max(p.width,String(Math.max(...p.nums,p.answer)).length,2);
   let a=p.nums[0];
   fr.push(a);
   for(let i=1;i<p.nums.length;i++){
     const op=p.ops[i],n=p.nums[i];
-    const aD=numberToDigits(Math.max(0,a),width),nD=numberToDigits(n,width);
+    const aD=numberToDigits(a,width),nD=numberToDigits(n,width);
     let carry=0;
     for(let c=width-1;c>=0;c--){
       if(op==='+'){
@@ -1046,7 +898,7 @@ function computeMicroFrames(p){
         if(v<0){v+=10;carry=1}else carry=0;
         aD[c]=v;
       }
-      fr.push(Math.max(0,Number(aD.join('')))); // BUG FIX: clamp negatives
+      fr.push(Number(aD.join('')));
     }
     a=Number(aD.join(''));
   }
@@ -1148,14 +1000,18 @@ function renderProblem(p){
 
 /* ===== BEAD COACH ===== */
 function getCoachExplanation(p,lineIdx){
+  // For coarse (line) mode: explain the technique for this line
   if(lineIdx===0) return 'Set '+p.nums[0]+' on the soroban.';
   const op=p.ops[lineIdx];
   const n=p.nums[lineIdx];
+  // Compute running value up to previous line
   let runVal=p.nums[0];
   for(let i=1;i<lineIdx;i++) runVal=p.ops[i]==='+'?runVal+p.nums[i]:runVal-p.nums[i];
+  // Explain per-rod technique, processing ones first to detect carries
   const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
   const onesRod=runVal%10,tensRod=Math.floor(runVal/10)%10;
   const parts=[];
+  // Process ones first to detect carry/borrow
   let onesCarry=0;
   if(ones>0){
     const onesResult=op==='+'?onesRod+ones:onesRod-ones;
@@ -1164,6 +1020,7 @@ function getCoachExplanation(p,lineIdx){
     const onesTech=describeComplementTechnique(op,ones,onesRod);
     parts.push((op==='+'?'+':'-')+ones+' on ones'+(onesTech?' ('+onesTech+')':''));
   }
+  // Process tens, accounting for carry from ones
   if(tens>0){
     const effectiveTensRod=clamp(tensRod+onesCarry,0,9);
     const tensTech=describeComplementTechnique(op,tens,effectiveTensRod);
@@ -1181,7 +1038,7 @@ function getCoachExplanation(p,lineIdx){
 function updateStepTag(p,idx){
   if(bpMicro){
     if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';soroCaptionEl.textContent='Set '+p.nums[0]+' on the soroban.';return}
-    const width=Math.max(p.width,String(Math.max(...p.nums,Math.abs(p.answer))).length,2);
+    const width=Math.max(p.width,String(Math.max(...p.nums,p.answer)).length,2);
     let k=0;
     for(let i=1;i<p.nums.length;i++){
       for(let c=width-1;c>=0;c--){
@@ -1191,10 +1048,11 @@ function updateStepTag(p,idx){
           const colName=['ones','tens','hundreds','thousands'][width-1-c]||'col '+(width-c);
           stepTagEl.textContent=(op==='+'?'Add':'Sub')+' '+colName;
           stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
+          // Show technique tip for this specific column
           const colDigit=numberToDigits(p.nums[i],width)[c];
           let microCaption=(op==='+'?'Add ':'Subtract ')+p.nums[i]+', working on '+colName+' rod.';
           if(colDigit>0){
-            const rodDigit=numberToDigits(Math.max(0,frames[k-1]||0),width)[c];
+            const rodDigit=numberToDigits(frames[k-1]||0,width)[c];
             const tech=describeComplementTechnique(op,colDigit,rodDigit);
             if(tech) microCaption+='\n'+tech;
           }
@@ -1264,13 +1122,7 @@ function beginProblem(){
   if(practiceMissesMode&&persistedMisses.length>0){
     const missIdx=problemCount%persistedMisses.length;
     const miss=persistedMisses[missIdx];
-    // BUG FIX: safely handle misses that lack ops/nums
-    p={
-      lines:miss.lines||[String(miss.answer||0)],
-      answer:miss.answer||0,
-      ops:miss.ops||['+'],
-      nums:miss.nums||[miss.answer||0]
-    };
+    p={lines:miss.lines,answer:miss.answer,ops:miss.ops||['+'],nums:miss.nums||[miss.answer]};
   } else {
     const conf=DIFFICULTIES[difficulty];
     const boost=adaptive?chainBoost:0;
@@ -1310,14 +1162,12 @@ function submitAnswer(){
     feedbackEl.textContent=encourageMsg[randInt(0,encourageMsg.length-1)]+(currentStreak>=3?' ('+currentStreak+' in a row!)':'');
     $('#problemArea').classList.add('flash-correct');
     setTimeout(()=>$('#problemArea').classList.remove('flash-correct'),500);
-    sndCorrect();
   } else {
     currentStreak=0;
     feedbackEl.className='feedback wrong';
     feedbackEl.textContent='Not quite. The answer was '+problem.answer;
     $('#problemArea').classList.add('flash-wrong');
     setTimeout(()=>$('#problemArea').classList.remove('flash-wrong'),500);
-    sndWrong();
     sessionMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
     persistedMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
     if(persistedMisses.length>10) persistedMisses=persistedMisses.slice(-10);
@@ -1374,21 +1224,6 @@ function endSession(){
   $('#sumHints').textContent=hintsUsed;
   $('#sumBestStreak').textContent=bestSessionStreak;
 
-  // Dan rank calculation
-  const danRank=calcDanRank(accVal,ppmVal);
-  const danDisplay=$('#sumDanRank');
-  if(total>=3){
-    danDisplay.classList.remove('hidden');
-    $('#sumDanLabel').textContent=danRank.rank;
-    $('#sumDanDesc').textContent=danRank.desc;
-    const danBadge=$('#danBadge');
-    danBadge.textContent=danRank.rank;
-    danBadge.classList.remove('hidden');
-    save('soroban_dan',danRank.rank);
-  } else {
-    danDisplay.classList.add('hidden');
-  }
-
   // Personal best check
   const pb=loadPB();
   let newPB=false;
@@ -1396,7 +1231,7 @@ function endSession(){
     if(accVal>pb.accuracy){pb.accuracy=accVal;newPB=true}
     if(ppmVal>pb.ppm){pb.ppm=ppmVal;newPB=true}
     if(bestSessionStreak>pb.streak){pb.streak=bestSessionStreak;newPB=true}
-    if(newPB){savePB(pb);showToast('New Personal Best!','var(--gold)');sndLevelUp()}
+    if(newPB){savePB(pb);showToast('New Personal Best!','var(--gold)')}
   }
   $('#sumPB').classList.toggle('hidden',!newPB);
 
@@ -1407,7 +1242,7 @@ function endSession(){
   $('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
 
   const hist=loadHist();
-  hist.push({date:todayISO(),mode,difficulty,minutes,accuracy:accVal,correct,total,hints:hintsUsed,ppm:ppmVal,bestStreak:bestSessionStreak,dan:danRank.rank});
+  hist.push({date:todayISO(),mode,difficulty,minutes,accuracy:accVal,correct,total,hints:hintsUsed,ppm:ppmVal,bestStreak:bestSessionStreak});
   saveHist(hist);
   $('#streakVal').textContent=calcStreak(hist);
   renderHistory(hist);
@@ -1420,14 +1255,14 @@ function endSession(){
     sessionMisses.forEach(m=>{
       const box=document.createElement('div');
       box.className='missed-item';
-      (m.lines||[]).forEach((ln,idx)=>{
+      m.lines.forEach((ln,idx)=>{
         const d=document.createElement('div');
         d.style.whiteSpace='pre';
         d.textContent=(idx===0?' ':'')+ln;
         box.appendChild(d);
       });
       const r=document.createElement('div');
-      r.textContent='\u2500'.repeat(Math.max(4,(m.lines&&m.lines[0]?m.lines[0].length:4)));
+      r.textContent='\u2500'.repeat(Math.max(4,m.lines[0].length));
       r.style.color='var(--ink3)';
       box.appendChild(r);
       const a=document.createElement('div');
@@ -1448,7 +1283,7 @@ function ensureKeypad(){
     const b=document.createElement('button');
     b.className='btn';
     b.textContent=d;
-    b.addEventListener('click',()=>{sndClick();checkSprint(d)});
+    b.addEventListener('click',()=>checkSprint(d));
     if(!spTarget) b.disabled=true;
     spGridEl.appendChild(b);
   }
@@ -1496,13 +1331,11 @@ function checkSprint(x){
     spScoreVal++;spScoreEl.textContent=spScoreVal;
     spAnsEl.textContent=spCurrentAns;
     spAnsEl.style.color='var(--good)';
-    sndCorrect();
     setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},250);
   } else {
     spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spTarget+'</span>';
     spAnsEl.textContent=spCurrentAns;
     spAnsEl.style.color='var(--bad)';
-    sndWrong();
     setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},600);
   }
 }
@@ -1549,7 +1382,7 @@ function renderBeadRodMulti(num,container){
   const digits=String(num).split('').map(Number);
   const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
   const wrap=document.createElement('div');
-  wrap.style.cssText='display:flex;gap:18px;align-items:flex-start';
+  wrap.style.cssText='display:flex;gap:20px;align-items:flex-start';
   digits.forEach((d,i)=>{
     const div=document.createElement('div');
     div.style.textAlign='center';
@@ -1568,6 +1401,48 @@ function renderBeadRodMulti(num,container){
   container.appendChild(outer);
 }
 
+function describeComplementTechnique(op,value,rodVal){
+  // Explains the actual soroban finger technique
+  const newVal=op==='+'?rodVal+value:rodVal-value;
+  if(op==='+'){
+    // Simple add: enough room on earth beads
+    if(rodVal<5&&newVal<5&&value<=4-rodVal) return null; // direct add
+    if(rodVal>=5&&newVal>=5&&newVal<=9&&value<=(4-(rodVal-5))) return null; // direct add above 5
+    // Friend of 5: adding N where N>room below bar, use +5 -complement
+    if(rodVal<5&&newVal>=5&&newVal<=9){
+      const comp=5-value;
+      if(comp>0) return 'Add 5 (drop heaven), subtract '+(5-value)+' (friend of 5)';
+      if(comp===0) return 'Drop the heaven bead (add 5)';
+    }
+    // Friend of 10: adding N, carry to next rod
+    if(newVal>=10){
+      const comp=10-value;
+      return 'Add 10 (carry to tens), subtract '+comp+' (complement of '+value+')';
+    }
+    // If we cross 5 but within same rod
+    if(rodVal%5+value>4&&newVal<10&&newVal>=5){
+      const comp=5-value;
+      if(comp>0) return 'Drop heaven bead, pull back '+(5-value)+' earth (friend of 5: '+value+'+'+(5-value)+'=5)';
+    }
+  } else {
+    // Subtraction
+    if(rodVal>=5&&newVal>=5&&value<=(rodVal-5)) return null; // direct subtract above 5
+    if(rodVal<5&&value<=rodVal) return null; // direct subtract below 5
+    // Friend of 5: subtracting N, need to lift heaven
+    if(rodVal>=5&&newVal<5){
+      const give=5-value;
+      if(give>0) return 'Lift heaven bead (-5), push '+(5-value)+' earth up (friend of 5)';
+      if(give===0) return 'Lift the heaven bead (-5)';
+    }
+    // Friend of 10: borrow from tens rod
+    if(newVal<0||rodVal<value){
+      const comp=10-value;
+      return 'Borrow from tens (-10), add '+comp+' (complement of '+value+': 10-'+value+'='+comp+')';
+    }
+  }
+  return null;
+}
+
 function getAnzanCoachTip(idx,item,runningSum){
   const newSum=item.op==='+'?runningSum+item.value:runningSum-item.value;
   if(anzanLevel==='beginner'){
@@ -1579,8 +1454,8 @@ function getAnzanCoachTip(idx,item,runningSum){
     const tech=describeComplementTechnique(item.op,item.value,onesVal);
     if(item.op==='+'){
       if(runningSum<5&&newSum>=5) return 'Adding '+item.value+' crosses 5. '+(tech||'Drop heaven, set '+(newSum-5)+' earth')+'. See it change.';
-      if(tech) return 'Add '+item.value+': '+tech+'. Now see '+newSum+'.';
-      return 'Push '+item.value+' more up. See: '+(newSum>=5?'heaven down, '+(newSum-5)+' earth':newSum+' earth')+'.';
+      if(tech) return item.op==='+'?'Add '+item.value+': '+tech+'. Now see '+newSum+'.':'Subtract '+item.value+': '+tech+'. Now see '+newSum+'.';
+      return 'Push '+item.value+' more up. See the beads: '+(newSum>=5?'heaven down, '+(newSum-5)+' earth':newSum+' earth')+'.';
     }
     if(runningSum>=5&&newSum<5){
       return 'Subtract '+item.value+'. '+(tech||'Lift heaven, set '+newSum+' earth')+'. Watch it shift.';
@@ -1588,16 +1463,18 @@ function getAnzanCoachTip(idx,item,runningSum){
     if(tech) return 'Subtract '+item.value+': '+tech+'. See '+newSum+' remaining.';
     return 'Pull '+item.value+' earth bead'+(item.value>1?'s':'')+' away. See '+newSum+' remaining.';
   }
-  // Intermediate, Advanced, Master
+  // Intermediate & Advanced: give real technique advice
   if(idx===0){
     const ones=item.value%10,tens=Math.floor(item.value/10)%10;
     if(item.value<=9) return 'Set '+item.value+' on ones rod. '+(item.value>=5?'Heaven down, '+(item.value-5)+' earth.':item.value+' earth beads up.')+' Hold the image.';
     return 'Set '+tens+' on tens rod, '+ones+' on ones rod. See both rods clearly.';
   }
+  // Build technique description per rod, processing ones first to detect carries
   const onesNow=runningSum%10, tensNow=Math.floor(runningSum/10)%10;
   const addVal=item.value;
   const addOnes=addVal%10, addTens=Math.floor(addVal/10)%10;
   const parts=[];
+  // Process ones first - detect if carry occurs
   let onesCarry=0;
   if(addOnes>0){
     const onesResult=item.op==='+'?onesNow+addOnes:onesNow-addOnes;
@@ -1606,6 +1483,7 @@ function getAnzanCoachTip(idx,item,runningSum){
     const onesTech=describeComplementTechnique(item.op,addOnes,onesNow);
     parts.push('Ones: '+(item.op==='+'?'+':'-')+addOnes+(onesTech?' \u2014 '+onesTech:''));
   }
+  // Process tens, accounting for carry from ones
   const effectiveTensNow=tensNow+onesCarry;
   if(addTens>0||onesCarry!==0){
     const tensAdjust=addTens;
@@ -1623,6 +1501,20 @@ function getAnzanCoachTip(idx,item,runningSum){
   return (item.op==='+'?'Add ':'Subtract ')+addVal+'. Result: '+newSum+'. Focus on the image.';
 }
 
+function describeOneRod(d){
+  if(d===0) return 'heaven up, 0 earth';
+  if(d<5) return 'heaven up, '+d+' earth';
+  if(d===5) return 'heaven DOWN, 0 earth';
+  return 'heaven DOWN, '+(d-5)+' earth';
+}
+function describeBeads(n){
+  if(n<0||n>999) return '';
+  if(n<=9) return '['+describeOneRod(n)+']';
+  const digits=String(n).split('').map(Number);
+  const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
+  return digits.map((d,i)=>'['+labels[i]+': '+describeOneRod(d)+']').join(' ');
+}
+
 function buildAnzanBreakdown(){
   let sum=0;
   const lines=[];
@@ -1633,6 +1525,7 @@ function buildAnzanBreakdown(){
     if(i===0) line='Start: '+item.value+' = '+sum;
     else line=(item.op==='+'?'+ ':'- ')+item.value+' = '+sum;
     if(sum>=0&&sum<=999) line+='  '+describeBeads(sum);
+    // Show technique used for ones digit
     if(i>0){
       const onesNow=prevSum%10;
       const onesAdd=item.value%10;
@@ -1657,7 +1550,6 @@ function startAnzan(){
   anzanStreak=0;anzanBestStreak=0;
   anzanTimeLeft=minutes*60;
   anzanPaused=false;
-  anzanFlashing=false;
   setScreen('anzan');
   anzanLevelDisplay.textContent=ANZAN_LEVELS[anzanLevel].label;
   updateClockDisplay(anzanClockEl,anzanTimeLeft);
@@ -1684,7 +1576,8 @@ function generateAnzanNumbers(){
   const nums=[];
   let sum=0;
 
-  const complementNums=[4,3,6,7,8,9];
+  // Technique-aware generation: prefer numbers that exercise complements
+  const complementNums=[4,3,6,7,8,9]; // numbers that trigger complement techniques on soroban
   for(let i=0;i<anzanCount;i++){
     let n,op;
     if(i===0){
@@ -1693,20 +1586,21 @@ function generateAnzanNumbers(){
       op='+';sum=n;
     } else {
       op=useAddOnly?'+':Math.random()<0.55?'+':'-';
+      // Bias toward complement-triggering numbers ~40% of the time
       const useComplement=!singleRod&&Math.random()<0.4;
       if(op==='+'){
         const cap=Math.min(upperCap-sum,maxNum);
-        if(cap<1){op='-';n=randInt(1,Math.max(1,Math.min(sum,maxNum)))}
+        if(cap<1){op='-';n=randInt(1,Math.min(sum,maxNum))}
         else if(useComplement){
           const candidates=complementNums.filter(c=>c<=cap);
           n=candidates.length?candidates[randInt(0,candidates.length-1)]:randInt(1,cap);
         } else n=randInt(1,cap);
       } else {
-        if(sum<2){op='+';n=randInt(1,Math.max(1,Math.min(upperCap-sum,maxNum)))}
+        if(sum<2){op='+';n=randInt(1,Math.min(upperCap-sum,maxNum))}
         else if(useComplement){
           const candidates=complementNums.filter(c=>c<=Math.min(sum,maxNum));
-          n=candidates.length?candidates[randInt(0,candidates.length-1)]:randInt(1,Math.max(1,Math.min(sum,maxNum)));
-        } else n=randInt(1,Math.max(1,Math.min(sum,maxNum)));
+          n=candidates.length?candidates[randInt(0,candidates.length-1)]:randInt(1,Math.min(sum,maxNum));
+        } else n=randInt(1,Math.min(sum,maxNum));
       }
       sum=op==='+'?sum+n:sum-n;
     }
@@ -1734,7 +1628,6 @@ function runCountdown(callback){
 
 function nextAnzanRound(replay){
   if(anzanTimeLeft<=0) return;
-  anzanFlashing=false;
 
   if(!replay){
     const gen=generateAnzanNumbers();
@@ -1758,18 +1651,16 @@ function nextAnzanRound(replay){
   anzanInputEl.value='';
   anzanCoachTip.textContent='Get ready...';
   $('#anzanInstruction').textContent=anzanShowBeads?
-    'Watch each number and the beads. Try to see them in your mind...':
-    'Watch each number. Visualize the soroban beads moving...';
+    'Watch each number and the beads. Try to see the beads in your mind too...':
+    'Watch each number. Visualize the soroban beads moving in your mind...';
   anzanBeadRod.innerHTML='';
   anzanBeadRod.classList.toggle('hidden',!anzanShowBeads);
 
-  runCountdown(()=>{anzanFlashing=true;flashAnzanNumber()});
+  runCountdown(()=>flashAnzanNumber());
 }
 
 function flashAnzanNumber(){
-  if(!anzanFlashing) return; // BUG FIX: prevent flash after pause cancellation
   if(anzanIdx>=anzanCount){
-    anzanFlashing=false;
     anzanNumberEl.innerHTML='&nbsp;';
     anzanBeadRod.classList.add('hidden');
     $('#anzanRunningTotal').classList.add('hidden');
@@ -1794,6 +1685,7 @@ function flashAnzanNumber(){
   }
   anzanCoachTip.textContent=getAnzanCoachTip(anzanIdx,item,runSumBefore);
 
+  // Training wheels: show running total
   const rtEl=$('#anzanRunningTotal');
   if(anzanShowRunning){
     rtEl.classList.remove('hidden');
@@ -1805,7 +1697,7 @@ function flashAnzanNumber(){
   if(anzanShowBeads){
     anzanBeadRod.classList.remove('hidden');
     if(runSum<0){
-      anzanBeadRod.innerHTML='<div class="bead-rod"><div class="bead-rod-label" style="color:var(--bad);font-size:.85rem">Negative: '+runSum+'</div></div>';
+      anzanBeadRod.innerHTML='<div class="bead-rod"><div class="bead-rod-label" style="color:var(--bad);font-size:.9rem">Negative: '+runSum+'</div></div>';
     } else if(runSum<=9) renderBeadRod(runSum,anzanBeadRod);
     else renderBeadRodMulti(runSum,anzanBeadRod);
   }
@@ -1819,11 +1711,10 @@ function flashAnzanNumber(){
 
   const showTime=Math.max(300,anzanSpeed-200);
   anzanTimer=setTimeout(()=>{
-    if(!anzanFlashing) return; // BUG FIX: check again before fading
     anzanNumberEl.style.opacity='0';
     setTimeout(()=>{
       anzanIdx++;
-      if(anzanFlashing&&!anzanPaused) flashAnzanNumber();
+      if(!anzanPaused) flashAnzanNumber();
     },200);
   },showTime);
 }
@@ -1842,16 +1733,15 @@ function submitAnzan(){
     anzanFeedbackEl.className='feedback correct';
     const msgs=['Correct!','Nice!','Sharp!','Well done!','Excellent!'];
     anzanFeedbackEl.textContent=msgs[randInt(0,msgs.length-1)]+' The answer is '+anzanAnswer+(anzanStreak>=3?' ('+anzanStreak+' streak!)':'');
-    sndCorrect();
   } else {
     anzanStreak=0;
     anzanFeedbackEl.className='feedback wrong';
     anzanFeedbackEl.textContent='Wrong. The answer was '+anzanAnswer+'. Your answer: '+v;
-    sndWrong();
   }
   $('#anzanStreakVal').textContent=anzanStreak;
   $('#anzanBestStreakVal').textContent=anzanBestStreak;
-  const nextLevels={beginner:'intermediate',intermediate:'advanced',advanced:'master'};
+  // Level-up suggestion
+  const nextLevels={beginner:'intermediate',intermediate:'advanced'};
   if(anzanStreak>=5&&nextLevels[anzanLevel]){
     $('#anzanLevelUpHint').classList.remove('hidden');
     $('#anzanLevelUpHint').textContent='Try '+ANZAN_LEVELS[nextLevels[anzanLevel]].label+'?';
@@ -1870,9 +1760,9 @@ function submitAnzan(){
     anzanBeadRod.classList.remove('hidden');
     if(anzanAnswer<=9) renderBeadRod(anzanAnswer,anzanBeadRod);
     else renderBeadRodMulti(anzanAnswer,anzanBeadRod);
-    anzanCoachTip.textContent=ok?'This is what the beads look like. Did your mental image match?':'Study this bead pattern. This is what you should have seen.';
+    anzanCoachTip.textContent=ok?'This is what the beads look like. Did your mental image match?':'Study this bead pattern. This is what you should have seen on your mental soroban.';
   } else {
-    anzanCoachTip.textContent=ok?'':'Study the breakdown to see where you lost track.';
+    anzanCoachTip.textContent=ok?'':'Study the breakdown below to see where you lost track.';
   }
 
   anzanAnswerRow.style.display='none';
@@ -1887,7 +1777,6 @@ function submitAnzan(){
 
 function endAnzan(){
   running=false;
-  anzanFlashing=false;
   if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
   if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   correct=anzanCorrectVal;total=anzanTotalVal;
@@ -1913,6 +1802,7 @@ function nextMultProblem(){
   multCount++;
   $('#multProbNum').textContent='#'+multCount;
   if(multReverse){
+    // Show as: ? x B = product, user answers ?
     $('#multA').textContent='?';
     $('#multB').textContent=multB;
   } else {
@@ -1937,11 +1827,9 @@ function submitMult(){
     multCorrect++;
     $('#multFeedback').className='feedback correct';
     $('#multFeedback').textContent='Correct!';
-    sndCorrect();
   } else {
     $('#multFeedback').className='feedback wrong';
     $('#multFeedback').textContent='Wrong. Answer: '+correctAns;
-    sndWrong();
   }
   $('#multCorrectEl').textContent=multCorrect;
   $('#multTotalEl').textContent=multTotal;
@@ -1995,7 +1883,7 @@ function renderHistory(hist){
                     h.mode==='anzan'?'Anzan':
                     h.mode==='multiplication'?'Multiplication':
                     'Sprint '+(h.mode==='sprint10'?'10':'5');
-    row.innerHTML='<div><div class="history-date">'+h.date+' \u2014 '+modeLabel+(h.dan?' \u2014 '+h.dan:'')+'</div>'+
+    row.innerHTML='<div><div class="history-date">'+h.date+' \u2014 '+modeLabel+'</div>'+
       '<div class="history-detail">'+h.minutes+' min \u00b7 '+h.correct+'/'+h.total+' \u00b7 Hints: '+(h.hints||0)+(h.ppm?' \u00b7 '+h.ppm+' PPM':'')+(h.bestStreak?' \u00b7 Streak: '+h.bestStreak:'')+'</div></div>'+
       '<span class="history-acc" style="color:'+(h.accuracy>=80?'var(--good)':h.accuracy>=60?'var(--gold)':'var(--bad)')+'">'+h.accuracy+'%</span>';
     list.appendChild(row);
@@ -2012,7 +1900,6 @@ $$('.btn[data-mode]').forEach(btn=>{
     mode=btn.dataset.mode;
     $('#anzanSetup').classList.toggle('hidden',mode!=='anzan');
     $('#multSetup').classList.toggle('hidden',mode!=='multiplication');
-    sndClick();
   });
 });
 
@@ -2022,7 +1909,6 @@ $$('.btn[data-diff]').forEach(btn=>{
     $$('.btn[data-diff]').forEach(b=>b.classList.remove('btn-active'));
     btn.classList.add('btn-active');
     difficulty=btn.dataset.diff;
-    sndClick();
   });
 });
 
@@ -2032,7 +1918,6 @@ $$('.btn.dur').forEach(btn=>{
     $$('.btn.dur').forEach(b=>b.classList.remove('btn-active'));
     btn.classList.add('btn-active');
     minutes=Number(btn.dataset.min);
-    sndClick();
   });
 });
 
@@ -2042,7 +1927,6 @@ $$('.btn.tech').forEach(btn=>{
     $$('.btn.tech').forEach(b=>b.classList.remove('btn-active'));
     btn.classList.add('btn-active');
     technique=btn.dataset.tech;
-    sndClick();
   });
 });
 
@@ -2052,7 +1936,6 @@ $$('.btn[data-multrng]').forEach(btn=>{
     $$('.btn[data-multrng]').forEach(b=>b.classList.remove('btn-active'));
     btn.classList.add('btn-active');
     multRange=btn.dataset.multrng;
-    sndClick();
   });
 });
 $('#multReverse').addEventListener('change',e=>multReverse=e.target.checked);
@@ -2074,7 +1957,6 @@ $$('.btn[data-anzlvl]').forEach(btn=>{
     $('#anzanSpeed').value=lvl.speed;
     $('#anzanCount').value=lvl.count;
     $('#anzanAddOnly').checked=lvl.addOnly;
-    sndClick();
   });
 });
 
@@ -2198,7 +2080,7 @@ anzanInputEl.addEventListener('keydown',e=>{
 anzanNextBtn.addEventListener('click',()=>nextAnzanRound());
 $('#anzanReplayBtn').addEventListener('click',()=>nextAnzanRound(true));
 $('#anzanLevelUpHint').addEventListener('click',()=>{
-  const nextLevels={beginner:'intermediate',intermediate:'advanced',advanced:'master'};
+  const nextLevels={beginner:'intermediate',intermediate:'advanced'};
   const next=nextLevels[anzanLevel];
   if(!next) return;
   anzanLevel=next;
@@ -2209,30 +2091,27 @@ $('#anzanLevelUpHint').addEventListener('click',()=>{
   anzanAddOnly=lvl.addOnly;
   $('#anzanLevelUpHint').classList.add('hidden');
   showToast('Level up! Now playing '+lvl.label,'var(--gold)');
-  sndLevelUp();
   nextAnzanRound();
 });
 $('#anzanEndBtn').addEventListener('click',endAnzan);
 $('#anzanHomeBtn').addEventListener('click',()=>{
   if(!confirm('Leave session and go back to setup? Progress will be lost.')) return;
-  running=false;anzanPaused=false;anzanFlashing=false;
+  running=false;anzanPaused=false;
   if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
   if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   setScreen('setup');
 });
-// BUG FIX: Anzan pause now properly stops and resumes without skipping numbers
 $('#anzanPauseBtn').addEventListener('click',()=>{
   anzanPaused=!anzanPaused;
   $('#anzanPauseBtn').textContent=anzanPaused?'Resume':'Pause';
   $('#anzanPauseBtn').classList.toggle('btn-primary',anzanPaused);
   if(anzanPaused){
-    anzanFlashing=false; // Stop the flash chain
     if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
   } else {
-    // Resume: restart flashing from current position without skipping
     if(anzanIdx<anzanCount&&anzanAnswerRow.style.display==='none'){
-      anzanFlashing=true;
-      flashAnzanNumber(); // Resume from current anzanIdx, NOT anzanIdx++
+      // Advance to next number to avoid re-flashing the same one
+      anzanIdx++;
+      flashAnzanNumber();
     }
   }
 });
@@ -2286,14 +2165,6 @@ $('#streakVal').textContent=calcStreak(hist);
 $('#missCount').textContent=persistedMisses.length;
 renderHistory(hist);
 ensureKeypad();
-
-// Restore dan badge if saved
-const savedDan=load('soroban_dan',null);
-if(savedDan){
-  const danBadge=$('#danBadge');
-  danBadge.textContent=savedDan;
-  danBadge.classList.remove('hidden');
-}
 
 })();
 </script>
