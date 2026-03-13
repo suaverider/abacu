@@ -602,8 +602,8 @@ function showTransition(phaseIdx){
 
   content.innerHTML=`
     <div class="transition-screen">
-      <div style="font-size:.9rem;color:var(--good);font-weight:700">Phase ${phaseIdx} of 4 Complete!</div>
-      <div class="transition-phase-name">Next: ${PHASE_NAMES[phaseIdx]}</div>
+      <div style="font-size:.9rem;color:var(--good);font-weight:700">${PHASE_NAMES[phaseIdx-1]} Complete!</div>
+      <div class="transition-phase-name">Up Next: ${PHASE_NAMES[phaseIdx]}</div>
       <div class="transition-desc">${PHASE_DESCRIPTIONS[phaseIdx]}</div>
       <div class="transition-timer">${phaseMins[phaseIdx]} minutes</div>
       <div class="transition-countdown" id="transCountdown">5</div>
@@ -698,6 +698,7 @@ function startWarmupPhase(){
 
   let problemCount=0;
   let currentAnswer=0;
+  let warmupActive=true;
 
   function generateWarmup(){
     // Simple 2-4 line problems, numbers 1-45, stay under 100
@@ -750,7 +751,7 @@ function startWarmupPhase(){
   }
 
   function submit(){
-    if(paused) return;
+    if(paused||!warmupActive) return;
     const val=$('#warmupInput').value.trim();
     if(!val) return;
     const v=Number(val);
@@ -910,6 +911,8 @@ function startAnzanPhase(){
   let anzanFlashing=false;
   let anzanTimer=null;
   let roundCount=0;
+  let countdownTimer=null;
+  let phaseActive=true;
 
   // Level definitions - starts very easy, scales gently
   const LEVELS=[
@@ -993,7 +996,8 @@ function startAnzanPhase(){
     let cdIdx=0;
     const cdSteps=['3','2','1','Go!'];
     function countdownTick(){
-      if(paused){setTimeout(countdownTick,100);return}
+      if(!phaseActive) return;
+      if(paused){countdownTimer=setTimeout(countdownTick,100);return}
       if(cdIdx>=cdSteps.length){
         anzanFlashing=true;
         flashNumber();
@@ -1002,13 +1006,13 @@ function startAnzanPhase(){
       $('#anzanNumber').textContent=cdSteps[cdIdx];
       $('#anzanNumber').style.opacity='1';
       cdIdx++;
-      setTimeout(countdownTick,cdIdx===cdSteps.length?400:700);
+      countdownTimer=setTimeout(countdownTick,cdIdx===cdSteps.length?400:700);
     }
     countdownTick();
   }
 
   function flashNumber(){
-    if(!anzanFlashing||paused) return;
+    if(!anzanFlashing||paused||!phaseActive) return;
     const lvl=getLevelConfig();
     if(anzanIdx>=lvl.count){
       // Done flashing — ask for answer
@@ -1103,8 +1107,10 @@ function startAnzanPhase(){
   startRound();
 
   phaseCleanup=()=>{
+    phaseActive=false;
     anzanFlashing=false;
     if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+    if(countdownTimer){clearTimeout(countdownTimer);countdownTimer=null}
   };
 }
 
