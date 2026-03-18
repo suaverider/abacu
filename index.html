@@ -729,6 +729,7 @@ function startWarmupPhase(){
   }
 
   function showProblem(){
+    if(!warmupActive) return;
     problemCount++;
     $('#warmupNum').textContent='#'+problemCount;
     const lines=generateWarmup();
@@ -783,7 +784,7 @@ function startWarmupPhase(){
   });
 
   showProblem();
-  phaseCleanup=()=>{};
+  phaseCleanup=()=>{warmupActive=false};
 }
 
 /* ================================================================
@@ -816,8 +817,10 @@ function startBeadReadingPhase(){
 
   let problemCount=0;
   let currentAnswer=0;
+  let beadActive=true;
 
   function showBeadProblem(){
+    if(!beadActive) return;
     problemCount++;
     $('#beadNum').textContent='#'+problemCount;
     // Generate number 1-99
@@ -834,7 +837,7 @@ function startBeadReadingPhase(){
   }
 
   function submit(){
-    if(paused) return;
+    if(paused||!beadActive) return;
     const val=$('#beadInput').value.trim();
     if(!val) return;
     const v=Number(val);
@@ -867,7 +870,7 @@ function startBeadReadingPhase(){
   });
 
   showBeadProblem();
-  phaseCleanup=()=>{};
+  phaseCleanup=()=>{beadActive=false};
 }
 
 /* ================================================================
@@ -1146,6 +1149,7 @@ function startComplementPhase(){
   let compScore=0, compTotal=0;
   let switchedTo5=false;
   let halfTime=0;
+  let compActive=true;
 
   // Track when we should switch from 10s to 5s
   const phaseMins=getPhaseMinutes();
@@ -1165,6 +1169,7 @@ function startComplementPhase(){
   }
 
   function nextComp(){
+    if(!compActive) return;
     if(compTarget===10){
       compN=randInt(1,9);compAns=10-compN;
     } else {
@@ -1193,7 +1198,7 @@ function startComplementPhase(){
   }
 
   function checkComp(x){
-    if(paused) return;
+    if(paused||!compActive) return;
     compTotal++;phaseResults[3].total++;
     $('#compTotal').textContent=compTotal;
     if(x===compAns){
@@ -1215,7 +1220,7 @@ function startComplementPhase(){
 
   buildKeypad();
   nextComp();
-  phaseCleanup=()=>{};
+  phaseCleanup=()=>{compActive=false};
 }
 
 /* ===== END SESSION ===== */
