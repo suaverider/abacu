@@ -202,6 +202,7 @@ button:focus:not(:focus-visible){outline:none}
   .sprint-n,.sprint-ans{font-size:2.2rem}
   .anzan-number{font-size:3rem}
   .phase-segment{font-size:.65rem;padding:0 4px}
+  .setup-grid{grid-template-columns:1fr!important}
 }
 </style>
 </head>
@@ -227,7 +228,7 @@ button:focus:not(:focus-visible){outline:none}
       <p style="color:var(--ink2);font-size:.9rem;margin-bottom:16px">
         Your session flows through 4 phases automatically. Each phase transitions with a clear announcement so you always know what's coming next.
       </p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="setup-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="setup-section">
           <div class="setup-label">Total Session Duration</div>
           <div class="btn-group" style="flex-direction:column">
@@ -373,7 +374,7 @@ const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
 const todayISO=()=>new Date().toISOString().slice(0,10);
 
 function load(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch{return def}}
-function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
+function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
 
 function fmtTime(secs){
   const m=String(Math.floor(secs/60)).padStart(2,'0');
@@ -686,7 +687,7 @@ function startWarmupPhase(){
       <div class="problem-lines" id="warmupProblem"></div>
       <div class="answer-row">
         <span class="eq">=</span>
-        <input id="warmupInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+        <input id="warmupInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
       </div>
       <div class="feedback" id="warmupFeedback"></div>
       <div style="display:flex;justify-content:center;gap:8px;margin-top:12px">
@@ -756,7 +757,7 @@ function startWarmupPhase(){
     const val=$('#warmupInput').value.trim();
     if(!val) return;
     const v=Number(val);
-    if(isNaN(v)) return;
+    if(isNaN(v)){$('#warmupFeedback').className='feedback';$('#warmupFeedback').textContent='Enter a number';return}
     phaseResults[0].total++;
     if(v===currentAnswer){
       phaseResults[0].correct++;
@@ -805,7 +806,7 @@ function startBeadReadingPhase(){
       </div>
       <div class="answer-row">
         <span class="eq">=</span>
-        <input id="beadInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+        <input id="beadInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
       </div>
       <div class="feedback" id="beadFeedback"></div>
       <div style="display:flex;justify-content:center;gap:8px;margin-top:12px">
@@ -841,7 +842,7 @@ function startBeadReadingPhase(){
     const val=$('#beadInput').value.trim();
     if(!val) return;
     const v=Number(val);
-    if(isNaN(v)) return;
+    if(isNaN(v)){$('#beadFeedback').className='feedback';$('#beadFeedback').textContent='Enter a number';return}
     phaseResults[1].total++;
     // Reveal digit labels
     $('#beadSoroban').querySelectorAll('.soroban-digit').forEach(el=>el.style.visibility='visible');
@@ -893,7 +894,7 @@ function startAnzanPhase(){
       <div id="anzanBeadViz" class="bead-rod-wrap" style="min-height:0"></div>
       <div class="answer-row" id="anzanAnswerRow" style="display:none">
         <span class="eq">=</span>
-        <input id="anzanInput" class="input mono" style="width:170px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+        <input id="anzanInput" class="input mono" style="width:170px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
         <button class="btn btn-primary" id="anzanSubmit">Submit</button>
       </div>
       <div class="feedback" id="anzanFeedback"></div>
@@ -1015,7 +1016,8 @@ function startAnzanPhase(){
   }
 
   function flashNumber(){
-    if(!anzanFlashing||paused||!phaseActive) return;
+    if(!anzanFlashing||!phaseActive) return;
+    if(paused){anzanTimer=setTimeout(flashNumber,100);return}
     const lvl=getLevelConfig();
     if(anzanIdx>=lvl.count){
       // Done flashing — ask for answer
@@ -1055,7 +1057,7 @@ function startAnzanPhase(){
       $('#anzanNumber').style.opacity='0';
       setTimeout(()=>{
         anzanIdx++;
-        if(anzanFlashing&&!paused) flashNumber();
+        if(anzanFlashing) flashNumber();
       },200);
     },showTime);
   }
@@ -1064,7 +1066,7 @@ function startAnzanPhase(){
     const val=$('#anzanInput').value.trim();
     if(!val) return;
     const v=Number(val);
-    if(isNaN(v)) return;
+    if(isNaN(v)){$('#anzanFeedback').className='feedback';$('#anzanFeedback').textContent='Enter a number';return}
     phaseResults[2].total++;
     const ok=v===anzanAnswer;
     if(ok){
