@@ -371,7 +371,7 @@ const $=q=>document.querySelector(q);
 const $$=q=>document.querySelectorAll(q);
 const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
 const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
-const todayISO=()=>new Date().toISOString().slice(0,10);
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 
 function load(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch{return def}}
 function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
@@ -700,6 +700,7 @@ function startWarmupPhase(){
   let problemCount=0;
   let currentAnswer=0;
   let warmupActive=true;
+  let warmupTimer=null;
 
   function generateWarmup(){
     // Simple 2-4 line problems, numbers 1-45, stay under 100
@@ -756,8 +757,8 @@ function startWarmupPhase(){
     if(paused||!warmupActive) return;
     const val=$('#warmupInput').value.trim();
     if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#warmupFeedback').className='feedback';$('#warmupFeedback').textContent='Enter a whole number';return}
     const v=Number(val);
-    if(isNaN(v)){$('#warmupFeedback').className='feedback';$('#warmupFeedback').textContent='Enter a number';return}
     phaseResults[0].total++;
     if(v===currentAnswer){
       phaseResults[0].correct++;
@@ -775,17 +776,17 @@ function startWarmupPhase(){
       sndWrong();
     }
     updateScoreDisplay();
-    setTimeout(showProblem,v===currentAnswer?400:700);
+    warmupTimer=setTimeout(showProblem,v===currentAnswer?400:700);
   }
 
   $('#warmupSubmit').addEventListener('click',submit);
-  $('#warmupSkip').addEventListener('click',()=>{if(!paused)showProblem()});
+  $('#warmupSkip').addEventListener('click',()=>{if(!paused&&warmupActive){phaseResults[0].total++;updateScoreDisplay();showProblem()}});
   $('#warmupInput').addEventListener('keydown',e=>{
     if(e.key==='Enter'){e.preventDefault();submit()}
   });
 
   showProblem();
-  phaseCleanup=()=>{warmupActive=false};
+  phaseCleanup=()=>{warmupActive=false;if(warmupTimer){clearTimeout(warmupTimer);warmupTimer=null}};
 }
 
 /* ================================================================
@@ -819,6 +820,7 @@ function startBeadReadingPhase(){
   let problemCount=0;
   let currentAnswer=0;
   let beadActive=true;
+  let beadTimer=null;
 
   function showBeadProblem(){
     if(!beadActive) return;
@@ -841,8 +843,8 @@ function startBeadReadingPhase(){
     if(paused||!beadActive) return;
     const val=$('#beadInput').value.trim();
     if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#beadFeedback').className='feedback';$('#beadFeedback').textContent='Enter a whole number';return}
     const v=Number(val);
-    if(isNaN(v)){$('#beadFeedback').className='feedback';$('#beadFeedback').textContent='Enter a number';return}
     phaseResults[1].total++;
     // Reveal digit labels
     $('#beadSoroban').querySelectorAll('.soroban-digit').forEach(el=>el.style.visibility='visible');
@@ -861,17 +863,17 @@ function startBeadReadingPhase(){
       sndWrong();
     }
     updateScoreDisplay();
-    setTimeout(showBeadProblem,v===currentAnswer?500:900);
+    beadTimer=setTimeout(showBeadProblem,v===currentAnswer?500:900);
   }
 
   $('#beadSubmit').addEventListener('click',submit);
-  $('#beadSkip').addEventListener('click',()=>{if(!paused)showBeadProblem()});
+  $('#beadSkip').addEventListener('click',()=>{if(!paused&&beadActive){phaseResults[1].total++;updateScoreDisplay();showBeadProblem()}});
   $('#beadInput').addEventListener('keydown',e=>{
     if(e.key==='Enter'){e.preventDefault();submit()}
   });
 
   showBeadProblem();
-  phaseCleanup=()=>{beadActive=false};
+  phaseCleanup=()=>{beadActive=false;if(beadTimer){clearTimeout(beadTimer);beadTimer=null}};
 }
 
 /* ================================================================
@@ -1065,8 +1067,8 @@ function startAnzanPhase(){
   function submitAnzan(){
     const val=$('#anzanInput').value.trim();
     if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#anzanFeedback').className='feedback';$('#anzanFeedback').textContent='Enter a whole number';return}
     const v=Number(val);
-    if(isNaN(v)){$('#anzanFeedback').className='feedback';$('#anzanFeedback').textContent='Enter a number';return}
     phaseResults[2].total++;
     const ok=v===anzanAnswer;
     if(ok){
@@ -1152,6 +1154,7 @@ function startComplementPhase(){
   let switchedTo5=false;
   let halfTime=0;
   let compActive=true;
+  let compTimer=null;
 
   // Track when we should switch from 10s to 5s
   const phaseMins=getPhaseMinutes();
@@ -1209,20 +1212,20 @@ function startComplementPhase(){
       $('#compAns').textContent=compAns;
       $('#compAns').style.color='var(--good)';
       sndCorrect();
-      setTimeout(nextComp,250);
+      compTimer=setTimeout(nextComp,250);
     } else {
       $('#compFeedback').innerHTML='<span style="color:var(--bad)">'+compN+' + '+compAns+' = '+compTarget+'</span>';
       $('#compAns').textContent=compAns;
       $('#compAns').style.color='var(--bad)';
       sndWrong();
-      setTimeout(nextComp,600);
+      compTimer=setTimeout(nextComp,600);
     }
     updateScoreDisplay();
   }
 
   buildKeypad();
   nextComp();
-  phaseCleanup=()=>{compActive=false};
+  phaseCleanup=()=>{compActive=false;if(compTimer){clearTimeout(compTimer);compTimer=null}};
 }
 
 /* ===== END SESSION ===== */
