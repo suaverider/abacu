@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'"/>
+<meta name="description" content="Structured daily soroban abacus training. 4 timed phases: warmup, bead reading, anzan mental math, and complements."/>
+<title>Soroban Trainer Pro v6.0</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<style>
+/* ===== RESET & FOUNDATIONS ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+  --surface:#1c2128;--surface2:#2d333b;--surface3:#373e47;
+  --ink:#e6edf3;--ink2:#8b949e;--ink3:#6e7681;
+  --accent:#e94560;--accent2:#ff6b6b;
+  --gold:#f0c040;--gold2:#ffd700;
+  --good:#3fb950;--bad:#f85149;
+  --teal:#39d2c0;--teal2:#58e6d6;
+  --purple:#a371f7;--blue:#58a6ff;
+  --wood1:#8d6e63;--wood2:#6d4c41;--wood3:#4e342e;
+  --bead-earth:#cdd9e5;--bead-earth-active:#58a6ff;
+  --bead-heaven:#cdd9e5;--bead-heaven-active:#f85149;
+  --ring:rgba(255,255,255,.06);
+  --ring2:rgba(255,255,255,.12);
+  --shadow:0 8px 32px rgba(0,0,0,.4);
+  --radius:14px;--radius-sm:8px;
+  font-size:16px;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus:not(:focus-visible){outline:none}
+
+/* ===== LAYOUT ===== */
+.container{max-width:900px;margin:0 auto;padding:16px}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+.gap-xs{gap:6px}.gap-sm{gap:10px}.gap-md{gap:16px}.gap-lg{gap:24px}
+.wrap{flex-wrap:wrap}
+.text-center{text-align:center}
+
+/* ===== HEADER ===== */
+.header{padding:20px 0 14px;border-bottom:1px solid var(--ring)}
+.header h1{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .subtitle{color:var(--ink3);font-size:.85rem;margin-top:2px}
+.streak-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:5px 12px;border-radius:999px;font-size:.8rem}
+.version{color:var(--ink3);font-size:.7rem;padding:3px 8px;border:1px solid var(--ring);border-radius:999px}
+
+/* ===== CARDS ===== */
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--ring);font-weight:700;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.card-body{padding:18px}
+
+/* ===== BUTTONS ===== */
+.btn{appearance:none;border:1px solid var(--ring2);background:var(--surface2);color:var(--ink);padding:9px 14px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:.85rem;transition:all .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;user-select:none}
+.btn:hover:not(:disabled){background:var(--surface3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#c2185b);border-color:transparent;color:#fff}
+.btn-primary:hover:not(:disabled){box-shadow:0 4px 20px rgba(233,69,96,.4)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#ff9800);border-color:transparent;color:#000}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn-sm{padding:5px 10px;font-size:.78rem;border-radius:6px}
+.btn-active{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.btn-group{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ===== INPUTS ===== */
+.input{background:var(--surface3);border:2px solid var(--ring2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--ink);font-size:1.5rem;text-align:center;font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .15s}
+.input:focus{border-color:var(--accent)}
+.input::placeholder{color:var(--ink3)}
+
+/* ===== SETUP SCREEN ===== */
+.setup-section{display:flex;flex-direction:column;gap:8px}
+.setup-label{font-weight:700;font-size:.8rem;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
+.tip{color:var(--ink3);font-size:.82rem;font-style:italic}
+
+/* ===== STATUS BAR ===== */
+.status-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 16px;border-bottom:1px solid var(--ring);background:rgba(0,0,0,.2)}
+.clock{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.2rem;font-weight:700;color:var(--teal)}
+.stat{display:flex;align-items:center;gap:4px;font-size:.85rem;color:var(--ink2)}
+.stat b{color:var(--ink)}
+
+/* ===== PHASE PROGRESS BAR ===== */
+.phase-bar{display:flex;align-items:center;gap:0;width:100%;height:40px;background:var(--surface2);border-bottom:1px solid var(--ring);overflow:hidden}
+.phase-segment{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--ink3);padding:0 8px;position:relative;transition:all .3s}
+.phase-segment.active{background:linear-gradient(135deg,rgba(233,69,96,.15),rgba(233,69,96,.05));color:var(--accent2)}
+.phase-segment.done{background:linear-gradient(135deg,rgba(63,185,80,.12),rgba(63,185,80,.04));color:var(--good)}
+.phase-segment .phase-time{font-size:.65rem;color:var(--ink3);font-weight:400}
+.phase-segment.active .phase-time{color:var(--accent2)}
+
+/* ===== PROBLEM DISPLAY ===== */
+.problem-area{border:2px solid var(--bg3);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--surface2));padding:18px}
+.problem-label{font-weight:700;color:var(--gold);font-size:.82rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.problem-lines{display:flex;flex-direction:column;align-items:center;padding:14px 0}
+.problem-line{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2.6rem;font-weight:700;line-height:1.3;white-space:pre;letter-spacing:.05em}
+.problem-divider{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:2rem;color:var(--ink3);letter-spacing:.15em}
+.answer-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}
+.answer-row .eq{font-size:2rem;color:var(--ink3);font-weight:700}
+.feedback{min-height:26px;margin-top:10px;font-weight:700;font-size:.95rem;text-align:center}
+.feedback.correct{color:var(--good)}
+.feedback.wrong{color:var(--bad)}
+
+/* ===== SOROBAN ABACUS ===== */
+.soroban{display:inline-flex;background:linear-gradient(180deg,var(--wood2),var(--wood3));border-radius:10px;padding:10px 14px;border:2px solid var(--wood1);box-shadow:inset 0 2px 8px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);gap:3px}
+.soroban-col{display:flex;flex-direction:column;align-items:center;gap:0;width:42px}
+.soroban-heaven{height:38px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:3px}
+.soroban-bar{width:100%;height:3px;background:linear-gradient(90deg,#5d4037,#8d6e63,#5d4037);border-radius:2px;flex-shrink:0}
+.soroban-earth{height:105px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding-top:3px;gap:2px}
+.bead{width:36px;height:20px;border-radius:999px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;flex-shrink:0}
+.bead-heaven{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
+.bead-heaven.active{background:linear-gradient(180deg,var(--bead-heaven-active),#c62828);transform:translateY(8px);box-shadow:0 2px 8px rgba(248,81,73,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.bead-earth{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
+.bead-earth.active{background:linear-gradient(180deg,var(--bead-earth-active),#1565c0);transform:translateY(-4px);box-shadow:0 2px 8px rgba(88,166,255,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.soroban-digit{font-size:.65rem;color:var(--gold);font-weight:700;margin-top:3px;font-family:monospace}
+
+/* ===== COMPLEMENT SPRINT ===== */
+.sprint-display{display:flex;align-items:center;justify-content:center;gap:20px;margin:14px 0}
+.sprint-n{font-size:3rem;font-weight:800;color:var(--teal);font-family:monospace}
+.sprint-plus{font-size:2rem;color:var(--ink3)}
+.sprint-ans{font-size:3rem;font-weight:800;color:var(--gold);font-family:monospace}
+.numpad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:300px;margin:0 auto}
+.numpad .btn{height:48px;font-size:1.1rem;font-weight:700}
+.sprint-feedback{text-align:center;min-height:22px;margin-top:6px;font-weight:600}
+
+/* ===== ANZAN (Mental) MODE ===== */
+.anzan-display{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 0}
+.anzan-number{font-size:4.5rem;font-weight:800;font-family:'JetBrains Mono',ui-monospace,monospace;color:var(--teal);text-shadow:0 0 30px rgba(57,210,192,.3);min-height:80px;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
+.anzan-progress{display:flex;gap:4px;align-items:center}
+.anzan-dot{width:8px;height:8px;border-radius:50%;background:var(--surface3);transition:background .2s}
+.anzan-dot.shown{background:var(--teal)}
+.anzan-dot.current{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+
+/* Bead rod visualization */
+.bead-rod{display:flex;flex-direction:column;align-items:center;gap:0;padding:4px 0;transition:opacity .4s}
+.bead-rod-wrap{display:flex;align-items:center;justify-content:center;gap:10px;min-height:110px}
+.bead-rod .bead-col{display:flex;flex-direction:column;align-items:center;position:relative;width:30px}
+.bead-rod .heaven-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:3px;border-bottom:3px solid var(--gold);margin-bottom:3px;min-height:36px;justify-content:flex-end}
+.bead-rod .earth-zone{display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:3px;min-height:56px}
+.bead-rod .bead{width:26px;height:11px;border-radius:5px;transition:transform .2s,opacity .2s}
+.bead-rod .bead.heaven{background:var(--teal);box-shadow:0 0 6px rgba(57,210,192,.3)}
+.bead-rod .bead.earth{background:var(--gold);box-shadow:0 0 5px rgba(255,215,0,.2)}
+.bead-rod .bead.away{opacity:.2}
+.bead-rod .bead.active{opacity:1}
+.bead-rod .bead.heaven.active{transform:translateY(5px)}
+.bead-rod .bead.earth.active{transform:translateY(-2px)}
+.bead-rod .rod-line{position:absolute;width:2px;background:var(--ink3);top:0;bottom:0;left:50%;transform:translateX(-50%);opacity:.4;border-radius:1px}
+.bead-rod-label{font-size:.65rem;color:var(--ink3);margin-top:3px;text-align:center}
+
+/* ===== TRANSITION SCREEN ===== */
+.transition-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:60px 20px;min-height:300px;text-align:center}
+.transition-phase-name{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.transition-desc{font-size:1rem;color:var(--ink2);max-width:500px;line-height:1.6}
+.transition-countdown{font-size:3.5rem;font-weight:900;color:var(--teal);font-family:'JetBrains Mono',ui-monospace,monospace}
+.transition-timer{font-size:.9rem;color:var(--ink3)}
+
+/* ===== SUMMARY ===== */
+.summary-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.summary-stat{display:flex;flex-direction:column;align-items:center;gap:3px;padding:16px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--ring)}
+.summary-stat .label{font-size:.75rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.summary-stat .value{font-size:1.8rem;font-weight:800;font-family:monospace}
+.summary-stat .value.good{color:var(--good)}
+.summary-stat .value.warn{color:var(--gold)}
+.summary-stat .value.bad{color:var(--bad)}
+.phase-summary{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.phase-summary-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--ring)}
+.phase-summary-item .phase-name{font-weight:700;font-size:.85rem}
+.phase-summary-item .phase-stats{color:var(--ink2);font-size:.82rem;font-family:monospace}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:20px 0;font-size:.72rem;color:var(--ink3);border-top:1px solid var(--ring);margin-top:20px}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes flash-green{0%{box-shadow:0 0 0 0 rgba(63,185,80,.6)}100%{box-shadow:0 0 0 20px rgba(63,185,80,0)}}
+@keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(248,81,73,.6)}100%{box-shadow:0 0 0 20px rgba(248,81,73,0)}}
+@keyframes countPulse{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:.8}}
+.animate-in{animation:fadeIn .3s ease}
+.flash-correct{animation:flash-green .5s ease}
+.flash-wrong{animation:flash-red .5s ease}
+
+/* ===== UTILITY ===== */
+.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.hidden{display:none!important}
+
+/* ===== ERROR/TOAST ===== */
+#err{display:none;position:fixed;bottom:16px;right:16px;background:var(--bad);color:#fff;padding:8px 14px;border-radius:var(--radius-sm);font-size:.82rem;z-index:1000;max-width:380px}
+#err.shown{display:block}
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);padding:8px 20px;border-radius:999px;font-weight:700;font-size:.85rem;z-index:1001;opacity:0;transition:opacity .3s;pointer-events:none}
+#toast.shown{opacity:1}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink3)}
+
+/* ===== SOUND TOGGLE ===== */
+.sound-btn{background:transparent;border:none;font-size:1.2rem;cursor:pointer;padding:4px;opacity:.6;transition:opacity .2s}
+.sound-btn:hover{opacity:1}
+
+@media(max-width:600px){
+  .problem-line{font-size:1.8rem}
+  .sprint-n,.sprint-ans{font-size:2.2rem}
+  .anzan-number{font-size:3rem}
+  .phase-segment{font-size:.65rem;padding:0 4px}
+  .setup-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- HEADER -->
+  <div class="header flex justify-between items-center wrap gap-md">
+    <div>
+      <h1>Soroban Trainer Pro</h1>
+      <div class="subtitle">Structured daily training &mdash; warmup, bead reading, anzan, complements</div>
+    </div>
+    <div class="flex items-center gap-sm">
+      <div class="streak-badge" id="streakBadge" role="status" aria-live="polite"><span aria-hidden="true">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
+      <button class="btn btn-sm btn-ghost" id="historyBtn" title="Session history" aria-label="View session history">History</button>
+      <button class="sound-btn" id="soundToggle" title="Toggle sound" aria-label="Toggle sound effects">&#x1F50A;</button>
+      <span class="version">v6.0.0</span>
+    </div>
+  </div>
+
+  <!-- ===== SETUP SCREEN ===== -->
+  <div id="setupScreen" class="card animate-in" style="margin-top:16px">
+    <div class="card-header">Session Setup</div>
+    <div class="card-body">
+      <p style="color:var(--ink2);font-size:.9rem;margin-bottom:16px">
+        Your session flows through 4 phases automatically. Each phase transitions with a clear announcement so you always know what's coming next.
+      </p>
+      <div class="setup-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="setup-section">
+          <div class="setup-label">Total Session Duration</div>
+          <div class="btn-group" style="flex-direction:column">
+            <button class="btn dur btn-active" data-min="20">20 minutes (recommended)</button>
+            <button class="btn dur" data-min="30">30 minutes</button>
+            <button class="btn dur" data-min="40">40 minutes</button>
+          </div>
+          <div class="tip" style="margin-top:6px">Time splits evenly across 4 phases.</div>
+        </div>
+        <div class="setup-section">
+          <div class="setup-label">Session Phases</div>
+          <div style="font-size:.85rem;color:var(--ink2);display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">1.</span> <b>Warmup</b> &mdash; Standard drill on your physical abacus</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">2.</span> <b>Bead Reading</b> &mdash; See beads, type the number</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">3.</span> <b>Anzan</b> &mdash; Mental math, starts easy, adapts to you</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">4.</span> <b>Complements</b> &mdash; Friends of 10, then Friends of 5</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;padding-top:16px;border-top:1px solid var(--ring);margin-top:16px">
+        <button id="startBtn" class="btn btn-primary" style="font-size:1rem;padding:12px 32px">Start Structured Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LIVE SESSION ===== -->
+  <div id="liveScreen" class="hidden" style="margin-top:16px">
+    <div class="card animate-in">
+      <!-- Phase progress bar -->
+      <div class="phase-bar" id="phaseBar">
+        <div class="phase-segment" data-phase="0">
+          <span>1. Warmup</span>
+          <span class="phase-time" id="phase0time"></span>
+        </div>
+        <div class="phase-segment" data-phase="1">
+          <span>2. Bead Reading</span>
+          <span class="phase-time" id="phase1time"></span>
+        </div>
+        <div class="phase-segment" data-phase="2">
+          <span>3. Anzan</span>
+          <span class="phase-time" id="phase2time"></span>
+        </div>
+        <div class="phase-segment" data-phase="3">
+          <span>4. Complements</span>
+          <span class="phase-time" id="phase3time"></span>
+        </div>
+      </div>
+      <!-- Status bar -->
+      <div class="status-bar">
+        <div class="flex items-center gap-sm">
+          <span class="clock" id="clock">00:00</span>
+          <span style="color:var(--ink3);font-size:.8rem" id="phaseLabel">Warmup</span>
+        </div>
+        <div class="flex items-center gap-md">
+          <div class="stat">Correct: <b id="scoreCorrect">0</b> / <span id="scoreTotal">0</span></div>
+          <div class="stat">Acc: <b class="mono" id="acc">0%</b></div>
+        </div>
+        <div class="flex items-center gap-xs">
+          <button class="btn btn-sm" id="pauseBtn">Pause</button>
+          <button class="btn btn-sm btn-ghost" id="endBtn">End Session</button>
+        </div>
+      </div>
+      <!-- Main content area -->
+      <div class="card-body" id="phaseContent">
+        <!-- Populated dynamically per phase -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY ===== -->
+  <div id="summaryScreen" class="hidden" style="margin-top:16px">
+    <div class="card animate-in">
+      <div class="card-header">Session Complete</div>
+      <div class="card-body">
+        <div class="summary-stats">
+          <div class="summary-stat"><span class="label">Total Correct</span><span class="value good" id="sumCorrect">0</span></div>
+          <div class="summary-stat"><span class="label">Total Problems</span><span class="value" id="sumTotal">0</span></div>
+          <div class="summary-stat"><span class="label">Overall Accuracy</span><span class="value" id="sumAcc">0%</span></div>
+        </div>
+        <div class="phase-summary" id="phaseSummary">
+          <!-- Filled dynamically -->
+        </div>
+        <div id="sumMessage" style="text-align:center;padding:14px;margin-top:12px;font-size:.95rem;font-weight:600;color:var(--gold)"></div>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px">
+          <button class="btn btn-primary" id="newSessionBtn">New Session</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SESSION HISTORY ===== -->
+  <div id="historyScreen" class="hidden" style="margin-top:16px">
+    <div class="card animate-in">
+      <div class="card-header">Session History <button class="btn btn-sm btn-ghost" id="histBackBtn" style="margin-left:auto">Back</button></div>
+      <div class="card-body" id="historyBody">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">&copy; 2025 Kodex. All rights reserved. <a href="#" id="privacyLink" style="color:var(--ink3);text-decoration:underline;margin-left:8px">Privacy</a></div>
+</div>
+
+<!-- Privacy Modal -->
+<div id="privacyModal" class="hidden" style="position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7)" role="dialog" aria-modal="true" aria-label="Privacy Policy">
+  <div style="max-width:520px;width:90%;background:var(--surface);border:1px solid var(--ring);border-radius:var(--radius);box-shadow:var(--shadow);max-height:80vh;overflow-y:auto">
+    <div style="padding:18px 24px;border-bottom:1px solid var(--ring);display:flex;justify-content:space-between;align-items:center">
+      <h2 style="font-size:1.1rem;font-weight:700">Privacy Policy</h2>
+      <button class="btn btn-sm btn-ghost" id="privacyClose" aria-label="Close privacy policy">&times;</button>
+    </div>
+    <div style="padding:24px;font-size:.88rem;color:var(--ink2);line-height:1.7">
+      <p><strong>Data Storage:</strong> All your training data (session history, streaks, preferences) is stored exclusively in your browser's localStorage. Nothing is ever sent to any server.</p>
+      <p style="margin-top:12px"><strong>No Accounts:</strong> This app does not require or support user accounts. There is no sign-up, no login, and no personal information collected.</p>
+      <p style="margin-top:12px"><strong>No Analytics:</strong> This app contains no analytics, tracking pixels, cookies, or third-party scripts of any kind.</p>
+      <p style="margin-top:12px"><strong>No Network Requests:</strong> After loading, this app makes zero network requests. It works entirely offline.</p>
+      <p style="margin-top:12px"><strong>Data Deletion:</strong> Clear your browser data or localStorage to remove all saved progress. Uninstalling is as simple as deleting the file.</p>
+    </div>
+  </div>
+</div>
+
+<div id="err"></div>
+<div id="toast"></div>
+
+<script>
+(()=>{
+'use strict';
+
+/* ===== ERROR HANDLER ===== */
+const errEl=document.getElementById('err');
+window.addEventListener('error',e=>{errEl.textContent='Error: '+(e.message||e.error);errEl.className='shown';setTimeout(()=>errEl.className='',5000)});
+
+/* ===== TOAST ===== */
+const toastEl=document.getElementById('toast');
+function showToast(msg,color){
+  toastEl.textContent=msg;
+  toastEl.style.background=color||'var(--good)';
+  toastEl.style.color=(color==='var(--gold)'||color==='var(--teal)')?'#000':'#fff';
+  toastEl.className='shown';
+  setTimeout(()=>toastEl.className='',2500);
+}
+
+/* ===== SOUND ===== */
+let soundEnabled=true;
+const AudioCtx=window.AudioContext||window.webkitAudioContext;
+let audioCtx=null;
+function getAudioCtx(){if(!audioCtx)audioCtx=new AudioCtx();return audioCtx}
+function playTone(freq,dur,type){
+  if(!soundEnabled)return;
+  try{
+    const ctx=getAudioCtx();const osc=ctx.createOscillator();const gain=ctx.createGain();
+    osc.type=type||'sine';osc.frequency.value=freq;gain.gain.value=0.15;
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+dur);
+  }catch(e){}
+}
+function sndCorrect(){playTone(880,.15);setTimeout(()=>playTone(1100,.12),80)}
+function sndWrong(){playTone(220,.25,'square')}
+function sndClick(){playTone(600,.05)}
+function sndTransition(){playTone(523,.1);setTimeout(()=>playTone(659,.1),100);setTimeout(()=>playTone(784,.15),200)}
+
+document.getElementById('soundToggle').addEventListener('click',function(){
+  soundEnabled=!soundEnabled;
+  this.textContent=soundEnabled?'\u{1F50A}':'\u{1F507}';
+});
+
+/* ===== HELPERS ===== */
+const $=q=>document.querySelector(q);
+const $$=q=>document.querySelectorAll(q);
+const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+
+function load(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch{return def}}
+function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
+
+function fmtTime(secs){
+  const m=String(Math.floor(secs/60)).padStart(2,'0');
+  const s=String(secs%60).padStart(2,'0');
+  return m+':'+s;
+}
+function fmtTimeShort(secs){
+  const m=Math.floor(secs/60);
+  const s=secs%60;
+  return m+'m'+String(s).padStart(2,'0')+'s';
+}
+
+/* ===== STORAGE ===== */
+function loadHist(){return load('soroban_history',[])}
+function saveHist(h){save('soroban_history',h)}
+function calcStreak(history){
+  if(!history.length) return 0;
+  const dates=[...new Set(history.map(h=>h.date))].sort();
+  const today=todayISO();
+  const last=dates[dates.length-1];
+  const diffFromToday=Math.floor((new Date(today)-new Date(last))/(86400000));
+  if(diffFromToday>1) return 0;
+  let streak=1;
+  for(let i=dates.length-1;i>0;i--){
+    const curr=new Date(dates[i]),prev=new Date(dates[i-1]);
+    if(Math.floor((curr-prev)/86400000)===1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+/* ===== SOROBAN MATH ===== */
+function numberToDigits(n,width){
+  const s=String(Math.max(0,n));
+  return s.padStart(Math.max(width,s.length),'0').split('').map(Number);
+}
+function digitToBeads(d){return{heaven:d>=5?1:0,earth:d%5}}
+function valueToBeads(n,width){return numberToDigits(Math.max(0,n),width).map(digitToBeads)}
+
+function leftPad(num,width){
+  const s=String(Math.abs(num));
+  return ' '.repeat(Math.max(0,width-s.length))+s;
+}
+
+/* ===== SOROBAN RENDERING ===== */
+function renderSoroban(el,beads){
+  el.innerHTML='';
+  beads.forEach(b=>{
+    const col=document.createElement('div');
+    col.className='soroban-col';
+    const heaven=document.createElement('div');
+    heaven.className='soroban-heaven';
+    const hBead=document.createElement('div');
+    hBead.className='bead bead-heaven'+(b.heaven?' active':'');
+    heaven.appendChild(hBead);
+    col.appendChild(heaven);
+    const bar=document.createElement('div');
+    bar.className='soroban-bar';
+    col.appendChild(bar);
+    const earth=document.createElement('div');
+    earth.className='soroban-earth';
+    for(let i=1;i<=4;i++){
+      const eBead=document.createElement('div');
+      eBead.className='bead bead-earth'+(i<=b.earth?' active':'');
+      earth.appendChild(eBead);
+    }
+    col.appendChild(earth);
+    const label=document.createElement('div');
+    label.className='soroban-digit';
+    label.textContent=String(b.heaven*5+b.earth);
+    col.appendChild(label);
+    el.appendChild(col);
+  });
+}
+
+/* ===== BEAD ROD VISUALIZATION (for bead reading & anzan) ===== */
+function renderBeadRod(num,container){
+  container.innerHTML='';
+  if(num<0||num>99) return;
+  const digits=num<=9?[num]:String(num).split('').map(Number);
+  const labels=digits.length===1?['ones']:['tens','ones'];
+  const wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;gap:18px;align-items:flex-start;justify-content:center';
+  digits.forEach((d,i)=>{
+    const heaven=d>=5?1:0;
+    const earth=d>=5?d-5:d;
+    const div=document.createElement('div');
+    div.style.textAlign='center';
+    const rod=document.createElement('div');
+    rod.className='bead-rod';
+    const col=document.createElement('div');
+    col.className='bead-col';
+    const rodLine=document.createElement('div');
+    rodLine.className='rod-line';
+    col.appendChild(rodLine);
+    const hz=document.createElement('div');
+    hz.className='heaven-zone';
+    const hb=document.createElement('div');
+    hb.className='bead heaven '+(heaven?'active':'away');
+    hz.appendChild(hb);
+    col.appendChild(hz);
+    const ez=document.createElement('div');
+    ez.className='earth-zone';
+    for(let j=0;j<4;j++){
+      const eb=document.createElement('div');
+      eb.className='bead earth '+(j<earth?'active':'away');
+      ez.appendChild(eb);
+    }
+    col.appendChild(ez);
+    rod.appendChild(col);
+    const lbl=document.createElement('div');
+    lbl.className='bead-rod-label';
+    lbl.textContent=labels[i];
+    rod.appendChild(lbl);
+    div.appendChild(rod);
+    wrap.appendChild(div);
+  });
+  container.appendChild(wrap);
+}
+
+/* ===== PHASE DEFINITIONS ===== */
+/*
+  Phase 0: WARMUP — Standard abacus drill. Show addition/subtraction problems
+           as numbers. User works on physical abacus, types answer.
+  Phase 1: BEAD READING — Show soroban beads representing a number.
+           User types what number the beads show.
+  Phase 2: ANZAN — Flash numbers one at a time, user adds mentally.
+           Starts easy (2 single-digit numbers, 3s speed), adapts up/down.
+  Phase 3: COMPLEMENTS — First half: Friends of 10, second half: Friends of 5.
+           Clear transition between them.
+*/
+
+const PHASE_NAMES=['Warmup','Bead Reading','Anzan','Complements'];
+const PHASE_DESCRIPTIONS=[
+  'Work these problems on your physical abacus. Type the answer when done.',
+  'Look at the bead positions and type the number they represent.',
+  'Watch the numbers flash. Add them in your head. Type the total.',
+  'Quick-fire complement practice. Tap the number that completes the pair.'
+];
+
+/* ===== GLOBAL SESSION STATE ===== */
+let totalMinutes=20;
+let running=false, paused=false;
+let currentPhase=0;
+let phaseTimeLeft=0; // seconds left in current phase
+let totalTimerId=null;
+let phaseResults=[
+  {correct:0,total:0},
+  {correct:0,total:0},
+  {correct:0,total:0},
+  {correct:0,total:0}
+];
+
+// Per-phase cleanup function
+let phaseCleanup=null;
+
+function getPhaseMinutes(){
+  // Split total time across 4 phases
+  const base=Math.floor(totalMinutes/4);
+  const remainder=totalMinutes%4;
+  // Distribute remainder: give extra minute to anzan, then complements
+  return [base, base, base+(remainder>=1?1:0), base+(remainder>=2?1:0)];
+}
+
+/* ===== SCREEN MANAGEMENT ===== */
+function setScreen(which){
+  $('#setupScreen').classList.toggle('hidden',which!=='setup');
+  $('#liveScreen').classList.toggle('hidden',which!=='live');
+  $('#summaryScreen').classList.toggle('hidden',which!=='summary');
+  $('#historyScreen').classList.toggle('hidden',which!=='history');
+}
+
+/* ===== PHASE BAR UI ===== */
+function updatePhaseBar(){
+  const segments=$$('.phase-segment');
+  segments.forEach((seg,i)=>{
+    seg.classList.remove('active','done');
+    if(i<currentPhase) seg.classList.add('done');
+    else if(i===currentPhase) seg.classList.add('active');
+  });
+}
+
+function updatePhaseTimers(){
+  const mins=getPhaseMinutes();
+  for(let i=0;i<4;i++){
+    const el=$('#phase'+i+'time');
+    if(i<currentPhase) el.textContent='Done';
+    else if(i===currentPhase) el.textContent=fmtTime(phaseTimeLeft);
+    else el.textContent=mins[i]+'m';
+  }
+}
+
+/* ===== MAIN TIMER ===== */
+function startPhaseTimer(){
+  if(totalTimerId) clearInterval(totalTimerId);
+  totalTimerId=setInterval(()=>{
+    if(paused) return;
+    phaseTimeLeft=Math.max(0,phaseTimeLeft-1);
+    $('#clock').textContent=fmtTime(phaseTimeLeft);
+    updatePhaseTimers();
+    if(phaseTimeLeft<=0){
+      advancePhase();
+    }
+  },1000);
+}
+
+function advancePhase(){
+  // Clean up current phase
+  if(phaseCleanup){phaseCleanup();phaseCleanup=null}
+  currentPhase++;
+  if(currentPhase>=4){
+    // Session complete
+    endSession();
+    return;
+  }
+  // Show transition screen, then start next phase
+  showTransition(currentPhase);
+}
+
+/* ===== TRANSITION SCREEN ===== */
+function showTransition(phaseIdx){
+  if(totalTimerId){clearInterval(totalTimerId);totalTimerId=null}
+  updatePhaseBar();
+
+  const content=$('#phaseContent');
+  const phaseMins=getPhaseMinutes();
+
+  content.innerHTML=`
+    <div class="transition-screen">
+      <div style="font-size:.9rem;color:var(--good);font-weight:700">${PHASE_NAMES[phaseIdx-1]} Complete!</div>
+      <div class="transition-phase-name">Up Next: ${PHASE_NAMES[phaseIdx]}</div>
+      <div class="transition-desc">${PHASE_DESCRIPTIONS[phaseIdx]}</div>
+      <div class="transition-timer">${phaseMins[phaseIdx]} minutes</div>
+      <div class="transition-countdown" id="transCountdown">5</div>
+      <div style="color:var(--ink3);font-size:.82rem">Starting in...</div>
+    </div>
+  `;
+
+  sndTransition();
+
+  let count=5;
+  const cdEl=$('#transCountdown');
+  const cdTimer=setInterval(()=>{
+    if(paused) return;
+    count--;
+    if(count<=0){
+      clearInterval(cdTimer);
+      startPhase(phaseIdx);
+    } else {
+      cdEl.textContent=count;
+    }
+  },1000);
+
+  // Store cleanup in case session ends during transition
+  phaseCleanup=()=>clearInterval(cdTimer);
+}
+
+/* ===== SCORE DISPLAY ===== */
+function updateScoreDisplay(){
+  let c=0,t=0;
+  phaseResults.forEach(p=>{c+=p.correct;t+=p.total});
+  $('#scoreCorrect').textContent=c;
+  $('#scoreTotal').textContent=t;
+  const a=t>0?Math.round(c/t*1000)/10:0;
+  $('#acc').textContent=a+'%';
+}
+
+/* ===== START SESSION ===== */
+function startSession(){
+  running=true;paused=false;
+  currentPhase=0;
+  phaseResults=[{correct:0,total:0},{correct:0,total:0},{correct:0,total:0},{correct:0,total:0}];
+  setScreen('live');
+  updatePhaseBar();
+  updateScoreDisplay();
+  startPhase(0);
+}
+
+/* ===== START PHASE ===== */
+function startPhase(phaseIdx){
+  currentPhase=phaseIdx;
+  const phaseMins=getPhaseMinutes();
+  phaseTimeLeft=phaseMins[phaseIdx]*60;
+  $('#clock').textContent=fmtTime(phaseTimeLeft);
+  $('#phaseLabel').textContent=PHASE_NAMES[phaseIdx];
+  updatePhaseBar();
+  updatePhaseTimers();
+  startPhaseTimer();
+
+  switch(phaseIdx){
+    case 0: startWarmupPhase(); break;
+    case 1: startBeadReadingPhase(); break;
+    case 2: startAnzanPhase(); break;
+    case 3: startComplementPhase(); break;
+  }
+}
+
+/* ================================================================
+   PHASE 0: WARMUP — Standard Drill
+   Simple addition/subtraction problems. User works on physical abacus.
+   ================================================================ */
+function startWarmupPhase(){
+  const content=$('#phaseContent');
+  content.innerHTML=`
+    <div style="text-align:center;padding:8px 0">
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">WARMUP: Work these on your physical abacus</div>
+      <div class="tip">Calculate each problem on your soroban, then type the answer.</div>
+    </div>
+    <div class="problem-area" id="warmupArea">
+      <div class="problem-label">Problem <span id="warmupNum">#1</span></div>
+      <div class="problem-lines" id="warmupProblem"></div>
+      <div class="answer-row">
+        <span class="eq">=</span>
+        <input id="warmupInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
+      </div>
+      <div class="feedback" id="warmupFeedback"></div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:12px">
+        <button class="btn btn-primary" id="warmupSubmit">Submit</button>
+        <button class="btn btn-ghost" id="warmupSkip">Skip</button>
+      </div>
+    </div>
+  `;
+
+  let problemCount=0;
+  let currentAnswer=0;
+  let warmupActive=true;
+  let warmupTimer=null;
+
+  function generateWarmup(){
+    // Simple 2-4 line problems, numbers 1-45, stay under 100
+    const chainLen=randInt(3,4);
+    let runningVal=randInt(10,50);
+    const ops=['+'],nums=[runningVal];
+    for(let i=1;i<chainLen;i++){
+      let op=Math.random()<0.55?'+':'-';
+      let next;
+      if(op==='+'){
+        const room=99-runningVal;
+        if(room<1){op='-';next=randInt(1,Math.min(runningVal,35))}
+        else next=randInt(1,Math.min(room,35));
+      } else {
+        if(runningVal<2){op='+';next=randInt(1,Math.min(99-runningVal,35))}
+        else next=randInt(1,Math.min(runningVal,35));
+      }
+      runningVal=op==='+'?runningVal+next:runningVal-next;
+      ops.push(op);nums.push(next);
+    }
+    currentAnswer=runningVal;
+    const displayWidth=Math.max(2,...nums.map(n=>String(n).length));
+    const lines=[leftPad(nums[0],displayWidth)];
+    for(let i=1;i<nums.length;i++){
+      lines.push(ops[i]+' '+leftPad(nums[i],displayWidth-1));
+    }
+    return lines;
+  }
+
+  function showProblem(){
+    if(!warmupActive) return;
+    problemCount++;
+    $('#warmupNum').textContent='#'+problemCount;
+    const lines=generateWarmup();
+    const el=$('#warmupProblem');
+    el.innerHTML='';
+    lines.forEach((ln,idx)=>{
+      const div=document.createElement('div');
+      div.className='problem-line';
+      div.textContent=(idx===0?' ':'')+ln;
+      el.appendChild(div);
+    });
+    const rule=document.createElement('div');
+    rule.className='problem-divider';
+    rule.textContent='\u2500'.repeat(Math.max(4,lines[0].length+2));
+    el.appendChild(rule);
+    $('#warmupInput').value='';
+    $('#warmupFeedback').textContent='';
+    $('#warmupFeedback').className='feedback';
+    $('#warmupInput').focus();
+  }
+
+  function submit(){
+    if(paused||!warmupActive) return;
+    const val=$('#warmupInput').value.trim();
+    if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#warmupFeedback').className='feedback';$('#warmupFeedback').textContent='Enter a whole number';return}
+    const v=Number(val);
+    phaseResults[0].total++;
+    if(v===currentAnswer){
+      phaseResults[0].correct++;
+      $('#warmupFeedback').className='feedback correct';
+      const msgs=['Correct!','Nice!','Well done!','Great!','Right!'];
+      $('#warmupFeedback').textContent=msgs[randInt(0,msgs.length-1)];
+      $('#warmupArea').classList.add('flash-correct');
+      setTimeout(()=>$('#warmupArea').classList.remove('flash-correct'),500);
+      sndCorrect();
+    } else {
+      $('#warmupFeedback').className='feedback wrong';
+      $('#warmupFeedback').textContent='Answer was '+currentAnswer;
+      $('#warmupArea').classList.add('flash-wrong');
+      setTimeout(()=>$('#warmupArea').classList.remove('flash-wrong'),500);
+      sndWrong();
+    }
+    updateScoreDisplay();
+    warmupTimer=setTimeout(showProblem,v===currentAnswer?400:700);
+  }
+
+  $('#warmupSubmit').addEventListener('click',submit);
+  $('#warmupSkip').addEventListener('click',()=>{if(!paused&&warmupActive){phaseResults[0].total++;updateScoreDisplay();showProblem()}});
+  $('#warmupInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();submit()}
+  });
+
+  showProblem();
+  phaseCleanup=()=>{warmupActive=false;if(warmupTimer){clearTimeout(warmupTimer);warmupTimer=null}};
+}
+
+/* ================================================================
+   PHASE 1: BEAD READING
+   Show soroban beads for a number. User types the number.
+   ================================================================ */
+function startBeadReadingPhase(){
+  const content=$('#phaseContent');
+  content.innerHTML=`
+    <div style="text-align:center;padding:8px 0">
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">BEAD READING: What number do these beads show?</div>
+      <div class="tip">Look at the bead positions and type the number they represent.</div>
+    </div>
+    <div class="problem-area" id="beadArea">
+      <div class="problem-label">Problem <span id="beadNum">#1</span></div>
+      <div style="display:flex;justify-content:center;padding:18px 0">
+        <div class="soroban" id="beadSoroban"></div>
+      </div>
+      <div class="answer-row">
+        <span class="eq">=</span>
+        <input id="beadInput" class="input mono" style="width:150px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
+      </div>
+      <div class="feedback" id="beadFeedback"></div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:12px">
+        <button class="btn btn-primary" id="beadSubmit">Submit</button>
+        <button class="btn btn-ghost" id="beadSkip">Skip</button>
+      </div>
+    </div>
+  `;
+
+  let problemCount=0;
+  let currentAnswer=0;
+  let beadActive=true;
+  let beadTimer=null;
+
+  function showBeadProblem(){
+    if(!beadActive) return;
+    problemCount++;
+    $('#beadNum').textContent='#'+problemCount;
+    // Generate number 1-99
+    currentAnswer=randInt(1,99);
+    const width=currentAnswer>=10?2:1;
+    const beads=valueToBeads(currentAnswer,width);
+    renderSoroban($('#beadSoroban'),beads);
+    // Hide the digit labels so user has to read beads
+    $('#beadSoroban').querySelectorAll('.soroban-digit').forEach(el=>el.style.visibility='hidden');
+    $('#beadInput').value='';
+    $('#beadFeedback').textContent='';
+    $('#beadFeedback').className='feedback';
+    $('#beadInput').focus();
+  }
+
+  function submit(){
+    if(paused||!beadActive) return;
+    const val=$('#beadInput').value.trim();
+    if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#beadFeedback').className='feedback';$('#beadFeedback').textContent='Enter a whole number';return}
+    const v=Number(val);
+    phaseResults[1].total++;
+    // Reveal digit labels
+    $('#beadSoroban').querySelectorAll('.soroban-digit').forEach(el=>el.style.visibility='visible');
+    if(v===currentAnswer){
+      phaseResults[1].correct++;
+      $('#beadFeedback').className='feedback correct';
+      $('#beadFeedback').textContent='Correct! It was '+currentAnswer;
+      $('#beadArea').classList.add('flash-correct');
+      setTimeout(()=>$('#beadArea').classList.remove('flash-correct'),500);
+      sndCorrect();
+    } else {
+      $('#beadFeedback').className='feedback wrong';
+      $('#beadFeedback').textContent='That was '+currentAnswer;
+      $('#beadArea').classList.add('flash-wrong');
+      setTimeout(()=>$('#beadArea').classList.remove('flash-wrong'),500);
+      sndWrong();
+    }
+    updateScoreDisplay();
+    beadTimer=setTimeout(showBeadProblem,v===currentAnswer?500:900);
+  }
+
+  $('#beadSubmit').addEventListener('click',submit);
+  $('#beadSkip').addEventListener('click',()=>{if(!paused&&beadActive){phaseResults[1].total++;updateScoreDisplay();showBeadProblem()}});
+  $('#beadInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();submit()}
+  });
+
+  showBeadProblem();
+  phaseCleanup=()=>{beadActive=false;if(beadTimer){clearTimeout(beadTimer);beadTimer=null}};
+}
+
+/* ================================================================
+   PHASE 2: ANZAN (Mental Math)
+   Flash numbers one at a time. Starts easy, adapts.
+   Beginner: 2 numbers, single digits, 3s flash speed
+   Scales up based on streak: more numbers, bigger numbers, faster
+   ================================================================ */
+function startAnzanPhase(){
+  const content=$('#phaseContent');
+  content.innerHTML=`
+    <div style="text-align:center;padding:8px 0">
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">ANZAN: Mental Calculation</div>
+      <div class="tip" id="anzanTip">Watch each number flash. Add them in your mind. Type the total.</div>
+    </div>
+    <div class="anzan-display">
+      <div style="font-size:.82rem;color:var(--ink2)">Level: <b id="anzanLevelLabel" style="color:var(--teal)">Easy</b> &middot; Streak: <b id="anzanStreakLabel" style="color:var(--gold)">0</b></div>
+      <div class="anzan-number" id="anzanNumber">&nbsp;</div>
+      <div class="anzan-progress" id="anzanDots"></div>
+      <div id="anzanBeadViz" class="bead-rod-wrap" style="min-height:0"></div>
+      <div class="answer-row" id="anzanAnswerRow" style="display:none">
+        <span class="eq">=</span>
+        <input id="anzanInput" class="input mono" style="width:170px" placeholder="?" inputmode="numeric" autocomplete="off" aria-label="Your answer"/>
+        <button class="btn btn-primary" id="anzanSubmit">Submit</button>
+      </div>
+      <div class="feedback" id="anzanFeedback"></div>
+      <div id="anzanBreakdown" class="hidden" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:10px;margin-top:6px;font-size:.85rem;max-width:420px">
+        <div style="font-weight:700;color:var(--gold);margin-bottom:3px">Breakdown:</div>
+        <div id="anzanBreakdownContent" class="mono" style="color:var(--ink2)"></div>
+      </div>
+      <button class="btn btn-gold hidden" id="anzanNext">Next Round</button>
+    </div>
+  `;
+
+  // Adaptive difficulty state
+  let anzanStreak=0;
+  let anzanLevel=0; // 0=easy, 1=medium, 2=hard
+  let anzanNumbers=[];
+  let anzanAnswer=0;
+  let anzanIdx=0;
+  let anzanFlashing=false;
+  let anzanTimer=null;
+  let roundCount=0;
+  let countdownTimer=null;
+  let phaseActive=true;
+
+  // Level definitions - starts very easy, scales gently
+  const LEVELS=[
+    {label:'Easy',      count:2, maxNum:5,  speed:3000, addOnly:true},  // 2 numbers, 1-5, 3s
+    {label:'Easy+',     count:3, maxNum:5,  speed:2500, addOnly:true},  // 3 numbers, 1-5, 2.5s
+    {label:'Medium',    count:3, maxNum:9,  speed:2000, addOnly:true},  // 3 numbers, 1-9, 2s
+    {label:'Medium+',   count:3, maxNum:15, speed:2000, addOnly:false}, // 3 numbers, 1-15 +/-, 2s
+    {label:'Challenge', count:4, maxNum:20, speed:1500, addOnly:false}, // 4 numbers, 1-20, 1.5s
+  ];
+
+  function getLevelConfig(){
+    return LEVELS[clamp(anzanLevel,0,LEVELS.length-1)];
+  }
+
+  function generateAnzan(){
+    const lvl=getLevelConfig();
+    const nums=[];
+    let sum=0;
+    for(let i=0;i<lvl.count;i++){
+      let n,op;
+      if(i===0){
+        n=randInt(1,lvl.maxNum);
+        op='+';sum=n;
+      } else {
+        op=lvl.addOnly?'+':Math.random()<0.55?'+':'-';
+        if(op==='+'){
+          const cap=Math.min(99-sum,lvl.maxNum);
+          if(cap<1){op='-';n=randInt(1,Math.max(1,Math.min(sum,lvl.maxNum)))}
+          else n=randInt(1,cap);
+        } else {
+          if(sum<2){op='+';n=randInt(1,Math.max(1,Math.min(99-sum,lvl.maxNum)))}
+          else n=randInt(1,Math.max(1,Math.min(sum,lvl.maxNum)));
+        }
+        sum=op==='+'?sum+n:sum-n;
+      }
+      nums.push({value:n,op});
+    }
+    return{numbers:nums,answer:sum};
+  }
+
+  function buildBreakdown(){
+    let sum=0;
+    return anzanNumbers.map((item,i)=>{
+      sum=item.op==='+'?sum+item.value:sum-item.value;
+      if(i===0) return 'Start: '+item.value+' = '+sum;
+      return (item.op==='+'?'+ ':'- ')+item.value+' = '+sum;
+    }).join('\n');
+  }
+
+  function startRound(){
+    roundCount++;
+    const gen=generateAnzan();
+    anzanNumbers=gen.numbers;
+    anzanAnswer=gen.answer;
+    anzanIdx=0;
+    anzanFlashing=false;
+
+    const lvl=getLevelConfig();
+    $('#anzanLevelLabel').textContent=lvl.label;
+    $('#anzanStreakLabel').textContent=anzanStreak;
+
+    // Build progress dots
+    const dotsEl=$('#anzanDots');
+    dotsEl.innerHTML='';
+    for(let i=0;i<lvl.count;i++){
+      const dot=document.createElement('div');
+      dot.className='anzan-dot';
+      dotsEl.appendChild(dot);
+    }
+
+    $('#anzanAnswerRow').style.display='none';
+    $('#anzanNext').classList.add('hidden');
+    $('#anzanFeedback').textContent='';$('#anzanFeedback').className='feedback';
+    $('#anzanBreakdown').classList.add('hidden');
+    $('#anzanInput').value='';
+    $('#anzanBeadViz').innerHTML='';
+    $('#anzanNumber').innerHTML='&nbsp;';
+    $('#anzanTip').textContent='Get ready...';
+
+    // Countdown 3-2-1-Go
+    let cdIdx=0;
+    const cdSteps=['3','2','1','Go!'];
+    function countdownTick(){
+      if(!phaseActive) return;
+      if(paused){countdownTimer=setTimeout(countdownTick,100);return}
+      if(cdIdx>=cdSteps.length){
+        anzanFlashing=true;
+        flashNumber();
+        return;
+      }
+      $('#anzanNumber').textContent=cdSteps[cdIdx];
+      $('#anzanNumber').style.opacity='1';
+      cdIdx++;
+      countdownTimer=setTimeout(countdownTick,cdIdx===cdSteps.length?400:700);
+    }
+    countdownTick();
+  }
+
+  function flashNumber(){
+    if(!anzanFlashing||!phaseActive) return;
+    if(paused){anzanTimer=setTimeout(flashNumber,100);return}
+    const lvl=getLevelConfig();
+    if(anzanIdx>=lvl.count){
+      // Done flashing — ask for answer
+      anzanFlashing=false;
+      $('#anzanNumber').innerHTML='&nbsp;';
+      $('#anzanBeadViz').innerHTML='';
+      $('#anzanTip').textContent='What is the total?';
+      $('#anzanAnswerRow').style.display='flex';
+      $('#anzanInput').focus();
+      return;
+    }
+    const item=anzanNumbers[anzanIdx];
+    const prefix=anzanIdx===0?'':item.op==='+'?'+':'-';
+    $('#anzanNumber').textContent=prefix+item.value;
+    $('#anzanNumber').style.opacity='1';
+
+    // Show running sum as beads
+    let runSum=0;
+    for(let j=0;j<=anzanIdx;j++){
+      runSum=anzanNumbers[j].op==='+'?runSum+anzanNumbers[j].value:runSum-anzanNumbers[j].value;
+    }
+    if(runSum>=0&&runSum<=99){
+      renderBeadRod(runSum,$('#anzanBeadViz'));
+    }
+
+    // Update dots
+    const dots=$('#anzanDots').querySelectorAll('.anzan-dot');
+    dots.forEach((d,i)=>{
+      d.className='anzan-dot';
+      if(i<anzanIdx) d.classList.add('shown');
+      if(i===anzanIdx) d.classList.add('current');
+    });
+
+    const showTime=Math.max(300,lvl.speed-200);
+    anzanTimer=setTimeout(()=>{
+      if(!anzanFlashing) return;
+      $('#anzanNumber').style.opacity='0';
+      setTimeout(()=>{
+        anzanIdx++;
+        if(anzanFlashing) flashNumber();
+      },200);
+    },showTime);
+  }
+
+  function submitAnzan(){
+    const val=$('#anzanInput').value.trim();
+    if(!val) return;
+    if(!/^-?\d+$/.test(val)){$('#anzanFeedback').className='feedback';$('#anzanFeedback').textContent='Enter a whole number';return}
+    const v=Number(val);
+    phaseResults[2].total++;
+    const ok=v===anzanAnswer;
+    if(ok){
+      phaseResults[2].correct++;
+      anzanStreak++;
+      // Level up every 3 correct in a row
+      if(anzanStreak>0&&anzanStreak%3===0&&anzanLevel<LEVELS.length-1){
+        anzanLevel++;
+        showToast('Level up! '+LEVELS[anzanLevel].label,'var(--gold)');
+        sndTransition();
+      }
+      $('#anzanFeedback').className='feedback correct';
+      const msgs=['Correct!','Nice!','Sharp!','Well done!'];
+      $('#anzanFeedback').textContent=msgs[randInt(0,msgs.length-1)]+' = '+anzanAnswer+(anzanStreak>=3?' ('+anzanStreak+' streak!)':'');
+      sndCorrect();
+    } else {
+      anzanStreak=0;
+      // Level down on miss if above 0
+      if(anzanLevel>0) anzanLevel--;
+      $('#anzanFeedback').className='feedback wrong';
+      $('#anzanFeedback').textContent='Wrong. The answer was '+anzanAnswer+'. You said '+v;
+      sndWrong();
+    }
+    // Show breakdown
+    $('#anzanBreakdownContent').textContent=buildBreakdown();
+    $('#anzanBreakdown').classList.remove('hidden');
+    // Show final beads
+    if(anzanAnswer>=0&&anzanAnswer<=99){
+      renderBeadRod(anzanAnswer,$('#anzanBeadViz'));
+    }
+
+    $('#anzanAnswerRow').style.display='none';
+    $('#anzanNext').classList.remove('hidden');
+    updateScoreDisplay();
+  }
+
+  $('#anzanSubmit').addEventListener('click',submitAnzan);
+  $('#anzanInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();submitAnzan()}
+  });
+  $('#anzanNext').addEventListener('click',()=>startRound());
+
+  startRound();
+
+  phaseCleanup=()=>{
+    phaseActive=false;
+    anzanFlashing=false;
+    if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+    if(countdownTimer){clearTimeout(countdownTimer);countdownTimer=null}
+  };
+}
+
+/* ================================================================
+   PHASE 3: COMPLEMENTS
+   First half: Friends of 10 (N + ? = 10)
+   Second half: Friends of 5 (N + ? = 5)
+   Clear transition between them.
+   ================================================================ */
+function startComplementPhase(){
+  const content=$('#phaseContent');
+  content.innerHTML=`
+    <div style="text-align:center;padding:8px 0">
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px" id="compTitle">COMPLEMENTS: Friends of 10</div>
+      <div class="tip" id="compTip">What number plus the shown number equals 10? Tap your answer.</div>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:8px 0">
+      <div class="stat">Done: <b id="compScore">0</b> / <span id="compTotal">0</span></div>
+    </div>
+    <div class="sprint-display">
+      <span class="sprint-n" id="compN">-</span>
+      <span class="sprint-plus">+</span>
+      <span class="sprint-ans" id="compAns">?</span>
+      <span class="sprint-plus">=</span>
+      <span class="sprint-n" id="compTarget">10</span>
+    </div>
+    <div class="numpad" id="compGrid"></div>
+    <div class="sprint-feedback" id="compFeedback"></div>
+  `;
+
+  let compTarget=10; // 10 first, then 5
+  let compN=0, compAns=0;
+  let compScore=0, compTotal=0;
+  let switchedTo5=false;
+  let halfTime=0;
+  let compActive=true;
+  let compTimer=null;
+
+  // Track when we should switch from 10s to 5s
+  const phaseMins=getPhaseMinutes();
+  halfTime=Math.floor(phaseMins[3]*60/2); // seconds — switch at halfway
+
+  function buildKeypad(){
+    const grid=$('#compGrid');
+    grid.innerHTML='';
+    const maxKey=compTarget===10?9:4;
+    for(let d=1;d<=maxKey;d++){
+      const b=document.createElement('button');
+      b.className='btn';
+      b.textContent=d;
+      b.addEventListener('click',()=>{sndClick();checkComp(d)});
+      grid.appendChild(b);
+    }
+  }
+
+  function nextComp(){
+    if(!compActive) return;
+    if(compTarget===10){
+      compN=randInt(1,9);compAns=10-compN;
+    } else {
+      compN=randInt(1,4);compAns=5-compN;
+    }
+    $('#compN').textContent=compN;
+    $('#compAns').textContent='?';
+    $('#compAns').style.color='var(--gold)';
+    $('#compTarget').textContent=compTarget;
+    $('#compFeedback').textContent='';
+    // Check if we should switch to 5s
+    if(!switchedTo5&&phaseTimeLeft<=halfTime){
+      switchTo5s();
+    }
+  }
+
+  function switchTo5s(){
+    switchedTo5=true;
+    compTarget=5;
+    // Show clear transition notification
+    showToast('Switching to Friends of 5!','var(--teal)');
+    sndTransition();
+    $('#compTitle').textContent='COMPLEMENTS: Friends of 5';
+    $('#compTip').textContent='What number plus the shown number equals 5? Tap your answer.';
+    buildKeypad();
+  }
+
+  function checkComp(x){
+    if(paused||!compActive) return;
+    compTotal++;phaseResults[3].total++;
+    $('#compTotal').textContent=compTotal;
+    if(x===compAns){
+      compScore++;phaseResults[3].correct++;
+      $('#compScore').textContent=compScore;
+      $('#compAns').textContent=compAns;
+      $('#compAns').style.color='var(--good)';
+      sndCorrect();
+      compTimer=setTimeout(nextComp,250);
+    } else {
+      $('#compFeedback').innerHTML='<span style="color:var(--bad)">'+compN+' + '+compAns+' = '+compTarget+'</span>';
+      $('#compAns').textContent=compAns;
+      $('#compAns').style.color='var(--bad)';
+      sndWrong();
+      compTimer=setTimeout(nextComp,600);
+    }
+    updateScoreDisplay();
+  }
+
+  buildKeypad();
+  nextComp();
+  phaseCleanup=()=>{compActive=false;if(compTimer){clearTimeout(compTimer);compTimer=null}};
+}
+
+/* ===== END SESSION ===== */
+function endSession(){
+  running=false;
+  if(totalTimerId){clearInterval(totalTimerId);totalTimerId=null}
+  if(phaseCleanup){phaseCleanup();phaseCleanup=null}
+  setScreen('summary');
+
+  let totalCorrect=0,totalProblems=0;
+  phaseResults.forEach(p=>{totalCorrect+=p.correct;totalProblems+=p.total});
+  const accVal=totalProblems>0?Math.round(totalCorrect/totalProblems*1000)/10:0;
+
+  $('#sumCorrect').textContent=totalCorrect;
+  $('#sumTotal').textContent=totalProblems;
+  $('#sumAcc').textContent=accVal+'%';
+  $('#sumAcc').className='value '+(accVal>=80?'good':accVal>=60?'warn':'bad');
+
+  // Phase-by-phase summary
+  const summaryEl=$('#phaseSummary');
+  summaryEl.innerHTML='';
+  phaseResults.forEach((p,i)=>{
+    const a=p.total>0?Math.round(p.correct/p.total*1000)/10:0;
+    const div=document.createElement('div');
+    div.className='phase-summary-item';
+    div.innerHTML=`<span class="phase-name">${PHASE_NAMES[i]}</span><span class="phase-stats">${p.correct}/${p.total} (${a}%)</span>`;
+    summaryEl.appendChild(div);
+  });
+
+  const msgs=accVal>=90?['Outstanding session! Your soroban skills are sharp.','Excellent work across all phases!']:
+             accVal>=70?['Good work! Keep practicing daily.','Solid session. Consistency is key.']:
+             accVal>=50?['Keep going! Every session builds skill.','Not bad. Focus on the areas where you missed.']:
+             ['Tough session. Try again tomorrow — daily practice adds up!','Keep at it. Even short daily sessions make a difference.'];
+  $('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
+
+  // Save to history
+  const hist=loadHist();
+  hist.push({date:todayISO(),mode:'structured',minutes:totalMinutes,accuracy:accVal,correct:totalCorrect,total:totalProblems,phases:phaseResults.map(p=>({c:p.correct,t:p.total}))});
+  saveHist(hist);
+  $('#streakVal').textContent=calcStreak(hist);
+}
+
+/* ===== PAUSE ===== */
+function togglePause(){
+  if(!running) return;
+  paused=!paused;
+  $('#pauseBtn').textContent=paused?'Resume':'Pause';
+  $('#pauseBtn').classList.toggle('btn-primary',paused);
+}
+
+/* ===== EVENT WIRING ===== */
+
+// Duration buttons
+$$('.btn.dur').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    $$('.btn.dur').forEach(b=>b.classList.remove('btn-active'));
+    btn.classList.add('btn-active');
+    totalMinutes=Number(btn.dataset.min);
+    sndClick();
+  });
+});
+
+// Start
+$('#startBtn').addEventListener('click',()=>{
+  startSession();
+});
+
+// Pause
+$('#pauseBtn').addEventListener('click',togglePause);
+
+// End
+$('#endBtn').addEventListener('click',()=>{
+  if(!confirm('End session early? Your progress will be saved.')) return;
+  endSession();
+});
+
+// New session
+$('#newSessionBtn').addEventListener('click',()=>setScreen('setup'));
+
+// Global Enter key for anzan next
+document.addEventListener('keydown',e=>{
+  if(!running||paused) return;
+  // If anzan next button is visible and user presses Enter
+  const nextBtn=$('#anzanNext');
+  if(nextBtn&&!nextBtn.classList.contains('hidden')&&e.key==='Enter'){
+    e.preventDefault();
+    nextBtn.click();
+  }
+});
+
+// History button
+$('#historyBtn').addEventListener('click',()=>{
+  renderHistory();
+  setScreen('history');
+});
+$('#histBackBtn').addEventListener('click',()=>setScreen('setup'));
+
+function renderHistory(){
+  const hist=loadHist();
+  const body=$('#historyBody');
+  if(!hist.length){
+    body.innerHTML='<p style="color:var(--ink3);text-align:center;padding:20px">No sessions yet. Complete a session to see your history here.</p>';
+    return;
+  }
+  const recent=hist.slice().reverse().slice(0,50);
+  let html='<div style="display:flex;flex-direction:column;gap:8px">';
+  recent.forEach(s=>{
+    const accClass=s.accuracy>=80?'good':s.accuracy>=60?'warn':'bad';
+    const phases=s.phases||[];
+    const phaseStr=phases.map((p,i)=>{
+      const names=['W','B','A','C'];
+      return '<span style="color:var(--ink3);font-size:.75rem">'+names[i]+':'+p.c+'/'+p.t+'</span>';
+    }).join(' ');
+    html+='<div class="phase-summary-item"><div><span class="phase-name">'+s.date+'</span> <span style="color:var(--ink3);font-size:.8rem;margin-left:6px">'+s.minutes+'min</span></div><div style="display:flex;align-items:center;gap:10px">'+phaseStr+' <span class="value '+accClass+'" style="font-size:1rem">'+s.accuracy+'%</span></div></div>';
+  });
+  html+='</div>';
+  body.innerHTML=html;
+}
+
+// Privacy modal
+$('#privacyLink').addEventListener('click',e=>{
+  e.preventDefault();
+  const m=$('#privacyModal');
+  m.classList.remove('hidden');
+  m.style.display='flex';
+});
+$('#privacyClose').addEventListener('click',()=>{
+  const m=$('#privacyModal');
+  m.classList.add('hidden');
+  m.style.display='none';
+});
+$('#privacyModal').addEventListener('click',e=>{
+  if(e.target===$('#privacyModal')){
+    const m=$('#privacyModal');
+    m.classList.add('hidden');
+    m.style.display='none';
+  }
+});
+
+/* ===== INIT ===== */
+const hist=loadHist();
+$('#streakVal').textContent=calcStreak(hist);
+
+})();
+</script>
+</body>
+</html>
