@@ -123,7 +123,7 @@ button:focus:not(:focus-visible){outline:none}
 .numpad .btn{height:48px;font-size:1.1rem;font-weight:700}
 .sprint-feedback{text-align:center;min-height:22px;margin-top:6px;font-weight:600}
 
-/* ===== ANZAN (Mental) MODE ===== */
+/* ===== FLASH ANZAN (Mental) MODE ===== */
 .anzan-display{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 0}
 .anzan-number{font-size:4.5rem;font-weight:800;font-family:'JetBrains Mono',ui-monospace,monospace;color:var(--teal);text-shadow:0 0 30px rgba(57,210,192,.3);min-height:80px;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
 .anzan-progress{display:flex;gap:4px;align-items:center}
@@ -247,7 +247,7 @@ button:focus:not(:focus-visible){outline:none}
           <div style="font-size:.85rem;color:var(--ink2);display:flex;flex-direction:column;gap:6px">
             <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">1.</span> <b>Warmup</b> &mdash; Standard drill on your physical abacus</div>
             <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">2.</span> <b>Bead Reading</b> &mdash; See beads, type the number</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">3.</span> <b>Anzan</b> &mdash; Mental math, starts easy, adapts to you</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">3.</span> <b>Flash Anzan</b> &mdash; Mental math, starts easy, adapts to you</div>
             <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">4.</span> <b>Complements</b> &mdash; Friends of 10, then Friends of 5</div>
           </div>
         </div>
@@ -272,7 +272,7 @@ button:focus:not(:focus-visible){outline:none}
           <span class="phase-time" id="phase1time"></span>
         </div>
         <div class="phase-segment" data-phase="2">
-          <span>3. Anzan</span>
+          <span>3. Flash Anzan</span>
           <span class="phase-time" id="phase2time"></span>
         </div>
         <div class="phase-segment" data-phase="3">
@@ -333,7 +333,7 @@ button:focus:not(:focus-visible){outline:none}
     </div>
   </div>
 
-  <div class="footer">&copy; 2025 Kodex. All rights reserved. <a href="#" id="privacyLink" style="color:var(--ink3);text-decoration:underline;margin-left:8px">Privacy</a></div>
+  <div class="footer">&copy; 2026 Kodex. All rights reserved. <a href="#" id="privacyLink" style="color:var(--ink3);text-decoration:underline;margin-left:8px">Privacy</a></div>
 </div>
 
 <!-- Privacy Modal -->
@@ -406,7 +406,7 @@ const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
 const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 
 function load(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch{return def}}
-function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
+function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){showToast('Could not save data — storage may be full','var(--bad)')}}
 
 function fmtTime(secs){
   const m=String(Math.floor(secs/60)).padStart(2,'0');
@@ -533,22 +533,23 @@ function renderBeadRod(num,container){
            as numbers. User works on physical abacus, types answer.
   Phase 1: BEAD READING — Show soroban beads representing a number.
            User types what number the beads show.
-  Phase 2: ANZAN — Flash numbers one at a time, user adds mentally.
+  Phase 2: FLASH ANZAN — Flash numbers one at a time, user calculates mentally.
            Starts easy (2 single-digit numbers, 3s speed), adapts up/down.
   Phase 3: COMPLEMENTS — First half: Friends of 10, second half: Friends of 5.
            Clear transition between them.
 */
 
-const PHASE_NAMES=['Warmup','Bead Reading','Anzan','Complements'];
+const PHASE_NAMES=['Warmup','Bead Reading','Flash Anzan','Complements'];
 const PHASE_DESCRIPTIONS=[
   'Work these problems on your physical abacus. Type the answer when done.',
   'Look at the bead positions and type the number they represent.',
-  'Watch the numbers flash. Add them in your head. Type the total.',
+  'Watch the numbers flash. Calculate the running total in your head.',
   'Quick-fire complement practice. Tap the number that completes the pair.'
 ];
 
 /* ===== GLOBAL SESSION STATE ===== */
 let totalMinutes=20;
+let sessionStartTime=null;
 let running=false, paused=false;
 let currentPhase=0;
 let phaseTimeLeft=0; // seconds left in current phase
@@ -676,7 +677,7 @@ function updateScoreDisplay(){
 
 /* ===== START SESSION ===== */
 function startSession(){
-  running=true;paused=false;
+  running=true;paused=false;sessionStartTime=Date.now();
   currentPhase=0;
   phaseResults=[{correct:0,total:0},{correct:0,total:0},{correct:0,total:0},{correct:0,total:0}];
   setScreen('live');
@@ -910,7 +911,7 @@ function startBeadReadingPhase(){
 }
 
 /* ================================================================
-   PHASE 2: ANZAN (Mental Math)
+   PHASE 2: FLASH ANZAN (Mental Math)
    Flash numbers one at a time. Starts easy, adapts.
    Beginner: 2 numbers, single digits, 3s flash speed
    Scales up based on streak: more numbers, bigger numbers, faster
@@ -919,8 +920,8 @@ function startAnzanPhase(){
   const content=$('#phaseContent');
   content.innerHTML=`
     <div style="text-align:center;padding:8px 0">
-      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">ANZAN: Mental Calculation</div>
-      <div class="tip" id="anzanTip">Watch each number flash. Add them in your mind. Type the total.</div>
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">FLASH ANZAN: Mental Calculation</div>
+      <div class="tip" id="anzanTip">Watch each number flash. Calculate the running total. Type the result.</div>
     </div>
     <div class="anzan-display">
       <div style="font-size:.82rem;color:var(--ink2)">Level: <b id="anzanLevelLabel" style="color:var(--teal)">Easy</b> &middot; Streak: <b id="anzanStreakLabel" style="color:var(--gold)">0</b></div>
@@ -1296,7 +1297,8 @@ function endSession(){
 
   // Save to history
   const hist=loadHist();
-  hist.push({date:todayISO(),mode:'structured',minutes:totalMinutes,accuracy:accVal,correct:totalCorrect,total:totalProblems,phases:phaseResults.map(p=>({c:p.correct,t:p.total}))});
+  const elapsedMin=Math.round((Date.now()-sessionStartTime)/60000);
+  hist.push({date:todayISO(),mode:'structured',minutes:elapsedMin||1,accuracy:accVal,correct:totalCorrect,total:totalProblems,phases:phaseResults.map(p=>({c:p.correct,t:p.total}))});
   saveHist(hist);
   $('#streakVal').textContent=calcStreak(hist);
 }
