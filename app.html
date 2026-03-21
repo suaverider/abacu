@@ -210,6 +210,9 @@ button:focus:not(:focus-visible){outline:none}
 </style>
 </head>
 <body>
+<div id="demoBanner" class="hidden" style="background:linear-gradient(135deg,#e94560,#c2185b);color:#fff;text-align:center;padding:12px 16px;font-size:.9rem;font-weight:600;position:sticky;top:0;z-index:9999">
+  Free Demo &mdash; 10-minute sessions only. <a href="https://suaverider.gumroad.com/l/soroban-trainer-pro" target="_blank" rel="noopener" style="color:#f0c040;text-decoration:underline;margin-left:8px">Get the Full Version for $4.99</a>
+</div>
 <div class="container">
   <!-- HEADER -->
   <div class="header flex justify-between items-center wrap gap-md">
@@ -245,10 +248,10 @@ button:focus:not(:focus-visible){outline:none}
         <div class="setup-section">
           <div class="setup-label">Session Phases</div>
           <div style="font-size:.85rem;color:var(--ink2);display:flex;flex-direction:column;gap:6px">
-            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">1.</span> <b>Warmup</b> &mdash; Standard drill on your physical abacus</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">2.</span> <b>Bead Reading</b> &mdash; See beads, type the number</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">3.</span> <b>Flash Anzan</b> &mdash; Mental math, starts easy, adapts to you</div>
-            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">4.</span> <b>Complements</b> &mdash; Friends of 10, then Friends of 5</div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">1.</span> <b>Warmup</b> &mdash; Solve problems on your physical soroban <span style="color:var(--ink3);font-size:.75rem">(requires physical abacus)</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">2.</span> <b>Bead Reading</b> &mdash; See bead positions, type the number <span style="color:var(--ink3);font-size:.75rem">(screen only)</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">3.</span> <b>Flash Anzan</b> &mdash; Mental math, adapts to your level <span style="color:var(--ink3);font-size:.75rem">(screen only)</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);font-weight:700">4.</span> <b>Complements</b> &mdash; Friends of 10, then Friends of 5 <span style="color:var(--ink3);font-size:.75rem">(screen only)</span></div>
           </div>
         </div>
       </div>
@@ -359,6 +362,9 @@ button:focus:not(:focus-visible){outline:none}
 <script>
 (()=>{
 'use strict';
+
+/* ===== DEMO MODE ===== */
+const DEMO_MODE=new URLSearchParams(window.location.search).has('demo');
 
 /* ===== ERROR HANDLER ===== */
 const errEl=document.getElementById('err');
@@ -713,8 +719,8 @@ function startWarmupPhase(){
   const content=$('#phaseContent');
   content.innerHTML=`
     <div style="text-align:center;padding:8px 0">
-      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">WARMUP: Work these on your physical abacus</div>
-      <div class="tip">Calculate each problem on your soroban, then type the answer.</div>
+      <div style="color:var(--gold);font-weight:700;font-size:.85rem;margin-bottom:4px">WARMUP: Work these on your physical soroban</div>
+      <div class="tip">You need a physical soroban (abacus) for this phase. Move the beads to solve each problem, then type your answer below.</div>
     </div>
     <div class="problem-area" id="warmupArea">
       <div class="problem-label">Problem <span id="warmupNum">#1</span></div>
@@ -1295,12 +1301,14 @@ function endSession(){
              ['Tough session. Try again tomorrow — daily practice adds up!','Keep at it. Even short daily sessions make a difference.'];
   $('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
 
-  // Save to history
-  const hist=loadHist();
-  const elapsedMin=Math.round((Date.now()-sessionStartTime)/60000);
-  hist.push({date:todayISO(),mode:'structured',minutes:elapsedMin||1,accuracy:accVal,correct:totalCorrect,total:totalProblems,phases:phaseResults.map(p=>({c:p.correct,t:p.total}))});
-  saveHist(hist);
-  $('#streakVal').textContent=calcStreak(hist);
+  // Save to history (skip in demo mode)
+  if(!DEMO_MODE){
+    const hist=loadHist();
+    const elapsedMin=Math.round((Date.now()-sessionStartTime)/60000);
+    hist.push({date:todayISO(),mode:'structured',minutes:elapsedMin||1,accuracy:accVal,correct:totalCorrect,total:totalProblems,phases:phaseResults.map(p=>({c:p.correct,t:p.total}))});
+    saveHist(hist);
+    $('#streakVal').textContent=calcStreak(hist);
+  }
 }
 
 /* ===== PAUSE ===== */
@@ -1401,6 +1409,17 @@ $('#privacyModal').addEventListener('click',e=>{
 });
 
 /* ===== INIT ===== */
+if(DEMO_MODE){
+  document.getElementById('demoBanner').classList.remove('hidden');
+  // Lock to 10-minute sessions in demo
+  totalMinutes=10;
+  $$('.btn.dur').forEach(b=>{b.style.display='none'});
+  const demoNote=document.querySelector('.setup-section .tip');
+  if(demoNote) demoNote.textContent='Demo: 10-minute session. Full version includes 20, 30, and 40 minute sessions + history tracking.';
+  // Hide history button in demo
+  $('#historyBtn').style.display='none';
+  $('#streakBadge').style.display='none';
+}
 const hist=loadHist();
 $('#streakVal').textContent=calcStreak(hist);
 
