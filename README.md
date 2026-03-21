@@ -2,7 +2,7 @@
 
 Structured daily soroban (abacus) training that runs entirely in your browser. No installation, no accounts, no internet required after download.
 
-**[Try it online](https://suaverider.github.io/abacu/) | [Download for offline use](https://suaverider.github.io/abacu/)**
+**[Try it online](https://suaverider.github.io/abacu/app.html) | [Download for offline use](https://suaverider.github.io/abacu/)**
 
 ## How It Works
 
