@@ -1,26 +1,17 @@
 #!/usr/bin/env bash
-# Regenerates index.html (landing/download page) by re-encoding app.html as base64
-# and embedding it into the landing page template.
+# Builds the full (non-demo) version of the app for sale on Gumroad.
+# Output: soroban-trainer-pro.html — upload this file to Gumroad.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-BLOB=$(base64 -w0 app.html)
+cp app.html soroban-trainer-pro.html
 
-# Extract the HTML before <script> and the JS after the APP_B64 line
-SCRIPT_LINE=$(grep -n '^const APP_B64=' index.html | head -1 | cut -d: -f1)
-BEFORE_SCRIPT=$((SCRIPT_LINE - 1))  # line before "const APP_B64=..."
-AFTER_BLOB=$((SCRIPT_LINE + 1))     # first line after the blob (blank line or function)
+# Flip demo mode OFF in the purchased version
+sed -i 's/const DEMO_MODE=!new URLSearchParams(window.location.search).has('\''full'\'')/const DEMO_MODE=false/' soroban-trainer-pro.html
 
-# Skip the blank line between blob and function if present
-NEXT=$(sed -n "${AFTER_BLOB}p" index.html)
-if [ -z "$NEXT" ]; then
-  AFTER_BLOB=$((AFTER_BLOB + 1))
-fi
+# Embed favicon as data URI so it works offline (standalone file)
+FAVICON_B64=$(base64 -w0 favicon.svg)
+sed -i "s|<link rel=\"icon\" type=\"image/svg+xml\" href=\"favicon.svg\"/>|<link rel=\"icon\" type=\"image/svg+xml\" href=\"data:image/svg+xml;base64,${FAVICON_B64}\"/>|" soroban-trainer-pro.html
 
-head -"$BEFORE_SCRIPT" index.html > index.html.tmp
-echo "const APP_B64=\"${BLOB}\"" >> index.html.tmp
-echo "" >> index.html.tmp
-tail -n +"$AFTER_BLOB" index.html >> index.html.tmp
-
-mv index.html.tmp index.html
-echo "index.html rebuilt ($(wc -c < index.html) bytes)"
+echo "Built soroban-trainer-pro.html ($(wc -c < soroban-trainer-pro.html) bytes)"
+echo "Upload this file to Gumroad as your product."

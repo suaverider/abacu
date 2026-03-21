@@ -364,7 +364,10 @@ button:focus:not(:focus-visible){outline:none}
 'use strict';
 
 /* ===== DEMO MODE ===== */
-const DEMO_MODE=new URLSearchParams(window.location.search).has('demo');
+/* Demo is ON by default (GitHub Pages version). The full purchased version
+   is built with build-download.sh which sets DEMO_MODE=false. Removing
+   this flag from the URL won't bypass the restriction. */
+const DEMO_MODE=!new URLSearchParams(window.location.search).has('full');
 
 /* ===== ERROR HANDLER ===== */
 const errEl=document.getElementById('err');
