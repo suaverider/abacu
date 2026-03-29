@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline'"/>
+<title>Soroban Trainer Pro &mdash; Structured Daily Abacus Training</title>
+<meta name="description" content="Structured daily soroban training program. 4 timed phases: warmup drills, bead reading, flash anzan, and complements. Try free or buy the full version for $4.99.">
+<meta property="og:title" content="Soroban Trainer Pro &mdash; Daily Abacus Training">
+<meta property="og:description" content="Structured soroban training. 4 timed phases that build real skill: Warmup, Bead Reading, Flash Anzan, and Complements. Try free online.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://suaverider.github.io/abacu/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Soroban Trainer Pro &mdash; Daily Abacus Training">
+<meta name="twitter:description" content="Structured soroban training. 4 timed phases that build real skill. Try free or buy for $4.99.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://suaverider.github.io/abacu/">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#0d1117;color:#e6edf3;font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;padding:0}
+.hero{max-width:720px;margin:0 auto;padding:48px 24px 0}
+.hero h1{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#f0c040,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:8px}
+.hero .tagline{color:#8b949e;font-size:1.05rem;text-align:center;line-height:1.6;max-width:540px;margin:0 auto 12px}
+.hero .origin{color:#6e7681;font-size:.88rem;text-align:center;line-height:1.5;max-width:480px;margin:0 auto 28px;font-style:italic}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.btn{appearance:none;border:none;padding:14px 28px;border-radius:8px;cursor:pointer;font-weight:700;font-size:1rem;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(135deg,#e94560,#c2185b);color:#fff}
+.btn-primary:hover{box-shadow:0 4px 20px rgba(233,69,96,.4)}
+.btn-gold{background:linear-gradient(135deg,#f0c040,#ff9800);color:#000}
+.btn-gold:hover{box-shadow:0 4px 20px rgba(240,192,64,.4)}
+.btn-outline{background:transparent;border:2px solid rgba(255,255,255,.15);color:#e6edf3}
+.btn-outline:hover{border-color:rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.card{background:#1c2128;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.section{max-width:720px;margin:0 auto;padding:0 24px 32px}
+.section-title{font-size:.85rem;color:#f0c040;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;font-weight:700}
+.phases{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:32px}
+.phase-card{padding:18px;background:#161b22;border:1px solid rgba(255,255,255,.06);border-radius:10px}
+.phase-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px;color:#e6edf3}
+.phase-card p{font-size:.82rem;color:#8b949e;line-height:1.5}
+.phase-card .abacus-note{font-size:.75rem;color:#39d2c0;margin-top:6px;font-style:italic}
+.phase-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#21262d;color:#f0c040;font-weight:700;font-size:.72rem;margin-right:6px}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.feature{display:flex;align-items:flex-start;gap:8px;font-size:.85rem;color:#8b949e;line-height:1.4}
+.feature b{color:#e6edf3}
+.dot{width:6px;height:6px;border-radius:50%;background:#f0c040;flex-shrink:0;margin-top:6px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.compare-card{padding:24px;background:#161b22;border:1px solid rgba(255,255,255,.06);border-radius:10px;text-align:center}
+.compare-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.compare-card .price{font-size:2rem;font-weight:800;margin:12px 0 8px}
+.compare-card .price small{font-size:.9rem;font-weight:400;color:#8b949e}
+.compare-card ul{list-style:none;text-align:left;font-size:.84rem;color:#8b949e;margin-bottom:16px}
+.compare-card ul li{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.compare-card ul li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.compare-card.free ul li::before{background:#39d2c0}
+.compare-card.pro ul li::before{background:#f0c040}
+.download-card{padding:28px 32px}
+.download-card h2{font-size:1.3rem;font-weight:700;margin-bottom:4px}
+.download-card p{color:#8b949e;font-size:.88rem;margin-bottom:16px}
+#status{text-align:center;margin-top:10px;font-size:.82rem;color:#3fb950;min-height:22px}
+.os-tabs{display:flex;gap:0;margin-bottom:14px;border:1px solid rgba(255,255,255,.06);border-radius:8px;overflow:hidden}
+.os-tab{flex:1;padding:8px;text-align:center;font-size:.8rem;font-weight:600;color:#8b949e;background:#161b22;cursor:pointer;border:none;transition:all .15s}
+.os-tab.active{background:#21262d;color:#e6edf3}
+.os-instructions{font-size:.84rem;color:#8b949e;line-height:1.6;min-height:44px}
+.faq{margin-bottom:32px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.06);padding:14px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-weight:700;font-size:.9rem;color:#e6edf3;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-a{font-size:.84rem;color:#8b949e;line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding-top:0}
+.faq-item.open .faq-a{max-height:200px;padding-top:8px}
+.faq-arrow{transition:transform .3s;color:#6e7681;font-size:.8rem}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.info-note{padding:14px;background:rgba(57,210,192,.06);border:1px solid rgba(57,210,192,.15);border-radius:8px;font-size:.82rem;color:#39d2c0;line-height:1.5;margin-bottom:32px}
+.feedback-card{padding:28px 32px;text-align:center}
+.feedback-card h2{font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.feedback-card p{color:#8b949e;font-size:.88rem;margin-bottom:16px;line-height:1.5}
+.footer{text-align:center;padding:20px 24px;font-size:.72rem;color:#6e7681;border-top:1px solid rgba(255,255,255,.06);max-width:720px;margin:0 auto}
+.footer a{color:#6e7681;text-decoration:underline}
+@media(max-width:500px){
+  .hero{padding-top:32px}
+  .hero h1{font-size:1.8rem}
+  .phases,.features,.compare{grid-template-columns:1fr}
+  .download-card,.feedback-card{padding:20px}
+  .cta-row{flex-direction:column;align-items:center}
+  .cta-row .btn{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Soroban Trainer Pro</h1>
+  <p class="tagline">Structured daily abacus training that builds real skill. 4 timed phases, adaptive difficulty, and streak tracking.</p>
+  <p class="origin">Built by a soroban student who couldn't find the right training tool &mdash; so I made one.</p>
+  <div class="cta-row">
+    <a href="app.html" class="btn btn-primary">Try Free Demo</a>
+    <a href="https://suaverider.gumroad.com/l/soroban-trainer-pro" target="_blank" rel="noopener" class="btn btn-gold">Buy Full Version &mdash; $4.99</a>
+  </div>
+  <div id="status"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">4 Training Phases Per Session</div>
+  <div class="phases">
+    <div class="phase-card">
+      <h3><span class="phase-num">1</span>Warmup</h3>
+      <p>Addition and subtraction drills. Work the problems on your physical soroban and type the answer to check.</p>
+      <div class="abacus-note">Requires a physical soroban (abacus)</div>
+    </div>
+    <div class="phase-card">
+      <h3><span class="phase-num">2</span>Bead Reading</h3>
+      <p>See a soroban bead pattern on screen, type the number it represents. Trains instant recognition of bead positions.</p>
+      <div class="abacus-note">Screen only &mdash; no physical abacus needed</div>
+    </div>
+    <div class="phase-card">
+      <h3><span class="phase-num">3</span>Flash Anzan</h3>
+      <p>Numbers flash on screen &mdash; calculate the running total mentally. Difficulty adapts automatically to your performance.</p>
+      <div class="abacus-note">Screen only &mdash; no physical abacus needed</div>
+    </div>
+    <div class="phase-card">
+      <h3><span class="phase-num">4</span>Complements</h3>
+      <p>Quick-fire complement drills. Friends of 10, then Friends of 5. Essential for efficient bead technique.</p>
+      <div class="abacus-note">Screen only &mdash; no physical abacus needed</div>
+    </div>
+  </div>
+
+  <div class="section-title">Free Demo vs Full Version</div>
+  <div class="compare">
+    <div class="compare-card free">
+      <h3>Free Demo</h3>
+      <div class="price">$0</div>
+      <ul>
+        <li>All 4 training phases</li>
+        <li>10-minute sessions only</li>
+        <li>No history or streak tracking</li>
+        <li>Runs in your browser</li>
+      </ul>
+      <a href="app.html" class="btn btn-outline" style="width:100%">Try Demo</a>
+    </div>
+    <div class="compare-card pro" style="border-color:rgba(240,192,64,.2)">
+      <h3>Full Version</h3>
+      <div class="price">$4.99 <small>one-time</small></div>
+      <ul>
+        <li>All 4 training phases</li>
+        <li>20, 30, or 40 minute sessions</li>
+        <li>Session history &amp; streak tracking</li>
+        <li>Download &amp; use offline forever</li>
+        <li>No accounts, no subscriptions</li>
+        <li>Works on any device</li>
+      </ul>
+      <a href="https://suaverider.gumroad.com/l/soroban-trainer-pro" target="_blank" rel="noopener" class="btn btn-gold" style="width:100%">Buy Now &mdash; $4.99</a>
+    </div>
+  </div>
+
+  <div class="section-title">Features</div>
+  <div class="features">
+    <div class="feature"><span class="dot"></span><span><b>No install needed</b> &mdash; runs in any browser</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Works offline</b> &mdash; download once, use forever</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Adaptive difficulty</b> &mdash; flash anzan levels up with you</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Streak tracking</b> &mdash; daily streaks &amp; accuracy stats</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Session history</b> &mdash; review past performance</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Cross-platform</b> &mdash; Windows, Mac, Linux, mobile</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Timed sessions</b> &mdash; 20, 30, or 40 minutes</span></div>
+    <div class="feature"><span class="dot"></span><span><b>Privacy-first</b> &mdash; no accounts, no tracking</span></div>
+  </div>
+
+  <div class="card" style="margin-bottom:32px">
+    <div class="download-card">
+      <h2>How It Works After Purchase</h2>
+      <p>Gumroad delivers a single HTML file. Save it, double-click to open in your browser. That's it &mdash; no install, no internet needed.</p>
+      <div class="os-tabs">
+        <button class="os-tab active" data-os="win">Windows</button>
+        <button class="os-tab" data-os="mac">Mac</button>
+        <button class="os-tab" data-os="linux">Linux</button>
+      </div>
+      <div class="os-instructions" id="osInstructions">
+        Save the file anywhere (Desktop works great). Double-click to open &mdash; it runs in your default browser. If it opens as text, right-click &rarr; <strong>Open with</strong> &rarr; Chrome or Edge.
+      </div>
+      <a href="https://suaverider.gumroad.com/l/soroban-trainer-pro" target="_blank" rel="noopener" class="btn btn-gold" style="width:100%;margin-top:14px">Buy Now &mdash; $4.99</a>
+    </div>
+  </div>
+
+  <div class="info-note">
+    <strong>Zero data collection.</strong> Your training data stays in your browser's localStorage. No accounts, no analytics, no cookies, no network requests after loading. Your scores are private and stay on your device.
+  </div>
+
+  <div class="section-title">FAQ</div>
+  <div class="faq">
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do I need a physical soroban (abacus)?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">Phase 1 (Warmup) is designed to be worked on a physical soroban &mdash; the app shows you problems and you solve them on your abacus, then type the answer to check. Phases 2-4 are screen-only and don't require a physical abacus.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What do I get when I buy?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">You get a single HTML file that you download and keep forever. Double-click it to open in your browser. No internet needed, no accounts, no subscriptions. It's yours.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long should I train daily?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">20 minutes is the recommended starting point. Consistency matters more than duration &mdash; daily 20-minute sessions beat occasional long ones.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it save my scores?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">Yes. The full version saves your session history and daily streak in your browser. Your data stays on your device &mdash; nothing is sent anywhere. The free demo does not save history.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is this for beginners?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">Yes. The warmup starts with simple 2-3 digit problems, and flash anzan begins at Easy level (two single-digit numbers). Difficulty adapts to your skill level automatically.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I use this on my phone?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">Yes. The demo runs in any phone or tablet browser. The downloaded file also works on mobile &mdash; open it in Chrome, Safari, or Firefox.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What if I have issues or suggestions?<span class="faq-arrow">&#9660;</span></div><div class="faq-a">Use the feedback section below to send an email. I read every message and actively improve the app based on user feedback.</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:32px">
+    <div class="feedback-card">
+      <h2>Feedback &amp; Suggestions</h2>
+      <p>Found a bug? Have an idea? I built this because I needed it myself, and I want to make it better for everyone learning soroban.</p>
+      <a href="mailto:sorobantrainerpro@gmail.com?subject=Soroban%20Trainer%20Pro%20Feedback" class="btn btn-outline">Send Feedback</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">&copy; 2026 Kodex. All rights reserved. <a href="#" id="privacyLink">Privacy</a></div>
+
+<!-- Privacy Modal -->
+<div id="privacyModal" style="display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;background:rgba(0,0,0,.7)" role="dialog" aria-modal="true" aria-label="Privacy Policy">
+  <div style="max-width:520px;width:90%;background:#1c2128;border:1px solid rgba(255,255,255,.06);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.4);max-height:80vh;overflow-y:auto">
+    <div style="padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center">
+      <h2 style="font-size:1.1rem;font-weight:700">Privacy Policy</h2>
+      <button id="privacyClose" style="background:none;border:none;color:#8b949e;font-size:1.4rem;cursor:pointer;padding:4px" aria-label="Close">&times;</button>
+    </div>
+    <div style="padding:24px;font-size:.88rem;color:#8b949e;line-height:1.7">
+      <p><strong style="color:#e6edf3">Data Storage:</strong> All training data is stored exclusively in your browser's localStorage. Nothing is sent to any server.</p>
+      <p style="margin-top:12px"><strong style="color:#e6edf3">No Accounts:</strong> No sign-up, no login, no personal information collected.</p>
+      <p style="margin-top:12px"><strong style="color:#e6edf3">No Analytics:</strong> No analytics, tracking pixels, cookies, or third-party scripts.</p>
+      <p style="margin-top:12px"><strong style="color:#e6edf3">No Network Requests:</strong> After loading, the app makes zero network requests.</p>
+      <p style="margin-top:12px"><strong style="color:#e6edf3">Data Deletion:</strong> Clear your browser data or localStorage to remove all saved progress.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// OS tab switching
+const osInstructions={
+  win:'Save the file anywhere (Desktop works great). Double-click to open &mdash; it runs in your default browser. If it opens as text, right-click &rarr; <strong>Open with</strong> &rarr; Chrome or Edge.',
+  mac:'Save the file. Double-click to open in Safari. If it doesn\'t open correctly, right-click &rarr; <strong>Open With</strong> &rarr; choose Chrome, Firefox, or Safari.',
+  linux:'Save the file. Open with your browser: <code style="background:#21262d;padding:2px 6px;border-radius:4px;font-size:.8rem">xdg-open soroban-trainer-pro.html</code> or right-click &rarr; Open With &rarr; your browser.'
+};
+document.querySelectorAll('.os-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.os-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('osInstructions').innerHTML=osInstructions[tab.dataset.os];
+  });
+});
+// Privacy modal
+document.getElementById('privacyLink').addEventListener('click',e=>{
+  e.preventDefault();
+  document.getElementById('privacyModal').style.display='flex';
+});
+document.getElementById('privacyClose').addEventListener('click',()=>{
+  document.getElementById('privacyModal').style.display='none';
+});
+document.getElementById('privacyModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('privacyModal')) document.getElementById('privacyModal').style.display='none';
+});
+</script>
+
+</body>
+</html>
