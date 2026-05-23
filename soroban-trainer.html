@@ -492,6 +492,15 @@ Built to feel like a complete practice session, not a loose pile of drills. One 
 </div></div>
 <button class="btn btn-primary hub-start" id="hubStartBead">Start Bead Reading</button>
 </div>
+<div class="hub-card">
+<div class="hub-card-name">Complements</div>
+<div class="hub-card-desc">A number appears &mdash; click the partner that completes 5 or 10 (e.g. 7&rarr;3). Builds instant carry/borrow recall. Keeps going.</div>
+<div class="hub-row"><span class="hub-lbl">Make</span><div class="btn-group">
+<button class="btn btn-sm" data-hbcomp="5">Friends of 5</button>
+<button class="btn btn-sm btn-active" data-hbcomp="10">Friends of 10</button>
+</div></div>
+<button class="btn btn-primary hub-start" id="hubStartComp">Start Complements</button>
+</div>
 </div>
 <div class="hub-backup"><button class="btn btn-sm" id="hubExport">Export Backup</button><button class="btn btn-sm" id="hubImport">Import Backup</button><span class="tip" style="font-style:normal" id="hubSaveNote"></span></div>
 </div>
@@ -939,7 +948,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v6.0.0';
+const BUILD='v6.1.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -961,7 +970,7 @@ let brStandaloneCols=null,beadReadDisplayCols=1;
 let anzanFreeConfig=null,azFreeDigits=1,azFreeCount=3,azFreeOps='add',azFreeSpeed=2200;
 let azFreeNoLimit=true,anzanNoLimit=false,anzanElapsed=0;
 let stdNoLimit=false,stdElapsed=0;
-let hbSize='1',hbCount=3,hbOps='add',hbSpeed=2200,hbSor='1',hbSorOps='mixed',hbBead=2;
+let hbSize='1',hbCount=3,hbOps='add',hbSpeed=2200,hbSor='1',hbSorOps='mixed',hbBead=2,hbComp=10;
 let soundMode=load('soroban_sound','off');
 let focusMode=load('soroban_focus',false);
 let reducedMotion=load('soroban_reduce_motion',(()=>{try{return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}})());
@@ -1751,7 +1760,8 @@ $('#sp5').classList.toggle('btn-active',target===5);
 $('#sp10').classList.toggle('btn-active',target===10);
 correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
 currentStreak=0;bestSessionStreak=0;
-timeLeft=minutes*60;
+stdElapsed=0;
+timeLeft=stdNoLimit?0:minutes*60;
 updateScores();
 setScreen('live');
 setLiveProblemUI(false);
@@ -2689,6 +2699,7 @@ hubGroup('data-hbspeed',v=>hbSpeed=Number(v));
 hubGroup('data-hbsor',v=>hbSor=v);
 hubGroup('data-hbsorops',v=>hbSorOps=v);
 hubGroup('data-hbbead',v=>hbBead=Number(v));
+hubGroup('data-hbcomp',v=>hbComp=Number(v));
 $('#hubDaily').addEventListener('click',startGuidedRoutine);
 $('#hubExport').addEventListener('click',()=>$('#exportBtn').click());
 $('#hubImport').addEventListener('click',()=>$('#importBtn').click());
@@ -2715,6 +2726,12 @@ anzanNoLimit=true;
 brStandaloneCols=hbBead;
 azSelectedLevel=0;
 startAnzan();
+});
+$('#hubStartComp').addEventListener('click',()=>{
+anzanFreeConfig=null;anzanNoLimit=false;brStandaloneCols=null;practiceMissesMode=false;
+mode=hbComp===10?'sprint10':'sprint5';
+stdNoLimit=true;
+startSprintSession(hbComp);
 });
 $('#startBtn').addEventListener('click',()=>{
 stdNoLimit=false;
