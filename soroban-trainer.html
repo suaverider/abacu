@@ -282,6 +282,23 @@ input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
 .welcome-how summary{color:var(--gold);font-weight:700;cursor:pointer;font-size:.95rem;padding:8px 0}
 .welcome-how ol{color:var(--ink2);font-size:.9rem;line-height:1.8;padding-left:20px;margin-top:8px}
 .welcome-how ol li{margin-bottom:4px}
+/* ===== PRACTICE HUB ===== */
+#practiceHub{display:flex;flex-direction:column;gap:14px;margin-bottom:8px}
+.hub-title{font-size:1.25rem;font-weight:800;color:var(--ink);text-align:center}
+.hub-daily{font-size:1.05rem;padding:16px 24px;border-radius:14px;flex-direction:column;gap:2px;line-height:1.2}
+.hub-daily-sub{font-size:.72rem;font-weight:700;opacity:.85}
+.hub-free-note{text-align:center;color:var(--teal2);font-size:.82rem;font-weight:600}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.hub-card{background:var(--surface2);border:1px solid var(--ring2);border-radius:var(--radius-sm);padding:14px;display:flex;flex-direction:column;gap:8px}
+.hub-card-name{font-weight:800;color:var(--gold);font-size:1.02rem}
+.hub-card-desc{font-size:.8rem;color:var(--ink3);line-height:1.4;min-height:34px}
+.hub-row{display:flex;flex-direction:column;gap:4px}
+.hub-lbl{font-size:.72rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
+.hub-start{margin-top:6px}
+.hub-backup{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;padding-top:4px}
+.adv-wrap{margin-top:18px;border-top:1px solid var(--ring);padding-top:10px}
+.adv-wrap>summary{cursor:pointer;color:var(--ink3);font-size:.85rem;font-weight:700;padding:6px 0;list-style:revert}
+.adv-wrap[open]>summary{color:var(--ink2);margin-bottom:8px}
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg)}
@@ -418,8 +435,68 @@ Built to feel like a complete practice session, not a loose pile of drills. One 
 </div>
 </div>
 <div id="setup" class="card animate-in" style="margin-top:20px">
-<div class="card-header">Session Setup</div>
+<div class="card-header">Practice</div>
 <div class="card-body">
+<div id="practiceHub">
+<div class="hub-title">What do you want to practice?</div>
+<button id="hubDaily" class="btn btn-gold hub-daily">Daily Course &mdash; 20 min<span class="hub-daily-sub">full classroom routine &middot; saves your progress</span></button>
+<div class="hub-free-note">Free Practice below &mdash; endless, nothing saved, nothing locked. Hit End Session whenever you want to stop.</div>
+<div class="hub-grid">
+<div class="hub-card">
+<div class="hub-card-name">Mental Math (Anzan)</div>
+<div class="hub-card-desc">Numbers flash on screen &mdash; add them in your head, type the total.</div>
+<div class="hub-row"><span class="hub-lbl">Number size</span><div class="btn-group">
+<button class="btn btn-sm btn-active" data-hbsize="1">Single 1-9</button>
+<button class="btn btn-sm" data-hbsize="2">Double 10-99</button>
+<button class="btn btn-sm" data-hbsize="3">Triple 100-999</button>
+<button class="btn btn-sm" data-hbsize="mixed">Mixed</button>
+</div></div>
+<div class="hub-row"><span class="hub-lbl">How many in a row</span><div class="btn-group">
+<button class="btn btn-sm" data-hbcount="2">2</button>
+<button class="btn btn-sm btn-active" data-hbcount="3">3</button>
+<button class="btn btn-sm" data-hbcount="4">4</button>
+<button class="btn btn-sm" data-hbcount="5">5</button>
+</div></div>
+<div class="hub-row"><span class="hub-lbl">Operations</span><div class="btn-group">
+<button class="btn btn-sm btn-active" data-hbops="add">Add only</button>
+<button class="btn btn-sm" data-hbops="mixed">Add &amp; subtract</button>
+</div></div>
+<div class="hub-row"><span class="hub-lbl">Speed</span><div class="btn-group">
+<button class="btn btn-sm" data-hbspeed="3000">Slow</button>
+<button class="btn btn-sm btn-active" data-hbspeed="2200">Normal</button>
+<button class="btn btn-sm" data-hbspeed="1500">Fast</button>
+</div></div>
+<button class="btn btn-primary hub-start" id="hubStartAnzan">Start Mental Math</button>
+</div>
+<div class="hub-card">
+<div class="hub-card-name">Soroban Drill</div>
+<div class="hub-card-desc">Written add/subtract problems for your physical abacus. Keeps going.</div>
+<div class="hub-row"><span class="hub-lbl">Difficulty</span><div class="btn-group">
+<button class="btn btn-sm btn-active" data-hbsor="1">1-digit</button>
+<button class="btn btn-sm" data-hbsor="2">2-digit</button>
+<button class="btn btn-sm" data-hbsor="3">3-digit</button>
+</div></div>
+<div class="hub-row"><span class="hub-lbl">Operations</span><div class="btn-group">
+<button class="btn btn-sm btn-active" data-hbsorops="mixed">Add &amp; subtract</button>
+<button class="btn btn-sm" data-hbsorops="add">Add only</button>
+</div></div>
+<button class="btn btn-primary hub-start" id="hubStartSoroban">Start Soroban Drill</button>
+</div>
+<div class="hub-card">
+<div class="hub-card-name">Bead Reading</div>
+<div class="hub-card-desc">A soroban bead pattern shows &mdash; type the number it represents. Keeps going.</div>
+<div class="hub-row"><span class="hub-lbl">Size</span><div class="btn-group">
+<button class="btn btn-sm" data-hbbead="1">1 digit</button>
+<button class="btn btn-sm btn-active" data-hbbead="2">2 digit</button>
+<button class="btn btn-sm" data-hbbead="3">3 digit</button>
+</div></div>
+<button class="btn btn-primary hub-start" id="hubStartBead">Start Bead Reading</button>
+</div>
+</div>
+<div class="hub-backup"><button class="btn btn-sm" id="hubExport">Export Backup</button><button class="btn btn-sm" id="hubImport">Import Backup</button><span class="tip" style="font-style:normal" id="hubSaveNote"></span></div>
+</div>
+<details class="adv-wrap">
+<summary>Advanced &amp; more drills (multiplication, complement sprints, level curriculum, fine settings)</summary>
 <div class="setup-grid">
 <div class="setup-section">
 <div class="setup-label">Mode</div>
@@ -573,6 +650,7 @@ Select a level above to see details.
 <button id="startBtn" class="btn btn-primary" style="font-size:1rem;padding:12px 28px">Start Selected Mode</button>
 </div>
 </div>
+</details>
 </div>
 </div>
 <div id="live" class="hidden" style="margin-top:16px">
@@ -861,7 +939,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.7.0';
+const BUILD='v5.8.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -882,6 +960,8 @@ let azReviewStepIdx=0,azConsecutiveFails=0,azConsecutivePasses=0;
 let brStandaloneCols=null,beadReadDisplayCols=1;
 let anzanFreeConfig=null,azFreeDigits=1,azFreeCount=3,azFreeOps='add',azFreeSpeed=2200;
 let azFreeNoLimit=true,anzanNoLimit=false,anzanElapsed=0;
+let stdNoLimit=false,stdElapsed=0;
+let hbSize='1',hbCount=3,hbOps='add',hbSpeed=2200,hbSor='1',hbSorOps='mixed',hbBead=2;
 let soundMode=load('soroban_sound','off');
 let focusMode=load('soroban_focus',false);
 let reducedMotion=load('soroban_reduce_motion',(()=>{try{return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}})());
@@ -996,9 +1076,11 @@ return ' '.repeat(Math.max(0,width-s.length))+s;
 function isSprintMode(){return mode==='sprint5'||mode==='sprint10'}
 function activeAnzanCfg(){return anzanFreeConfig||AZ_CURRICULUM[azSelectedLevel]}
 function buildAnzanFreeConfig(d,count,ops,speed){
-const maxNum=d===1?9:d===2?40:120;
-const sumCap=d===1?99:d===2?199:999;
-return{type:'flash',count,maxNum,sumCap,addOnly:ops==='add',speed,digits:d>=2?d:undefined,free:true};
+const mixed=d==='mixed';
+const dn=mixed?2:Number(d);
+const maxNum=mixed?99:(dn===1?9:dn===2?40:120);
+const sumCap=mixed?299:(dn===1?99:dn===2?199:999);
+return{type:'flash',count,maxNum,sumCap,addOnly:ops==='add',speed,digits:(!mixed&&dn>=2)?dn:undefined,mixed,free:true};
 }
 function syncMinutesFromButtons(){
 const b=document.querySelector('.btn.dur.btn-active');
@@ -1379,7 +1461,7 @@ scoreCorrectEl.textContent=correct;
 scoreTotalEl.textContent=total;
 const a=total>0?Math.round(correct/total*1000)/10:0;
 accEl.textContent=a+'%';
-const elapsed=minutes*60-timeLeft;
+const elapsed=stdNoLimit?stdElapsed:(minutes*60-timeLeft);
 const ppmVal=elapsed>0?Math.round(total/(elapsed/60)*10)/10:0;
 ppmEl.textContent=ppmVal;
 bestStreakEl.textContent=bestSessionStreak;
@@ -1390,9 +1472,10 @@ function startTimer(){
 running=true;isPaused=false;
 sessionStartTime=Date.now();
 if(timerId){clearInterval(timerId);timerId=null}
-updateClockDisplay(clockEl,timeLeft);
+updateClockDisplay(clockEl,stdNoLimit?stdElapsed:timeLeft);
 timerId=setInterval(()=>{
 if(!running||isPaused) return;
+if(stdNoLimit){stdElapsed++;updateClockDisplay(clockEl,stdElapsed);return}
 timeLeft=Math.max(0,timeLeft-1);
 updateClockDisplay(clockEl,timeLeft);
 if(timeLeft<=0){clearInterval(timerId);timerId=null;running=false;endSession()}
@@ -1621,7 +1704,8 @@ revealArea.textContent='';
 function startSession(){
 correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
 currentStreak=0;bestSessionStreak=0;
-timeLeft=minutes*60;
+stdElapsed=0;
+timeLeft=stdNoLimit?0:minutes*60;
 updateScores();
 setScreen('live');
 setLiveProblemUI(true);
@@ -1661,6 +1745,7 @@ running=false;isPaused=false;
 if(timerId){clearInterval(timerId);timerId=null}
 if(spTimerId){clearInterval(spTimerId);spTimerId=null}
 stopPlayback();
+if(stdNoLimit){minutes=Math.max(1,Math.ceil(stdElapsed/60));timeLeft=0;stdNoLimit=false;}
 setScreen('summary');
 const accVal=total>0?Math.round(correct/total*1000)/10:0;
 const elapsed=minutes*60-timeLeft;
@@ -1918,8 +2003,9 @@ const count=cfg.count||3,maxNum=cfg.maxNum||9,sumCap=cfg.sumCap||99;
 const minFirst=cfg.digits===2?10:1,addOnly=cfg.addOnly!==false;
 for(let i=0;i<count;i++){
 if(safetyCounter++>count*10) break; // generous safety limit
+const termMax=cfg.mixed?(Math.random()<0.5?9:99):maxNum; // mixed: each number is randomly single- or double-digit
 if(i===0){
-const n=randInt(minFirst,Math.min(maxNum,sumCap));
+const n=randInt(minFirst,Math.min(termMax,sumCap));
 nums.push({value:n,op:'+'});sum=n;
 } else {
 let op=addOnly?'+':Math.random()<0.55?'+':'-';
@@ -1927,13 +2013,13 @@ let n;
 if(op==='+'){
 const room=sumCap-sum;
 if(room<1){
-if(addOnly){op='-';n=randInt(1,Math.min(Math.max(sum,1),maxNum))}
-else{op='-';n=randInt(1,Math.min(Math.max(sum,1),maxNum))}
+if(addOnly){op='-';n=randInt(1,Math.min(Math.max(sum,1),termMax))}
+else{op='-';n=randInt(1,Math.min(Math.max(sum,1),termMax))}
 }
-else n=randInt(1,Math.min(room,maxNum));
+else n=randInt(1,Math.min(room,termMax));
 } else {
-if(sum<1){op='+';n=randInt(1,Math.min(Math.max(sumCap-sum,1),maxNum))}
-else n=randInt(1,Math.min(sum,maxNum));
+if(sum<1){op='+';n=randInt(1,Math.min(Math.max(sumCap-sum,1),termMax))}
+else n=randInt(1,Math.min(sum,termMax));
 }
 if(!n||n<1) n=1;
 // Final bounds check
@@ -1998,10 +2084,21 @@ $('#anzanFeedback').className='feedback wrong';
 $('#anzanFeedback').textContent='✗ Was '+beadReadAnswer+'. '+describeBeads(beadReadAnswer);
 playFeedbackTone('bad');
 }
-if(!routineActive) azRecordResult(azSelectedLevel,ok);
+if(!routineActive&&!brStandaloneCols) azRecordResult(azSelectedLevel,ok);
 updateAzStats();
 const cfg=AZ_CURRICULUM[azSelectedLevel];
-$('#anzanRoundDisplay').textContent=azRoundNum+'/'+cfg.passOf;
+$('#anzanRoundDisplay').textContent=brStandaloneCols?(azRoundNum+'/∞'):(azRoundNum+'/'+cfg.passOf);
+if(brStandaloneCols){
+// Quick Bead Reading: endless, continuous, no levels, no pass/fail
+if(ok){setTimeout(nextBeadReading,600)}
+else{
+const container=$('#anzanNumber');
+renderBeadReadingValue(beadReadAnswer,container,false);
+$('#anzanAnswerRow').style.display='none';
+setTimeout(nextBeadReading,1700);
+}
+return;
+}
 if(routineActive){
 // During guided routine: just keep cycling bead reading, never change levels
 if(ok){
@@ -2271,7 +2368,7 @@ anzanTimeLeft=anzanNoLimit?0:minutes*60;anzanElapsed=0;anzanPaused=false;
 const cfg=activeAnzanCfg();
 setScreen('anzan');
 if(anzanFreeConfig){
-$('#anzanLevelDisplay').textContent='Quick: '+azFreeDigits+'-digit ×'+cfg.count;
+$('#anzanLevelDisplay').textContent=(cfg.mixed?'Quick: mixed':'Quick: '+azFreeDigits+'-digit')+' ×'+cfg.count;
 $('#anzanRoundDisplay').textContent='0/∞';
 } else {
 $('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+cfg.name;
@@ -2539,7 +2636,52 @@ anzanNoLimit=azFreeNoLimit;
 if(!anzanNoLimit) syncMinutesFromButtons();
 startAnzan();
 });
+/* ===== PRACTICE HUB WIRING ===== */
+function hubGroup(attr,setter){
+$$('['+attr+']').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('['+attr+']').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+setter(btn.getAttribute(attr));
+});
+});
+}
+hubGroup('data-hbsize',v=>hbSize=v);
+hubGroup('data-hbcount',v=>hbCount=Number(v));
+hubGroup('data-hbops',v=>hbOps=v);
+hubGroup('data-hbspeed',v=>hbSpeed=Number(v));
+hubGroup('data-hbsor',v=>hbSor=v);
+hubGroup('data-hbsorops',v=>hbSorOps=v);
+hubGroup('data-hbbead',v=>hbBead=Number(v));
+$('#hubDaily').addEventListener('click',startGuidedRoutine);
+$('#hubExport').addEventListener('click',()=>$('#exportBtn').click());
+$('#hubImport').addEventListener('click',()=>$('#importBtn').click());
+$('#hubStartAnzan').addEventListener('click',()=>{
+brStandaloneCols=null;stdNoLimit=false;
+azFreeDigits=hbSize;
+anzanFreeConfig=buildAnzanFreeConfig(hbSize,hbCount,hbOps,hbSpeed);
+anzanNoLimit=true;
+startAnzan();
+});
+$('#hubStartSoroban').addEventListener('click',()=>{
+anzanFreeConfig=null;anzanNoLimit=false;brStandaloneCols=null;practiceMissesMode=false;
+mode='standard';
+difficulty=hbSor==='3'?'advanced':hbSor==='2'?'intermediate':'beginner';
+technique=hbSorOps==='add'?'add':'mixed';
+stayUnder100=(hbSor!=='3');
+adaptive=true;
+stdNoLimit=true;
+startSession();
+});
+$('#hubStartBead').addEventListener('click',()=>{
+anzanFreeConfig=null;stdNoLimit=false;
+anzanNoLimit=true;
+brStandaloneCols=hbBead;
+azSelectedLevel=0;
+startAnzan();
+});
 $('#startBtn').addEventListener('click',()=>{
+stdNoLimit=false;
 practiceMissesMode=$('#practiceMisses').checked;
 anzanAutoNext=$('#anzanAutoNext').checked;
 brStandaloneCols=null;
@@ -2564,7 +2706,7 @@ $('#homeBtn').addEventListener('click',()=>{
 if(!confirm('Leave session and go back to setup? Progress will be lost.')) return;
 if(routineActive){endGuidedRoutine();return}
 running=false;isPaused=false;
-brStandaloneCols=null;
+brStandaloneCols=null;stdNoLimit=false;
 if(timerId){clearInterval(timerId);timerId=null}
 if(spTimerId){clearInterval(spTimerId);spTimerId=null}
 stopPlayback();
@@ -2781,6 +2923,7 @@ return [180,0,900,80,40];               // 3+0+15+1.3+0.7 = 20 min (advanced, le
 function startGuidedRoutine(){
 guidedProfile=loadGuidedProfile();
 deriveGuidedRoutinePlan();
+stdNoLimit=false;anzanNoLimit=false;anzanFreeConfig=null;brStandaloneCols=null;
 routineActive=true;routinePhaseIdx=0;routinePhaseEnding=false;
 routineMissedThisPhase=[];
 // Always use fixed time allocation for guided routine:
