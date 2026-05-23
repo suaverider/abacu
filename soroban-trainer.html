@@ -458,6 +458,8 @@ Built to feel like a complete practice session, not a loose pile of drills. One 
 <button class="btn dur" data-min="15">15 min</button>
 <button class="btn dur btn-active" data-min="20">20 min</button>
 <button class="btn dur" data-min="30">30 min</button>
+<button class="btn dur" data-min="45">45 min</button>
+<button class="btn dur" data-min="60">60 min</button>
 </div>
 <div class="setup-label" style="margin-top:12px">Technique</div>
 <div class="btn-group">
@@ -514,7 +516,7 @@ Select a level above to see details.
 </div>
 <button class="btn btn-sm btn-primary" id="startQuickAnzan">Start Quick Anzan</button>
 </div>
-<div style="font-size:.78rem;color:var(--ink3);line-height:1.5;margin-top:8px">Tip: leave it on 1-digit / 3 numbers / Add only to drill single beads (1, 3, 4&hellip;) that build up in your head. It runs until the timer ends and never locks or unlocks anything.</div>
+<div style="font-size:.78rem;color:var(--ink3);line-height:1.5;margin-top:8px">Tip: set the <b>Duration</b> above (up to 60 min) and it runs that whole time &mdash; do the mental part for as long as you like. Leave it on 1-digit / 3 numbers / Add only to drill single beads (1, 3, 4&hellip;) that build up in your head. It stays at the difficulty you pick and never locks or unlocks anything.</div>
 </div>
 <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
 <div class="setup-label" style="margin-bottom:8px">Standalone Bead Reading Practice</div>
@@ -992,6 +994,10 @@ function buildAnzanFreeConfig(d,count,ops,speed){
 const maxNum=d===1?9:d===2?40:120;
 const sumCap=d===1?99:d===2?199:999;
 return{type:'flash',count,maxNum,sumCap,addOnly:ops==='add',speed,digits:d>=2?d:undefined,free:true};
+}
+function syncMinutesFromButtons(){
+const b=document.querySelector('.btn.dur.btn-active');
+if(b) minutes=Number(b.dataset.min)||minutes;
 }
 function activePhaseKey(){return routineActive&&ROUTINE_PHASES[routinePhaseIdx]?ROUTINE_PHASES[routinePhaseIdx].key:''}
 function getSessionSurfaceMode(){
@@ -2483,7 +2489,7 @@ $('#startBeadReadOnly').addEventListener('click',()=>{
 anzanFreeConfig=null;
 brStandaloneCols=brColumns;
 azSelectedLevel=0;
-minutes=10;
+syncMinutesFromButtons();
 startAnzan();
 });
 $$('[data-azfd]').forEach(btn=>{
@@ -2517,7 +2523,7 @@ azFreeSpeed=Number(btn.dataset.azfs);
 $('#startQuickAnzan').addEventListener('click',()=>{
 brStandaloneCols=null;
 anzanFreeConfig=buildAnzanFreeConfig(azFreeDigits,azFreeCount,azFreeOps,azFreeSpeed);
-minutes=10;
+syncMinutesFromButtons();
 startAnzan();
 });
 $('#startBtn').addEventListener('click',()=>{
@@ -2525,6 +2531,7 @@ practiceMissesMode=$('#practiceMisses').checked;
 anzanAutoNext=$('#anzanAutoNext').checked;
 brStandaloneCols=null;
 anzanFreeConfig=null;
+syncMinutesFromButtons();
 if(mode==='anzan'){startAnzan();return}
 if(mode==='multiplication'){startMult();return}
 if(mode==='sprint5'||mode==='sprint10'){
