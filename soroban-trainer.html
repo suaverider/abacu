@@ -446,9 +446,9 @@ Built to feel like a complete practice session, not a loose pile of drills. One 
 <div class="hub-card-name">Mental Math (Anzan)</div>
 <div class="hub-card-desc">Numbers flash on screen &mdash; add them in your head, type the total.</div>
 <div class="hub-row"><span class="hub-lbl">Number size</span><div class="btn-group">
-<button class="btn btn-sm btn-active" data-hbsize="1">Single 1-9</button>
-<button class="btn btn-sm" data-hbsize="2">Double 10-99</button>
-<button class="btn btn-sm" data-hbsize="3">Triple 100-999</button>
+<button class="btn btn-sm btn-active" data-hbsize="1">Single</button>
+<button class="btn btn-sm" data-hbsize="2">Double</button>
+<button class="btn btn-sm" data-hbsize="3">Triple</button>
 <button class="btn btn-sm" data-hbsize="mixed">Mixed</button>
 </div></div>
 <div class="hub-row"><span class="hub-lbl">How many in a row</span><div class="btn-group">
@@ -939,7 +939,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.8.0';
+const BUILD='v5.9.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -1255,8 +1255,26 @@ const minVal=0;
 const startMin=width>=2?10:1;
 const startMax=stayUnder100?Math.min(80,maxVal):maxVal;
 let runningVal=randInt(startMin,startMax);
+if(technique==='add'){runningVal=Math.min(runningVal,Math.max(startMin,maxVal-chainLen));}
+else if(technique==='sub'){runningVal=Math.max(runningVal,Math.min(maxVal,minVal+chainLen));}
 const ops=['+'],nums=[runningVal];
 for(let i=1;i<chainLen;i++){
+const remaining=chainLen-1-i;
+const stepMax=stayUnder100?45:Math.pow(10,width)-1;
+if(technique==='add'){
+const room=maxVal-runningVal-remaining;
+let nx=room<1?1:randInt(1,Math.min(room,stepMax));
+if(runningVal+nx>maxVal) nx=Math.max(1,maxVal-runningVal);
+if(nx<1) nx=1;
+runningVal+=nx;ops.push('+');nums.push(nx);continue;
+}
+if(technique==='sub'){
+const room=runningVal-minVal-remaining;
+let nx=room<1?1:randInt(1,Math.min(room,stepMax));
+if(runningVal-nx<minVal) nx=Math.max(1,runningVal-minVal);
+if(nx<1) nx=1;
+runningVal-=nx;ops.push('-');nums.push(nx);continue;
+}
 let op;
 if(technique==='add') op='+';
 else if(technique==='sub') op='-';
@@ -2012,10 +2030,13 @@ let op=addOnly?'+':Math.random()<0.55?'+':'-';
 let n;
 if(op==='+'){
 const room=sumCap-sum;
-if(room<1){
-if(addOnly){op='-';n=randInt(1,Math.min(Math.max(sum,1),termMax))}
-else{op='-';n=randInt(1,Math.min(Math.max(sum,1),termMax))}
+if(addOnly){
+// pure addition: leave at least 1 of headroom for each remaining term so we never get stuck and flip to subtraction
+const remaining=count-1-i;
+const maxAdd=Math.min(termMax,room-remaining);
+n=randInt(1,Math.max(1,maxAdd));
 }
+else if(room<1){op='-';n=randInt(1,Math.min(Math.max(sum,1),termMax))}
 else n=randInt(1,Math.min(room,termMax));
 } else {
 if(sum<1){op='+';n=randInt(1,Math.min(Math.max(sumCap-sum,1),termMax))}
@@ -2370,6 +2391,9 @@ setScreen('anzan');
 if(anzanFreeConfig){
 $('#anzanLevelDisplay').textContent=(cfg.mixed?'Quick: mixed':'Quick: '+azFreeDigits+'-digit')+' ×'+cfg.count;
 $('#anzanRoundDisplay').textContent='0/∞';
+} else if(brStandaloneCols){
+$('#anzanLevelDisplay').textContent='Bead Reading: '+brStandaloneCols+'-digit';
+$('#anzanRoundDisplay').textContent='0/∞';
 } else {
 $('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+cfg.name;
 $('#anzanRoundDisplay').textContent='0/'+cfg.passOf;
@@ -2668,7 +2692,7 @@ anzanFreeConfig=null;anzanNoLimit=false;brStandaloneCols=null;practiceMissesMode
 mode='standard';
 difficulty=hbSor==='3'?'advanced':hbSor==='2'?'intermediate':'beginner';
 technique=hbSorOps==='add'?'add':'mixed';
-stayUnder100=(hbSor!=='3');
+stayUnder100=(hbSor==='2');
 adaptive=true;
 stdNoLimit=true;
 startSession();
