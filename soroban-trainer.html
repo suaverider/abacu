@@ -712,7 +712,7 @@ Select a level above to see details.
 <div class="flex gap-xs">
 <button class="btn btn-primary" id="submitBtn">Submit</button>
 <button class="btn btn-ghost" id="endBtn">End Session</button>
-<button class="btn btn-ghost" id="homeBtn" style="color:var(--ink3)">Back to Setup</button>
+<button class="btn" id="homeBtn">&#x2302; Home</button>
 </div>
 </div>
 </div>
@@ -795,7 +795,7 @@ Select a level above to see details.
 <div class="stat">Round: <b id="anzanRoundDisplay">0/5</b></div>
 </div>
 <button class="btn btn-sm btn-ghost" id="anzanEndBtn">End Session</button>
-<button class="btn btn-sm btn-ghost" id="anzanHomeBtn" style="color:var(--ink3)">Back to Setup</button>
+<button class="btn btn-sm" id="anzanHomeBtn">&#x2302; Home</button>
 </div>
 <div class="card-body">
 <div class="anzan-display">
@@ -844,7 +844,7 @@ Select a level above to see details.
 <div class="stat">PPM: <b class="mono" id="multPPMEl">0</b></div>
 </div>
 <button class="btn btn-sm btn-ghost" id="multEndBtn">End Session</button>
-<button class="btn btn-sm btn-ghost" id="multHomeBtn" style="color:var(--ink3)">Back</button>
+<button class="btn btn-sm" id="multHomeBtn">&#x2302; Home</button>
 </div>
 <div class="card-body">
 <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0">
@@ -948,7 +948,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v6.1.0';
+const BUILD='v6.2.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -2756,10 +2756,9 @@ if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitAnswer()}
 $('#endBtn').addEventListener('click',endSession);
 $('#skipBtn').addEventListener('click',()=>{if(running&&!isPaused){stopPlayback();beginProblem()}});
 $('#homeBtn').addEventListener('click',()=>{
-if(!confirm('Leave session and go back to setup? Progress will be lost.')) return;
-if(routineActive){endGuidedRoutine();return}
+if(routineActive){if(confirm('End the guided routine and go back home?')) endGuidedRoutine();return}
 running=false;isPaused=false;
-brStandaloneCols=null;stdNoLimit=false;
+brStandaloneCols=null;stdNoLimit=false;anzanFreeConfig=null;anzanNoLimit=false;
 if(timerId){clearInterval(timerId);timerId=null}
 if(spTimerId){clearInterval(spTimerId);spTimerId=null}
 stopPlayback();
@@ -2886,8 +2885,7 @@ $('#azRevPrev').addEventListener('click',()=>{if(azReviewStepIdx>0) renderAzRevi
 $('#azRevNext').addEventListener('click',()=>{if(azReviewStepIdx<azIntermediateSums.length-1) renderAzReviewBead(azReviewStepIdx+1)});
 $('#anzanEndBtn').addEventListener('click',endAnzan);
 $('#anzanHomeBtn').addEventListener('click',()=>{
-if(!confirm('Leave session and go back to setup?')) return;
-if(routineActive){endGuidedRoutine();return}
+if(routineActive){if(confirm('End the guided routine and go back home?')) endGuidedRoutine();return}
 running=false;anzanPaused=false;
 brStandaloneCols=null;
 anzanFreeConfig=null;
@@ -2917,7 +2915,6 @@ if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitMult()}
 $('#multSkipBtn').addEventListener('click',()=>{if(running&&!multPaused)nextMultProblem()});
 $('#multEndBtn').addEventListener('click',endMult);
 $('#multHomeBtn').addEventListener('click',()=>{
-if(!confirm('Leave session and go back to setup?')) return;
 running=false;multPaused=false;
 if(multTimerId){clearInterval(multTimerId);multTimerId=null}
 setScreen('setup');
