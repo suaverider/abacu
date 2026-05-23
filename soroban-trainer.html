@@ -471,17 +471,8 @@ Built to feel like a complete practice session, not a loose pile of drills. One 
 </div>
 </div>
 <div id="anzanSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
-<div class="setup-label" style="margin-bottom:10px">Anzan Curriculum <span style="font-weight:400;font-size:.75rem;color:var(--ink3)">&mdash; Complete each level to unlock the next (80% accuracy required)</span></div>
-<div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-<button class="btn btn-sm" id="azUnlockAll">Unlock All Levels (experienced user)</button>
-<button class="btn btn-sm btn-ghost" id="azResetProg" style="color:var(--bad)">Reset Progress</button>
-</div>
-<div class="az-levels" id="azLevelGrid"></div>
-<div id="azLevelInfo" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-top:8px;font-size:.85rem;color:var(--ink2)">
-Select a level above to see details.
-</div>
-<div id="quickAnzanPanel" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
-<div class="setup-label" style="margin-bottom:8px">Quick Anzan Practice <span style="font-weight:400;font-size:.75rem;color:var(--ink3)">&mdash; free practice, does not change your level or unlocks</span></div>
+<div id="quickAnzanPanel" style="margin-bottom:16px;padding:14px;background:var(--surface2);border:1px solid var(--gold);border-radius:var(--radius-sm)">
+<div class="setup-label" style="margin-bottom:8px;color:var(--gold)">Quick Practice &mdash; pick a part and just go <span style="font-weight:400;font-size:.72rem;color:var(--ink3);text-transform:none">(endless, stays at the difficulty you pick, never locks/unlocks anything)</span></div>
 <div class="flex wrap gap-md items-center">
 <div class="flex-col gap-xs">
 <span style="color:var(--ink3);font-size:.8rem">Digits</span>
@@ -515,9 +506,21 @@ Select a level above to see details.
 <button class="btn btn-sm" data-azfs="1500">Fast</button>
 </div>
 </div>
-<button class="btn btn-sm btn-primary" id="startQuickAnzan">Start Quick Anzan</button>
 </div>
-<div style="font-size:.78rem;color:var(--ink3);line-height:1.5;margin-top:8px">Tip: set the <b>Duration</b> above (up to 60 min) and it runs that whole time &mdash; do the mental part for as long as you like. Leave it on 1-digit / 3 numbers / Add only to drill single beads (1, 3, 4&hellip;) that build up in your head. It stays at the difficulty you pick and never locks or unlocks anything.</div>
+<div class="flex wrap gap-md items-center" style="margin-top:10px">
+<label class="toggle"><input type="checkbox" id="azFreeNoLimit" checked/><span class="track"></span> <span style="font-size:.85rem">No time limit (keep going until I stop)</span></label>
+<button class="btn btn-primary" id="startQuickAnzan">Start Quick Practice</button>
+</div>
+<div style="font-size:.78rem;color:var(--ink3);line-height:1.5;margin-top:8px">Each answer flows straight into the next &mdash; it just keeps going at the difficulty you chose, no level changes. Leave it on 1-digit / 3 numbers / Add only to drill single beads (1, 3, 4&hellip;). Uncheck &ldquo;No time limit&rdquo; if you want it to stop after the Duration set above. Press <b>End Session</b> whenever you want to finish.</div>
+</div>
+<div class="setup-label" style="margin-bottom:10px">Anzan Curriculum <span style="font-weight:400;font-size:.75rem;color:var(--ink3)">&mdash; the guided path: complete each level to unlock the next (80% accuracy)</span></div>
+<div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<button class="btn btn-sm" id="azUnlockAll">Unlock All Levels (experienced user)</button>
+<button class="btn btn-sm btn-ghost" id="azResetProg" style="color:var(--bad)">Reset Progress</button>
+</div>
+<div class="az-levels" id="azLevelGrid"></div>
+<div id="azLevelInfo" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-top:8px;font-size:.85rem;color:var(--ink2)">
+Select a level above to see details.
 </div>
 <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
 <div class="setup-label" style="margin-bottom:8px">Standalone Bead Reading Practice</div>
@@ -858,7 +861,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.6.0';
+const BUILD='v5.7.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -878,6 +881,7 @@ let azSelectedLevel=0,azRoundNum=0,azRoundCorrect=0,azIntermediateSums=[];
 let azReviewStepIdx=0,azConsecutiveFails=0,azConsecutivePasses=0;
 let brStandaloneCols=null,beadReadDisplayCols=1;
 let anzanFreeConfig=null,azFreeDigits=1,azFreeCount=3,azFreeOps='add',azFreeSpeed=2200;
+let azFreeNoLimit=true,anzanNoLimit=false,anzanElapsed=0;
 let soundMode=load('soroban_sound','off');
 let focusMode=load('soroban_focus',false);
 let reducedMotion=load('soroban_reduce_motion',(()=>{try{return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}})());
@@ -2043,7 +2047,7 @@ let anzanFirstRound=true;
 function nextAnzanRound(replay){
 if(routinePhaseEnding) return; // block stale setTimeout from previous phase
 if(!running&&!routineActive) return; // guard against stale setTimeout
-if(anzanTimeLeft<=0&&!routineActive) return;
+if(anzanTimeLeft<=0&&!routineActive&&!anzanNoLimit) return;
 const cfg=activeAnzanCfg();
 if(!replay){
 const gen=generateAnzanProblem(cfg);
@@ -2129,16 +2133,10 @@ if(!freeMode) azRecordResult(azSelectedLevel,ok);
 updateAzStats();
 $('#anzanRoundDisplay').textContent=azRoundNum+'/'+(freeMode?'∞':cfg.passOf);
 $('#anzanAnswerRow').style.display='none';
-// Quick Anzan free practice: never change level, never gate — just keep going.
+// Quick Practice: never change level, never gate — just keep flowing into the next one.
 if(freeMode){
-if(ok){
-if(anzanAutoNext) setTimeout(()=>nextAnzanRound(),600);
-else{$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next Round';}
-} else {
-showAnzanReview();
-$('#anzanReplayBtn').classList.remove('hidden');
-$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next Round';
-}
+if(ok) setTimeout(()=>nextAnzanRound(),700);
+else setTimeout(()=>nextAnzanRound(),1700); // brief pause so the correct answer is visible
 return;
 }
 // Check if round set complete
@@ -2269,7 +2267,7 @@ $('#anzanStreakVal').textContent=anzanStreak;$('#anzanBestStreakVal').textConten
 function startAnzan(){
 anzanCorrectVal=0;anzanTotalVal=0;anzanStreak=0;anzanBestStreak=0;
 azRoundNum=0;azRoundCorrect=0;anzanFirstRound=true;azConsecutiveFails=0;azConsecutivePasses=0;
-anzanTimeLeft=minutes*60;anzanPaused=false;
+anzanTimeLeft=anzanNoLimit?0:minutes*60;anzanElapsed=0;anzanPaused=false;
 const cfg=activeAnzanCfg();
 setScreen('anzan');
 if(anzanFreeConfig){
@@ -2279,11 +2277,12 @@ $('#anzanRoundDisplay').textContent='0/∞';
 $('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+cfg.name;
 $('#anzanRoundDisplay').textContent='0/'+cfg.passOf;
 }
-updateClockDisplay($('#anzanClock'),anzanTimeLeft);
+updateClockDisplay($('#anzanClock'),anzanNoLimit?anzanElapsed:anzanTimeLeft);
 updateAzStats();
 if(anzanTimerId) clearInterval(anzanTimerId);
 anzanTimerId=setInterval(()=>{
 if(anzanPaused) return;
+if(anzanNoLimit){anzanElapsed++;updateClockDisplay($('#anzanClock'),anzanElapsed);return}
 anzanTimeLeft=Math.max(0,anzanTimeLeft-1);
 updateClockDisplay($('#anzanClock'),anzanTimeLeft);
 if(anzanTimeLeft<=0){clearInterval(anzanTimerId);anzanTimerId=null;endAnzan()}
@@ -2294,8 +2293,10 @@ else nextAnzanRound();
 }
 function endAnzan(){
 if(routineActive){showToast('Phase complete, moving to next...','var(--teal)');onRoutinePhaseEnd();return}
+if(anzanNoLimit){minutes=Math.max(1,Math.ceil(anzanElapsed/60));anzanTimeLeft=0}
 brStandaloneCols=null;
 anzanFreeConfig=null;
+anzanNoLimit=false;
 running=false;
 if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
 if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
@@ -2496,6 +2497,7 @@ brColumns=Number(btn.dataset.brcol);
 });
 $('#startBeadReadOnly').addEventListener('click',()=>{
 anzanFreeConfig=null;
+anzanNoLimit=false;
 brStandaloneCols=brColumns;
 azSelectedLevel=0;
 syncMinutesFromButtons();
@@ -2529,10 +2531,12 @@ btn.classList.add('btn-active');
 azFreeSpeed=Number(btn.dataset.azfs);
 });
 });
+if($('#azFreeNoLimit')) $('#azFreeNoLimit').addEventListener('change',e=>azFreeNoLimit=e.target.checked);
 $('#startQuickAnzan').addEventListener('click',()=>{
 brStandaloneCols=null;
 anzanFreeConfig=buildAnzanFreeConfig(azFreeDigits,azFreeCount,azFreeOps,azFreeSpeed);
-syncMinutesFromButtons();
+anzanNoLimit=azFreeNoLimit;
+if(!anzanNoLimit) syncMinutesFromButtons();
 startAnzan();
 });
 $('#startBtn').addEventListener('click',()=>{
@@ -2540,6 +2544,7 @@ practiceMissesMode=$('#practiceMisses').checked;
 anzanAutoNext=$('#anzanAutoNext').checked;
 brStandaloneCols=null;
 anzanFreeConfig=null;
+anzanNoLimit=false;
 syncMinutesFromButtons();
 if(mode==='anzan'){startAnzan();return}
 if(mode==='multiplication'){startMult();return}
@@ -2691,6 +2696,7 @@ if(routineActive){endGuidedRoutine();return}
 running=false;anzanPaused=false;
 brStandaloneCols=null;
 anzanFreeConfig=null;
+anzanNoLimit=false;
 if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
 if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
 setScreen('setup');renderAzLevelGrid();
@@ -2870,6 +2876,7 @@ updateClockDisplay(clockEl,routinePhaseTime);
 beginProblem();
 } else if(phase.key==='beadread'){
 azSelectedLevel=0; // bead reading is always level 0
+anzanFreeConfig=null;anzanNoLimit=false;
 minutes=Math.ceil(routinePhaseTime/60);
 startAnzan();
 // Kill anzan's internal timer - routine timer handles phase end
@@ -2880,6 +2887,7 @@ updateClockDisplay($('#anzanClock'),anzanTimeLeft);
 // Start just below the saved guided anchor so the routine ramps in instead of resetting too low every day.
 azSelectedLevel=routineDailyStartLevel;
 azConsecutiveFails=0;azConsecutivePasses=0;
+anzanFreeConfig=null;anzanNoLimit=false;
 minutes=Math.ceil(routinePhaseTime/60);
 startAnzan();
 // Kill anzan's internal timer - routine timer handles phase end
