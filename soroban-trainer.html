@@ -1,0 +1,3036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="color-scheme" content="dark"/>
+<title>Soroban Trainer Pro — Daily Mental Math Training</title>
+<style>
+/* ===== RESET & FOUNDATIONS ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;
+--surface:#1e2746;--surface2:#253256;--surface3:#2d3a66;
+--ink:#e8eaf6;--ink2:#b0b8d1;--ink3:#7b87a8;
+--accent:#e94560;--accent2:#ff6b6b;
+--gold:#f0c040;--gold2:#ffd700;
+--good:#00e676;--bad:#ff5252;
+--teal:#00bcd4;--teal2:#26c6da;
+--wood1:#8d6e63;--wood2:#6d4c41;--wood3:#4e342e;
+--bead-earth:#e0e0e0;--bead-earth-active:#42a5f5;
+--bead-heaven:#e0e0e0;--bead-heaven-active:#ef5350;
+--ring:rgba(255,255,255,.08);
+--ring2:rgba(255,255,255,.15);
+--shadow:0 8px 32px rgba(0,0,0,.3);
+--radius:16px;--radius-sm:10px;
+font-size:16px;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+input:focus,button:focus{outline:2px solid var(--accent);outline-offset:2px}
+/* ===== LAYOUT ===== */
+.container{max-width:1220px;margin:0 auto;padding:24px 22px 36px}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}
+.gap-xs{gap:6px}.gap-sm{gap:10px}.gap-md{gap:16px}.gap-lg{gap:24px}
+.wrap{flex-wrap:wrap}
+.grid{display:grid;gap:16px}
+.text-center{text-align:center}
+.surface-note{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid rgba(240,192,64,.22);background:rgba(240,192,64,.08);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gold)}
+/* ===== HEADER ===== */
+.header{padding:22px 0 18px;border-bottom:1px solid var(--ring)}
+.header h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--gold),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .subtitle{color:var(--ink3);font-size:.9rem;margin-top:2px}
+.streak-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:6px 14px;border-radius:999px;font-size:.85rem}
+.version{color:var(--ink3);font-size:.75rem;padding:4px 10px;border:1px solid var(--ring);border-radius:999px}
+/* ===== CARDS ===== */
+.card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0)),var(--surface);border:1px solid var(--ring);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--ring);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px}
+/* ===== BUTTONS ===== */
+.btn{appearance:none;border:1px solid var(--ring2);background:var(--surface2);color:var(--ink);padding:10px 16px;border-radius:var(--radius-sm);cursor:pointer;font-weight:650;font-size:.875rem;letter-spacing:.01em;transition:all .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--surface3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#c2185b);border-color:transparent;color:#fff}
+.btn-primary:hover:not(:disabled){box-shadow:0 4px 20px rgba(233,69,96,.4)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#ff9800);border-color:transparent;color:#000}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn-success{background:var(--good);border-color:transparent;color:#000}
+.btn-sm{padding:6px 12px;font-size:.8rem;border-radius:8px}
+.btn-active{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.btn-group{display:flex;gap:6px;flex-wrap:wrap}
+.toggle-disabled{opacity:.58;cursor:not-allowed}
+/* ===== TOGGLE SWITCH ===== */
+.toggle{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.875rem;color:var(--ink2);padding:4px 0}
+.toggle input{display:none}
+.toggle .track{width:40px;height:22px;background:var(--surface3);border-radius:999px;position:relative;transition:background .2s}
+.toggle input:checked+.track{background:var(--accent)}
+.toggle .track::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle input:checked+.track::after{transform:translateX(18px)}
+/* ===== INPUTS ===== */
+.input{background:var(--surface3);border:2px solid var(--ring2);border-radius:var(--radius-sm);padding:12px 16px;color:var(--ink);font-size:1.5rem;text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;transition:border-color .15s}
+.input:focus{border-color:var(--accent)}
+.input::placeholder{color:var(--ink3)}
+/* ===== SETUP SCREEN ===== */
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.setup-section{display:flex;flex-direction:column;gap:10px}
+.setup-label{font-weight:700;font-size:.85rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em}
+.setup-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-top:16px;border-top:1px solid var(--ring);margin-top:8px}
+.tip{color:var(--ink3);font-size:.85rem;font-style:italic}
+.setting-note{font-size:.78rem;color:var(--ink3);line-height:1.5;padding-top:4px}
+/* ===== LIVE SESSION ===== */
+.live-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:16px}
+@media(max-width:900px){.live-grid{grid-template-columns:1fr}.setup-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.setup-grid{grid-template-columns:1fr}}
+/* Status bar */
+.status-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 20px;border-bottom:1px solid var(--ring);background:rgba(0,0,0,.15)}
+.status-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.clock{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.3rem;font-weight:700;color:var(--teal)}
+.stat{display:flex;align-items:center;gap:4px;font-size:.9rem;color:var(--ink2)}
+.stat b{color:var(--ink)}
+/* Problem display */
+.problem-area{border:2px solid var(--bg3);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--surface2));padding:20px}
+.problem-label{font-weight:700;color:var(--gold);font-size:.85rem;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.problem-lines{display:flex;flex-direction:column;align-items:center;padding:16px 0}
+.problem-line{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2.8rem;font-weight:700;line-height:1.3;white-space:pre;letter-spacing:.05em}
+.problem-divider{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:2rem;color:var(--ink3);letter-spacing:.15em}
+.problem-area.sprint-shell .problem-label,
+.problem-area.sprint-shell .problem-lines,
+.problem-area.sprint-shell .answer-row,
+.problem-area.sprint-shell .rules,
+.problem-area.sprint-shell .feedback,
+.problem-area.sprint-shell .missed-rework-prompt{display:none}
+.problem-area.sprint-shell #submitBtn{display:none}
+.answer-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
+.answer-row .eq{font-size:2rem;color:var(--ink3);font-weight:700}
+.reveal-badge{background:var(--surface3);color:var(--gold);padding:6px 14px;border-radius:999px;font-family:monospace;font-size:1.1rem;display:none}
+/* Rules pills */
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.rule-pill{font-size:.75rem;padding:4px 10px;border-radius:999px;background:rgba(233,69,96,.1);color:var(--accent2);border:1px solid rgba(233,69,96,.2)}
+/* Feedback */
+.feedback{min-height:28px;margin-top:12px;font-weight:700;font-size:1rem;text-align:center}
+.feedback.correct{color:var(--good)}
+.feedback.wrong{color:var(--bad)}
+/* Actions row */
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:8px}
+/* ===== SOROBAN ABACUS ===== */
+.soroban-container{display:flex;flex-direction:column;align-items:center;gap:12px}
+.soroban{display:inline-flex;background:linear-gradient(180deg,var(--wood2),var(--wood3));border-radius:12px;padding:12px 16px;border:2px solid var(--wood1);box-shadow:inset 0 2px 8px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);gap:4px}
+.soroban-col{display:flex;flex-direction:column;align-items:center;gap:0;width:44px}
+.soroban-heaven{height:40px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:4px}
+.soroban-bar{width:100%;height:4px;background:linear-gradient(90deg,#5d4037,#8d6e63,#5d4037);border-radius:2px;flex-shrink:0}
+.soroban-earth{height:110px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding-top:4px;gap:2px}
+.bead{width:38px;height:22px;border-radius:999px;transition:all .25s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;flex-shrink:0}
+.bead-heaven{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
+.bead-heaven.active{background:linear-gradient(180deg,var(--bead-heaven-active),#c62828);transform:translateY(8px);box-shadow:0 2px 8px rgba(239,83,80,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.bead-earth{background:linear-gradient(180deg,#b0bec5,#78909c);box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)}
+.bead-earth.active{background:linear-gradient(180deg,var(--bead-earth-active),#1565c0);transform:translateY(-4px);box-shadow:0 2px 8px rgba(66,165,245,.5),inset 0 1px 2px rgba(255,255,255,.3)}
+.bead.moved{box-shadow:0 0 0 2px var(--gold),0 2px 8px rgba(240,192,64,.5)!important}
+.soroban-digit{font-size:.7rem;color:var(--gold);font-weight:700;margin-top:4px;font-family:monospace}
+.soroban-hidden-msg{color:var(--ink3);font-style:italic;padding:30px 20px}
+/* Coach controls */
+.coach-controls{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.step-tag{font-size:.75rem;padding:3px 10px;border-radius:999px;border:1px solid var(--ring2);background:var(--surface);color:var(--ink2)}
+.step-tag.add{color:var(--good);border-color:var(--good)}
+.step-tag.sub{color:var(--bad);border-color:var(--bad)}
+.coach-options{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.coach-caption{font-size:.75rem;color:var(--ink3);text-align:center}
+.hotkeys{font-size:.75rem;color:var(--ink3);text-align:center;padding:4px 8px;background:rgba(0,0,0,.15);border-radius:8px}
+/* ===== COMPLEMENT SPRINT ===== */
+.sprint-display{display:flex;align-items:center;justify-content:center;gap:20px;margin:16px 0}
+.sprint-n{font-size:3rem;font-weight:800;color:var(--teal);font-family:monospace}
+.sprint-plus{font-size:2rem;color:var(--ink3)}
+.sprint-ans{font-size:3rem;font-weight:800;color:var(--gold);font-family:monospace}
+.numpad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:320px;margin:0 auto}
+.numpad .btn{height:50px;font-size:1.2rem;font-weight:700}
+.sprint-feedback{text-align:center;min-height:24px;margin-top:8px;font-weight:600}
+/* ===== ANZAN (Mental) MODE ===== */
+.anzan-display{display:flex;flex-direction:column;align-items:center;gap:16px;padding:30px 0}
+.anzan-number{font-size:5rem;font-weight:800;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--teal);text-shadow:0 0 30px rgba(0,188,212,.3);min-height:90px;display:flex;align-items:center;justify-content:center;transition:opacity .15s}
+.anzan-progress{display:flex;gap:4px;align-items:center}
+.anzan-dot{width:10px;height:10px;border-radius:50%;background:var(--surface3);transition:background .2s}
+.anzan-dot.shown{background:var(--teal)}
+.anzan-dot.current{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.anzan-settings{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+/* Bead rod visualization */
+.bead-rod{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0;transition:opacity .4s}
+.bead-rod-wrap{display:flex;align-items:center;justify-content:center;gap:16px;min-height:160px}
+.bead-rod .bead-col{display:flex;flex-direction:column;align-items:center;position:relative;width:48px}
+.bead-rod .heaven-zone{display:flex;flex-direction:column;align-items:center;gap:3px;padding-bottom:6px;border-bottom:4px solid var(--wood1);margin-bottom:6px;min-height:50px;justify-content:flex-end}
+.bead-rod .earth-zone{display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:6px;min-height:80px}
+.bead-rod .bead{width:42px;height:20px;border-radius:3px;transition:transform .2s,opacity .2s,background .2s;clip-path:polygon(15% 0%,85% 0%,100% 50%,85% 100%,15% 100%,0% 50%)}
+.bead-rod .bead.heaven{background:linear-gradient(180deg,#666,#444);box-shadow:none}
+.bead-rod .bead.earth{background:linear-gradient(180deg,#666,#444);box-shadow:none}
+.bead-rod .bead.away{opacity:.12}
+.bead-rod .bead.active{opacity:1}
+.bead-rod .bead.heaven.active{background:linear-gradient(180deg,#ff6659,#d32f2f);transform:translateY(8px);filter:drop-shadow(0 2px 6px rgba(211,47,47,.5))}
+.bead-rod .bead.earth.active{background:linear-gradient(180deg,#64b5f6,#1976d2);transform:translateY(-3px);filter:drop-shadow(0 2px 6px rgba(25,118,210,.5))}
+.bead-rod .rod-line{position:absolute;width:3px;background:var(--wood1);top:0;bottom:0;left:50%;transform:translateX(-50%);opacity:.6;border-radius:1px}
+.bead-rod-label{font-size:.8rem;color:var(--ink3);margin-top:6px;text-align:center;font-weight:600}
+/* ===== ANZAN LEVEL SELECTOR ===== */
+.az-levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+.az-level{background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:all .15s;position:relative}
+.az-level:hover:not(.locked){border-color:var(--teal);transform:translateY(-1px)}
+.az-level.active{border-color:var(--gold);background:rgba(240,192,64,.08)}
+.az-level.locked{opacity:.4;cursor:not-allowed}
+.az-level.complete{border-color:var(--good)}
+.az-level .lv-num{font-size:.7rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.az-level .lv-name{font-weight:700;font-size:.95rem;margin:2px 0}
+.az-level .lv-desc{font-size:.75rem;color:var(--ink3);line-height:1.4}
+.az-level .lv-badge{position:absolute;top:8px;right:8px;font-size:.7rem;padding:2px 8px;border-radius:999px;font-weight:700}
+.az-level .lv-badge.pass{background:var(--good);color:#000}
+.az-level .lv-badge.lock{background:var(--surface3);color:var(--ink3)}
+.az-progress-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:6px}
+.az-progress-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .3s}
+.az-review-beads{display:flex;justify-content:center;gap:16px;padding:16px 0;min-height:120px}
+.az-review-step{display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--ring);margin:4px 0;font-family:monospace;font-size:.85rem}
+.az-review-step.current{border-color:var(--gold);background:rgba(240,192,64,.08)}
+.az-review-step .az-op{font-weight:700;width:20px;text-align:center}
+.az-review-step .az-op.add{color:var(--good)}
+.az-review-step .az-op.sub{color:var(--bad)}
+.az-review-stepper{display:flex;align-items:center;gap:8px;justify-content:center;margin:8px 0}
+/* ===== GUIDED ROUTINE ===== */
+.routine-bar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-bottom:2px solid var(--gold);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.routine-phases{display:flex;gap:4px;align-items:center}
+.routine-phase{padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:600;background:var(--surface3);color:var(--ink3);border:1px solid transparent;transition:all .2s;cursor:default;display:inline-flex;align-items:center;gap:8px}
+.routine-phase.active{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 12px rgba(240,192,64,.3)}
+.routine-phase.done{background:var(--good);color:#000;border-color:var(--good)}
+.routine-phase.upcoming{opacity:.5}
+.routine-phase .phase-code{display:inline-flex;align-items:center;justify-content:center;min-width:30px;padding:3px 7px;border-radius:999px;background:rgba(0,0,0,.18);font-size:.68rem;font-weight:800;letter-spacing:.06em}
+.routine-timer{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.3rem;font-weight:700;color:var(--gold)}
+.routine-phase-label{font-size:.85rem;color:var(--ink2);font-weight:600}
+.routine-transition{position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:rgba(0,0,0,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;animation:fadeIn .3s}
+.routine-transition h2{font-size:1.8rem;color:var(--gold);text-align:center}
+.routine-transition p{color:var(--ink2);text-align:center;max-width:400px;line-height:1.6}
+.missed-rework-prompt{background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius);padding:16px;margin-top:12px;text-align:center}
+/* ===== SUMMARY ===== */
+.summary-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px}
+.summary-stat{display:flex;flex-direction:column;align-items:center;gap:4px;padding:20px;background:var(--surface2);border-radius:var(--radius);border:1px solid var(--ring)}
+.summary-stat .label{font-size:.8rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em}
+.summary-stat .value{font-size:2rem;font-weight:800;font-family:monospace}
+.summary-stat .value.good{color:var(--good)}
+.summary-stat .value.warn{color:var(--gold)}
+.summary-stat .value.bad{color:var(--bad)}
+/* Missed problems */
+.missed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px}
+.missed-item{background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;font-family:monospace;font-size:.85rem}
+.missed-item .ans{font-weight:700;color:var(--gold);margin-top:4px}
+/* History */
+.history-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--ring)}
+.history-item+.history-item{margin-top:8px}
+.history-date{font-weight:700;font-size:.9rem}
+.history-detail{color:var(--ink3);font-size:.8rem}
+.history-acc{font-weight:800;font-size:1.1rem;font-family:monospace}
+/* ===== PERSONAL BEST ===== */
+.pb-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold),#ff9800);color:#000;font-weight:700;padding:3px 10px;border-radius:999px;font-size:.75rem;animation:pulse .6s ease}
+/* ===== MULTIPLICATION DRILL ===== */
+.mult-display{display:flex;align-items:center;justify-content:center;gap:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.mult-num{font-size:3.5rem;font-weight:800;color:var(--teal)}
+.mult-op{font-size:2.5rem;color:var(--ink3);font-weight:700}
+.mult-input{font-size:2.5rem;width:160px}
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:24px 0;font-size:.75rem;color:var(--ink3);border-top:1px solid var(--ring);margin-top:24px}
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes flash-green{0%{box-shadow:0 0 0 0 rgba(0,230,118,.6)}100%{box-shadow:0 0 0 20px rgba(0,230,118,0)}}
+@keyframes flash-red{0%{box-shadow:0 0 0 0 rgba(255,82,82,.6)}100%{box-shadow:0 0 0 20px rgba(255,82,82,0)}}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
+@keyframes countPulse{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:.8}}
+.anzan-countdown{font-size:5rem;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(240,192,64,.4);animation:countPulse .7s ease;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.anzan-streak-bar{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink2)}
+.anzan-streak-bar b{color:var(--gold)}
+.level-up-hint{background:linear-gradient(135deg,rgba(240,192,64,.15),rgba(255,152,0,.1));border:1px solid rgba(240,192,64,.3);color:var(--gold);padding:8px 16px;border-radius:999px;font-size:.85rem;font-weight:600;animation:pulse .8s ease}
+.animate-in{animation:fadeIn .3s ease}
+.flash-correct{animation:flash-green .5s ease}
+.flash-wrong{animation:flash-red .5s ease}
+.reduce-motion *,.reduce-motion *::before,.reduce-motion *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+/* ===== UTILITY ===== */
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.focus-mode .focus-hide{display:none!important}
+.focus-standard .live-grid{grid-template-columns:1fr}
+/* ===== ERROR DISPLAY ===== */
+#err{display:none;position:fixed;bottom:20px;right:20px;background:var(--bad);color:#fff;padding:10px 16px;border-radius:var(--radius-sm);font-size:.85rem;z-index:1000;max-width:400px}
+#err.shown{display:block}
+/* ===== TOAST ===== */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:999px;font-weight:700;font-size:.9rem;z-index:1001;opacity:0;transition:opacity .3s;pointer-events:none}
+#toast.shown{opacity:1}
+/* ===== WELCOME SCREEN ===== */
+#welcome{max-width:720px;margin:0 auto;padding:40px 0}
+.welcome-kicker{display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:999px;border:1px solid rgba(38,198,218,.28);background:rgba(38,198,218,.08);color:var(--teal2);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.welcome-logo{font-size:3rem;font-weight:900;letter-spacing:-.03em;background:linear-gradient(135deg,var(--gold),var(--accent2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:4px}
+.welcome-tag{color:var(--ink2);font-size:1.08rem;line-height:1.6;max-width:620px;margin:0 auto 28px}
+.welcome-hero{background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--ring2);border-radius:var(--radius);padding:32px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 18px 48px rgba(0,0,0,.28)}
+.welcome-hero::before{content:'';position:absolute;top:-50%;right:-30%;width:300px;height:300px;background:radial-gradient(circle,rgba(240,192,64,.08),transparent 70%);pointer-events:none}
+.welcome-pitch{font-size:1.02rem;color:var(--ink);line-height:1.75;margin-bottom:18px;max-width:590px}
+.welcome-hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px}
+.welcome-phases{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+@media(max-width:500px){.welcome-phases{grid-template-columns:1fr}}
+.welcome-phase{background:var(--bg2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:start}
+.welcome-phase .wp-icon{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border-radius:12px;background:rgba(240,192,64,.12);border:1px solid rgba(240,192,64,.25);color:var(--gold);font-size:.9rem;font-weight:800;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.welcome-phase .wp-name{font-weight:700;color:var(--gold);font-size:.9rem}
+.welcome-phase .wp-desc{font-size:.8rem;color:var(--ink3);margin-top:2px;line-height:1.4}
+.welcome-research{background:var(--bg2);border-left:3px solid var(--teal);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;margin:24px 0;font-size:.85rem;color:var(--ink2);line-height:1.6}
+.welcome-research b{color:var(--teal)}
+.welcome-start{text-align:center;margin-top:32px}
+.welcome-start .btn{font-size:1.15rem;padding:16px 46px;border-radius:999px;box-shadow:0 10px 30px rgba(240,192,64,.22)}
+.welcome-how{margin-top:24px}
+.welcome-how summary{color:var(--gold);font-weight:700;cursor:pointer;font-size:.95rem;padding:8px 0}
+.welcome-how ol{color:var(--ink2);font-size:.9rem;line-height:1.8;padding-left:20px;margin-top:8px}
+.welcome-how ol li{margin-bottom:4px}
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink3)}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div id="welcome">
+<div class="text-center">
+<div class="welcome-kicker">Offline Single-File Trainer</div>
+<div class="welcome-logo">Soroban Trainer Pro</div>
+<div class="welcome-tag">A focused 20-minute daily soroban routine for speed, accuracy, and mental visualization.</div>
+</div>
+
+<div class="welcome-hero">
+<p class="welcome-pitch">
+Built to feel like a complete practice session, not a loose pile of drills. One button starts a balanced routine that warms up your hands, sharpens bead recognition, trains mental soroban, and reinforces complements without guesswork.
+</p>
+<div class="welcome-hero-cta">
+<span class="surface-note">Recommended Path</span>
+<span style="color:var(--ink3);font-size:.84rem">Run the guided routine once per day, then use standalone drills only when you want extra repetitions.</span>
+</div>
+
+<div style="font-weight:700;color:var(--ink);margin-bottom:8px;font-size:.95rem">What&rsquo;s inside the daily routine:</div>
+<div class="welcome-phases">
+<div class="welcome-phase">
+<div class="wp-icon">01</div>
+<div><div class="wp-name">Warm-Up (4 min)</div><div class="wp-desc">Physical soroban warm-up. Two-digit mixed work under 100 with adaptive chain length.</div></div>
+</div>
+<div class="welcome-phase">
+<div class="wp-icon">02</div>
+<div><div class="wp-name">Bead Reading (3 min)</div><div class="wp-desc">Read bead patterns quickly and type the number they show. The guided routine can expand into three columns as your level rises.</div></div>
+</div>
+<div class="welcome-phase">
+<div class="wp-icon">03</div>
+<div><div class="wp-name">Flash Anzan (10 min)</div><div class="wp-desc">Short number flashes that train steady mental bead movement and retention.</div></div>
+</div>
+<div class="welcome-phase">
+<div class="wp-icon">04</div>
+<div><div class="wp-name">Friends of 10 (2 min)</div><div class="wp-desc">Fast complement recall for carries and borrows.</div></div>
+</div>
+<div class="welcome-phase">
+<div class="wp-icon">05</div>
+<div><div class="wp-name">Friends of 5 (1 min)</div><div class="wp-desc">Quick upper-bead complements for smoother technique.</div></div>
+</div>
+</div>
+</div>
+
+<div class="welcome-research" style="background:var(--surface2);padding:12px 16px;border-radius:var(--radius-sm);border:1px solid var(--gold);margin-bottom:12px">
+<b style="color:var(--gold)">No equipment needed for 4 of 5 phases.</b> Bead Reading, Flash Anzan, Friends of 10, and Friends of 5 are fully on-screen. The warm-up works best with a physical soroban, but you can still train effectively without it.
+</div>
+
+<div class="welcome-research">
+<b>What this is best for:</b> consistent soroban skill training, stronger bead recognition, and more reliable mental visualization. It is designed as deliberate practice, not as a broad claim about general brain improvement. <span style="font-size:.75rem;color:var(--ink3)">Individual results vary.</span>
+</div>
+
+<div class="welcome-research">
+<b>Beyond the guided routine:</b> Standard Drill, Flash Anzan, Multiplication, and Complement Sprint are also available as standalone modes whenever you want targeted extra work.
+</div>
+
+<details class="welcome-how">
+<summary>&#x2753; How do I use this?</summary>
+<ol>
+<li><b>Make sure you extracted (unzipped) this file first.</b> If you opened it directly from inside the ZIP, your progress will not save. Right-click the ZIP &rarr; Extract All (Windows), double-click the ZIP (Mac), or open the ZIP in Files and drag to Downloads (Chromebook). Then open the HTML from the extracted folder.</li>
+<li>If double-clicking the file opens a text editor instead of your browser, right-click the file, choose &ldquo;Open with,&rdquo; and select Chrome, Edge, or Firefox.</li>
+<li>Click <b>Start Training</b> below to enter the app</li>
+<li>Click the gold <b>Guided Routine (20 min)</b> button &mdash; this is all you need</li>
+<li>Follow the phases: warm-up with your physical soroban, then bead reading, anzan, and complements</li>
+<li>Each phase has a transition screen explaining what to do &mdash; just hit <b>Continue</b></li>
+<li>The program adapts to you &mdash; if you&rsquo;re getting answers right, it gets harder. If you struggle, it backs off.</li>
+<li>Do this every day. That&rsquo;s it. Consistency is everything.</li>
+</ol>
+</details>
+
+<details class="welcome-how">
+<summary>&#x2753; Do I need a physical soroban?</summary>
+<ol>
+<li>For the warm-up phase, yes &mdash; use your physical soroban to work the problems</li>
+<li>For bead reading, anzan, and complements, no physical soroban needed &mdash; it&rsquo;s all on screen and in your head</li>
+<li>If you don&rsquo;t have a physical soroban yet, you can skip the warm-up and just do the other 3 phases</li>
+</ol>
+</details>
+
+<details class="welcome-how">
+<summary>&#x2753; How does progress saving work?</summary>
+<ol>
+<li>Your progress saves automatically in your browser&rsquo;s local storage</li>
+<li><b>Always open the file from the same folder using the same browser.</b> Moving the file to a different folder or switching browsers will reset your progress.</li>
+<li>Clearing your browser data will also delete saved progress</li>
+<li>Use the <b>Export</b> button in Practice History to download a backup file. Use <b>Import</b> to restore it anytime.</li>
+<li>We recommend exporting a backup once a week</li>
+</ol>
+</details>
+
+<div class="welcome-start">
+<button class="btn btn-gold" id="welcomeStartBtn">Start Training &#x2192;</button>
+<div style="color:var(--ink3);font-size:.8rem;margin-top:10px">For use on computers (Windows, Mac, Chromebook). Open the file in any modern browser.</div>
+<div style="color:var(--ink3);font-size:.75rem;margin-top:8px">Version <span id="welcomeVersion">v5.3.0</span><br><b>Recommended browsers:</b> Chrome or Edge for best results. Firefox also works. Safari may clear saved progress after 7 days of inactivity, so use the Export button to back up regularly.</div>
+</div>
+</div>
+
+<div id="mainApp" style="display:none">
+<div id="routineBar" class="routine-bar hidden">
+<div class="routine-phases" id="routinePhases"></div>
+<div class="flex items-center gap-md">
+<span class="routine-phase-label" id="routinePhaseLabel">Phase 1/4</span>
+<span class="routine-timer" id="routineTimer">3:00</span>
+<button class="btn btn-sm" id="routineSkipPhase">Skip Phase</button>
+<button class="btn btn-sm btn-ghost" id="routineEnd">End Routine</button>
+</div>
+</div>
+<div id="routineTransition" class="routine-transition hidden">
+<h2 id="rtTitle">Next Phase</h2>
+<p id="rtDesc"></p>
+<p id="rtTip" style="color:var(--teal);font-weight:600;font-size:.9rem"></p>
+<div class="flex gap-sm">
+<button class="btn btn-gold" id="rtContinue" style="font-size:1rem;padding:12px 28px">Continue</button>
+</div>
+</div>
+
+<div class="header flex justify-between items-center wrap gap-md">
+<div>
+<h1>Soroban Trainer Pro</h1>
+<div class="subtitle">Daily abacus drills &mdash; Japanese classroom style</div>
+</div>
+<div class="flex items-center gap-sm">
+<div class="streak-badge" id="streakBadge"><span id="streakIcon">&#x1F525;</span> <span id="streakVal">0</span> day streak</div>
+<span id="pbBadge" class="pb-badge hidden">PB</span>
+<span class="version" id="buildBadge">v5.3.0</span>
+<button class="btn btn-sm" id="helpBtn" title="How to use" style="font-size:.85rem;padding:4px 10px;border-radius:999px">?</button>
+</div>
+</div>
+<div id="setup" class="card animate-in" style="margin-top:20px">
+<div class="card-header">Session Setup</div>
+<div class="card-body">
+<div class="setup-grid">
+<div class="setup-section">
+<div class="setup-label">Mode</div>
+<div class="btn-group" style="flex-direction:column">
+<button class="btn btn-active" data-mode="standard">Standard Drill</button>
+<button class="btn" data-mode="anzan">Anzan (Mental Math)</button>
+<button class="btn" data-mode="multiplication">Multiplication Drill</button>
+<button class="btn" data-mode="sprint10">Sprint: Friends of 10</button>
+<button class="btn" data-mode="sprint5">Sprint: Friends of 5</button>
+</div>
+</div>
+<div class="setup-section">
+<div class="setup-label">Difficulty</div>
+<div class="btn-group" style="flex-direction:column">
+<button class="btn" data-diff="beginner">Beginner (1-digit)</button>
+<button class="btn btn-active" data-diff="intermediate">Intermediate (2-digit)</button>
+<button class="btn" data-diff="advanced">Advanced (3-digit)</button>
+<button class="btn" data-diff="expert">Expert (4-digit)</button>
+</div>
+</div>
+<div class="setup-section">
+<div class="setup-label">Options</div>
+<label class="toggle"><input type="checkbox" id="under100" checked/><span class="track"></span> Stay under 100</label>
+<label class="toggle"><input type="checkbox" id="adaptive" checked/><span class="track"></span> Adaptive chain length</label>
+<label class="toggle toggle-disabled" title="Negative totals are gated off until the bead coach can represent them faithfully."><input type="checkbox" id="negatives" disabled/><span class="track"></span> Negative totals (coming later)</label>
+<label class="toggle"><input type="checkbox" id="soundOn"/><span class="track"></span> Minimal sound</label>
+<label class="toggle"><input type="checkbox" id="focusMode"/><span class="track"></span> Focus mode</label>
+<label class="toggle"><input type="checkbox" id="reducedMotion"/><span class="track"></span> Reduced motion</label>
+<label class="toggle"><input type="checkbox" id="practiceMisses"/><span class="track"></span> Practice missed set (<span id="missCount">0</span>)</label>
+<div class="setting-note">Preferences save automatically in this browser.</div>
+</div>
+<div class="setup-section">
+<div class="setup-label">Duration</div>
+<div class="btn-group">
+<button class="btn dur" data-min="5">5 min</button>
+<button class="btn dur" data-min="10">10 min</button>
+<button class="btn dur" data-min="15">15 min</button>
+<button class="btn dur btn-active" data-min="20">20 min</button>
+<button class="btn dur" data-min="30">30 min</button>
+</div>
+<div class="setup-label" style="margin-top:12px">Technique</div>
+<div class="btn-group">
+<button class="btn tech btn-active" data-tech="mixed">Mixed</button>
+<button class="btn tech" data-tech="add">Add only</button>
+<button class="btn tech" data-tech="sub">Sub only</button>
+</div>
+</div>
+</div>
+<div id="anzanSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
+<div class="setup-label" style="margin-bottom:10px">Anzan Curriculum <span style="font-weight:400;font-size:.75rem;color:var(--ink3)">&mdash; Complete each level to unlock the next (80% accuracy required)</span></div>
+<div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<button class="btn btn-sm" id="azUnlockAll">Unlock All Levels (experienced user)</button>
+<button class="btn btn-sm btn-ghost" id="azResetProg" style="color:var(--bad)">Reset Progress</button>
+</div>
+<div class="az-levels" id="azLevelGrid"></div>
+<div id="azLevelInfo" style="background:var(--surface2);border:1px solid var(--ring);border-radius:var(--radius-sm);padding:12px;margin-top:8px;font-size:.85rem;color:var(--ink2)">
+Select a level above to see details.
+</div>
+<div id="quickAnzanPanel" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
+<div class="setup-label" style="margin-bottom:8px">Quick Anzan Practice <span style="font-weight:400;font-size:.75rem;color:var(--ink3)">&mdash; free practice, does not change your level or unlocks</span></div>
+<div class="flex wrap gap-md items-center">
+<div class="flex-col gap-xs">
+<span style="color:var(--ink3);font-size:.8rem">Digits</span>
+<div class="btn-group">
+<button class="btn btn-sm btn-active" data-azfd="1">1 (1-9)</button>
+<button class="btn btn-sm" data-azfd="2">2 (10-99)</button>
+<button class="btn btn-sm" data-azfd="3">3 (100-999)</button>
+</div>
+</div>
+<div class="flex-col gap-xs">
+<span style="color:var(--ink3);font-size:.8rem">How many numbers</span>
+<div class="btn-group">
+<button class="btn btn-sm" data-azfc="2">2</button>
+<button class="btn btn-sm btn-active" data-azfc="3">3</button>
+<button class="btn btn-sm" data-azfc="4">4</button>
+<button class="btn btn-sm" data-azfc="5">5</button>
+</div>
+</div>
+<div class="flex-col gap-xs">
+<span style="color:var(--ink3);font-size:.8rem">Operations</span>
+<div class="btn-group">
+<button class="btn btn-sm btn-active" data-azfo="add">Add only</button>
+<button class="btn btn-sm" data-azfo="mixed">Mixed</button>
+</div>
+</div>
+<div class="flex-col gap-xs">
+<span style="color:var(--ink3);font-size:.8rem">Speed</span>
+<div class="btn-group">
+<button class="btn btn-sm" data-azfs="3000">Slow</button>
+<button class="btn btn-sm btn-active" data-azfs="2200">Normal</button>
+<button class="btn btn-sm" data-azfs="1500">Fast</button>
+</div>
+</div>
+<button class="btn btn-sm btn-primary" id="startQuickAnzan">Start Quick Anzan</button>
+</div>
+<div style="font-size:.78rem;color:var(--ink3);line-height:1.5;margin-top:8px">Tip: leave it on 1-digit / 3 numbers / Add only to drill single beads (1, 3, 4&hellip;) that build up in your head. It runs until the timer ends and never locks or unlocks anything.</div>
+</div>
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
+<div class="setup-label" style="margin-bottom:8px">Standalone Bead Reading Practice</div>
+<div class="flex wrap gap-sm items-center">
+<span style="color:var(--ink3);font-size:.85rem">Columns:</span>
+<div class="btn-group">
+<button class="btn btn-sm" data-brcol="1">1 (0-9)</button>
+<button class="btn btn-sm btn-active" data-brcol="2">2 (10-99)</button>
+<button class="btn btn-sm" data-brcol="3">3 (100-999)</button>
+</div>
+<button class="btn btn-sm btn-primary" id="startBeadReadOnly">Start Bead Reading</button>
+</div>
+</div>
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--ring)">
+<div class="setup-label" style="margin-bottom:6px">Visualization Tip</div>
+<div style="font-size:.8rem;color:var(--ink3);line-height:1.6">
+<b style="color:var(--teal)">Eyes open.</b> Look at the number on screen. As you see it, picture your soroban&rsquo;s beads moving &mdash; don&rsquo;t try to &ldquo;see&rdquo; a perfect crystal-clear abacus image. At first it&rsquo;s fuzzy and that&rsquo;s fine. Focus on the <b>movement</b>: &ldquo;push 3 earth beads up.&rdquo; Some teachers recommend moving your thumb and index finger slightly in the air as if touching real beads &mdash; this bridges the physical and mental. With practice, the image gets clearer and the finger movements fade away. You&rsquo;re building a new brain pathway &mdash; it takes weeks, not days.
+</div>
+</div>
+<div class="flex wrap gap-md items-center" style="margin-top:8px">
+<label class="toggle"><input type="checkbox" id="anzanAutoNext"/><span class="track"></span> Auto-advance on correct</label>
+</div>
+</div>
+<div id="multSetup" class="hidden" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--ring)">
+<div class="setup-label" style="margin-bottom:10px">Multiplication Settings</div>
+<div class="flex wrap gap-md items-center">
+<div class="flex-col gap-xs">
+<label class="tip">Table range</label>
+<div class="btn-group">
+<button class="btn btn-active" data-multrng="basic">2-9</button>
+<button class="btn" data-multrng="extended">2-12</button>
+<button class="btn" data-multrng="hard">2-20</button>
+</div>
+</div>
+<label class="toggle"><input type="checkbox" id="multReverse"/><span class="track"></span> Reverse (answer &times; ? = product)</label>
+</div>
+</div>
+<div class="setup-footer">
+<div class="flex-col gap-xs" style="max-width:560px">
+<div class="tip">Recommended: run the guided routine once daily, then add standalone drills only when you want extra reps.</div>
+<div class="tip" id="guidedStatus" style="color:var(--teal);font-style:normal"></div>
+<div class="tip" id="saveStatus" style="font-style:normal"></div>
+<div class="flex gap-xs wrap" style="margin-top:4px">
+<button class="btn btn-sm" id="exportBtnSetup" title="Back up your progress">Export Backup</button>
+<button class="btn btn-sm" id="importBtnSetup" title="Restore from backup">Import Backup</button>
+</div>
+</div>
+<div class="flex gap-xs wrap">
+<button id="guidedBtn" class="btn btn-gold" style="font-size:1rem;padding:12px 28px">Guided Routine (20 min)</button>
+<button id="startBtn" class="btn btn-primary" style="font-size:1rem;padding:12px 28px">Start Selected Mode</button>
+</div>
+</div>
+</div>
+</div>
+<div id="live" class="hidden" style="margin-top:16px">
+<div class="live-grid">
+<div class="card animate-in">
+<div class="status-bar">
+<div class="status-actions">
+<span class="clock" id="clock">00:00</span>
+<button class="btn btn-sm" id="pauseBtn">Pause</button>
+<button class="btn btn-sm btn-ghost" id="focusBtn">Focus: Off</button>
+</div>
+<div class="flex items-center gap-md">
+<div class="stat">Correct: <b id="scoreCorrect">0</b> / <span id="scoreTotal">0</span></div>
+<div class="stat">Acc: <b class="mono" id="acc">0%</b></div>
+<div class="stat">PPM: <b class="mono" id="ppm">0</b></div>
+<div class="stat">Best: <b class="mono" id="bestStreak">0</b></div>
+</div>
+<div class="flex items-center gap-xs" id="liveTopTools">
+<button class="btn btn-sm" id="hintBtn">Hint</button>
+<button class="btn btn-sm" id="revealBtn">Reveal</button>
+<button class="btn btn-sm btn-ghost" id="skipBtn">Skip</button>
+</div>
+</div>
+<div class="card-body">
+<div class="problem-area" id="problemArea">
+<div class="problem-label">Problem <span id="problemNum">#1</span></div>
+<div class="problem-lines" id="problem"></div>
+<div class="answer-row">
+<span class="eq">=</span>
+<input id="answer" class="input mono" style="width:160px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+<span class="reveal-badge" id="revealArea"></span>
+</div>
+<div class="rules focus-hide">
+<span class="rule-pill">Work right to left</span>
+<span class="rule-pill">Carry at 10</span>
+<span class="rule-pill">Borrow if short</span>
+<span class="rule-pill">Friends of 10: 1+9, 2+8, 3+7, 4+6, 5+5</span>
+<span class="rule-pill">Friends of 5: 1+4, 2+3</span>
+</div>
+<div class="feedback" id="feedback"></div>
+<div id="missedReworkArea" class="missed-rework-prompt hidden">
+<div style="font-weight:700;color:var(--gold);margin-bottom:8px">Missed that one. Take one clean recovery rep?</div>
+<div class="flex gap-xs justify-center">
+<button class="btn btn-primary btn-sm" id="reworkYes">Rework it once</button>
+<button class="btn btn-sm" id="reworkNo">Move on</button>
+</div>
+</div>
+<div class="actions">
+<div class="tip focus-hide">Say the answer out loud before submitting.</div>
+<div class="flex gap-xs">
+<button class="btn btn-primary" id="submitBtn">Submit</button>
+<button class="btn btn-ghost" id="endBtn">End Session</button>
+<button class="btn btn-ghost" id="homeBtn" style="color:var(--ink3)">Back to Setup</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-col gap-md" id="liveSidebar">
+<div class="card animate-in">
+<div class="card-header flex justify-between"><span>Bead Coach</span><span class="step-tag" id="stepTag">Ready</span></div>
+<div class="card-body">
+<div class="soroban-container">
+<div class="soroban" id="soroban"></div>
+<div class="coach-options">
+<label class="toggle"><input type="checkbox" id="bpMicro"/><span class="track"></span><span style="font-size:.8rem">Micro-steps</span></label>
+<label class="toggle"><input type="checkbox" id="bpManual"/><span class="track"></span><span style="font-size:.8rem">Manual</span></label>
+<label class="toggle"><input type="checkbox" id="bpPersist"/><span class="track"></span><span style="font-size:.8rem">Keep highlight</span></label>
+<label class="toggle"><input type="checkbox" id="bpHide"/><span class="track"></span><span style="font-size:.8rem">Mental mode</span></label>
+<button class="btn btn-sm" id="bpPeek">Peek</button>
+</div>
+<div class="coach-controls">
+<button class="btn btn-sm" id="bpFirst">|&lt;</button>
+<button class="btn btn-sm" id="bpPrev">&lt;</button>
+<button class="btn btn-sm btn-primary" id="bpPlay">Play</button>
+<button class="btn btn-sm" id="bpPause">||</button>
+<button class="btn btn-sm" id="bpNext">&gt;</button>
+<button class="btn btn-sm" id="bpLast">&gt;|</button>
+<button class="btn btn-sm" id="bpRestart">Restart</button>
+<select id="bpSpeed" class="btn btn-sm">
+<option value="1">Normal</option>
+<option value="0.6">Slow</option>
+<option value="1.4">Fast</option>
+<option value="2">Very Fast</option>
+</select>
+</div>
+<div class="coach-caption" id="soroCaption">Line-steps: each press advances one worksheet line.</div>
+<div class="hotkeys focus-hide">Enter=submit &middot; H=hint &middot; R=reveal &middot; S=skip &middot; Arrows=coach</div>
+</div>
+</div>
+</div>
+<div class="card animate-in">
+<div class="card-header flex justify-between"><span>Complement Sprint</span><span class="step-tag" id="spTag">Pick target</span></div>
+<div class="card-body">
+<div class="flex justify-between items-center">
+<div class="flex gap-xs">
+<button class="btn btn-sm" id="sp5">Friends of 5</button>
+<button class="btn btn-sm" id="sp10">Friends of 10</button>
+</div>
+<div class="flex gap-md items-center">
+<div class="stat"><span class="clock mono" id="spClock" style="font-size:.9rem;color:var(--teal)">0:00</span></div>
+<div class="stat">Done: <b id="spScore">0</b> / <span id="spTotal">0</span></div>
+</div>
+</div>
+<div class="sprint-display">
+<span class="sprint-n" id="spN">-</span>
+<span class="sprint-plus">+</span>
+<span class="sprint-ans" id="spAns">?</span>
+</div>
+<div class="numpad" id="spGrid"></div>
+<div class="sprint-feedback" id="spFeedback"></div>
+</div>
+</div>
+<div class="card animate-in hidden focus-hide" id="hintBox">
+<div class="card-header">Hint</div>
+<div class="card-body"><pre class="mono" id="hintContent" style="white-space:pre-wrap;font-size:.85rem;color:var(--ink2)"></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="anzanLive" class="hidden" style="margin-top:16px">
+<div class="card animate-in">
+<div class="status-bar">
+<div class="status-actions">
+<span class="clock" id="anzanClock">00:00</span>
+<button class="btn btn-sm" id="anzanPauseBtn">Pause</button>
+<button class="btn btn-sm btn-ghost" id="anzanFocusBtn">Focus: Off</button>
+</div>
+<div class="flex items-center gap-md">
+<div class="stat">Correct: <b id="anzanCorrect">0</b> / <span id="anzanTotal">0</span></div>
+<div class="stat">Acc: <b class="mono" id="anzanAcc">0%</b></div>
+<div class="stat">Level: <b id="anzanLevelDisplay"></b></div>
+<div class="stat">Round: <b id="anzanRoundDisplay">0/5</b></div>
+</div>
+<button class="btn btn-sm btn-ghost" id="anzanEndBtn">End Session</button>
+<button class="btn btn-sm btn-ghost" id="anzanHomeBtn" style="color:var(--ink3)">Back to Setup</button>
+</div>
+<div class="card-body">
+<div class="anzan-display">
+<div class="anzan-streak-bar" id="anzanStreakBar">Streak: <b id="anzanStreakVal">0</b> &middot; Best: <b id="anzanBestStreakVal">0</b></div>
+<div class="tip" id="anzanInstruction">Visualize the soroban beads moving in your mind.</div>
+<div class="anzan-countdown hidden" id="anzanCountdown"></div>
+<div class="anzan-number" id="anzanNumber">&nbsp;</div>
+<div class="anzan-progress" id="anzanDots"></div>
+<div class="answer-row" id="anzanAnswerRow" style="display:none">
+<span class="eq">=</span>
+<input id="anzanInput" class="input mono" style="width:180px" placeholder="?" inputmode="numeric" autocomplete="off"/>
+<button class="btn btn-primary" id="anzanSubmitBtn">Submit</button>
+</div>
+<div class="feedback" id="anzanFeedback"></div>
+<!-- Post-answer review area - ONLY shown after answering -->
+<div id="anzanReview" class="hidden" style="margin-top:12px;max-width:500px;width:100%">
+<div style="font-weight:700;color:var(--gold);margin-bottom:8px;font-size:.9rem">Step-by-step Review:</div>
+<div id="anzanReviewSteps" style="max-height:200px;overflow-y:auto"></div>
+<div style="font-weight:700;color:var(--teal);margin:12px 0 4px;font-size:.85rem">Bead State &mdash; use stepper to walk through each step:</div>
+<div class="az-review-stepper">
+<button class="btn btn-sm" id="azRevPrev">&lt;</button>
+<span class="mono" id="azRevStepLabel" style="font-size:.85rem;color:var(--ink2)">Step 0/0</span>
+<button class="btn btn-sm" id="azRevNext">&gt;</button>
+</div>
+<div class="az-review-beads" id="anzanReviewBeads"></div>
+</div>
+<div class="flex gap-xs" style="margin-top:12px">
+<button class="btn hidden" id="anzanReplayBtn">Replay</button>
+<button class="btn btn-gold hidden" id="anzanNextBtn">Next Round</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="multLive" class="hidden" style="margin-top:16px">
+<div class="card animate-in">
+<div class="status-bar">
+<div class="status-actions">
+<span class="clock" id="multClock">00:00</span>
+<button class="btn btn-sm" id="multPauseBtn">Pause</button>
+<button class="btn btn-sm btn-ghost" id="multFocusBtn">Focus: Off</button>
+</div>
+<div class="flex items-center gap-md">
+<div class="stat">Correct: <b id="multCorrectEl">0</b> / <span id="multTotalEl">0</span></div>
+<div class="stat">Acc: <b class="mono" id="multAccEl">0%</b></div>
+<div class="stat">PPM: <b class="mono" id="multPPMEl">0</b></div>
+</div>
+<button class="btn btn-sm btn-ghost" id="multEndBtn">End Session</button>
+<button class="btn btn-sm btn-ghost" id="multHomeBtn" style="color:var(--ink3)">Back</button>
+</div>
+<div class="card-body">
+<div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0">
+<div class="problem-label">Problem <span id="multProbNum">#1</span></div>
+<div class="mult-display">
+<span class="mult-num" id="multA">0</span>
+<span class="mult-op">&times;</span>
+<span class="mult-num" id="multB">0</span>
+<span class="mult-op hidden" id="multEq">=</span>
+<span class="mult-num hidden" id="multResult">0</span>
+</div>
+<div class="answer-row">
+<span class="eq">=</span>
+<input id="multInput" class="input mono mult-input" placeholder="?" inputmode="numeric" autocomplete="off"/>
+</div>
+<div class="feedback" id="multFeedback"></div>
+<div class="flex gap-xs">
+<button class="btn btn-primary" id="multSubmitBtn">Submit</button>
+<button class="btn btn-ghost" id="multSkipBtn">Skip</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="summary" class="hidden" style="margin-top:16px">
+<div class="card animate-in">
+<div class="card-header">Session Complete</div>
+<div class="card-body">
+<div class="summary-stats">
+<div class="summary-stat"><span class="label">Correct</span><span class="value good" id="sumCorrect">0</span></div>
+<div class="summary-stat"><span class="label">Total</span><span class="value" id="sumTotal">0</span></div>
+<div class="summary-stat"><span class="label">Accuracy</span><span class="value" id="sumAcc">0%</span></div>
+<div class="summary-stat"><span class="label">Problems/min</span><span class="value" id="sumPPM">0</span></div>
+<div class="summary-stat"><span class="label">Hints Used</span><span class="value" id="sumHints">0</span></div>
+<div class="summary-stat"><span class="label">Best Streak</span><span class="value" id="sumBestStreak">0</span></div>
+</div>
+<div id="sumPB" class="hidden" style="text-align:center;padding:12px;margin-top:8px"><span class="pb-badge" style="font-size:1rem;padding:8px 20px">New Personal Best!</span></div>
+<div id="sumMessage" style="text-align:center;padding:12px;margin-top:12px;font-size:1rem;font-weight:600;color:var(--gold)"></div>
+<div id="missWrap" class="hidden" style="margin-top:20px">
+<div style="font-weight:700;margin-bottom:8px">Missed Problems (<span id="missLen">0</span>)</div>
+<div class="missed-grid" id="missList"></div>
+</div>
+<div class="flex justify-between items-center wrap gap-sm" style="margin-top:20px">
+<div class="flex gap-xs">
+<button class="btn" id="practiceMissBtn">Practice Missed Set</button>
+</div>
+<button class="btn btn-primary" id="newSession">New Session</button>
+</div>
+</div>
+</div>
+<div id="historyCard" class="card hidden" style="margin-top:16px">
+<div class="card-header flex justify-between"><span>Practice History</span><div class="flex gap-xs"><button class="btn btn-sm" id="exportBtn" title="Back up your progress">Export</button><button class="btn btn-sm" id="importBtn" title="Restore from backup">Import</button><button class="btn btn-sm btn-ghost" id="clearHistBtn">Clear</button></div></div>
+<div class="card-body" id="historyList"></div>
+</div>
+</div>
+<div class="footer">Soroban Trainer Pro <span id="footerBuild">v5.3.0</span> &mdash; Practice daily for best results. Keyboard: Enter, H, R, S, Arrow keys.</div>
+<div class="card" style="margin:0 auto 24px;max-width:1200px">
+<div class="card-header" style="background:rgba(0,188,212,.08)">Recommended Daily Routine (20 min) &mdash; use the <span style="color:var(--gold)">Guided Routine</span> button above to auto-run this</div>
+<div class="card-body" style="font-size:.9rem;line-height:1.7;color:var(--ink2)">
+<div style="display:grid;grid-template-columns:50px 1fr;gap:8px 16px;align-items:start">
+<span style="font-weight:800;color:var(--teal);font-family:monospace;font-size:1.1rem">4 min</span>
+<div><b style="color:var(--ink)">Standard Drill Warm-Up</b><br>Intermediate &middot; 2-digit &middot; Stay under 100 &middot; Mixed ops. Physical soroban work &mdash; keeps your fingers sharp. Four minutes gives you ~12 problems with the adaptive chain length getting harder as your accuracy climbs.</div>
+<span style="font-weight:800;color:var(--teal);font-family:monospace;font-size:1.1rem">3 min</span>
+<div><b style="color:var(--ink)">Bead Reading</b><br>The guided routine starts with two-column bead patterns and can move to three columns as your guided anzan level rises. This builds instant bead-to-number recognition without staying artificially capped at double digits.</div>
+<span style="font-weight:800;color:var(--teal);font-family:monospace;font-size:1.1rem">10 min</span>
+<div><b style="color:var(--ink)">Anzan (mental visualization)</b><br>Numbers flash on screen &mdash; NO beads, NO answers. You picture the soroban in your mind. Starts at Level 4 (3 numbers, ones rod). If you pass 2 sets in a row, it advances. If you fail 1 set, it drops back immediately. Auto-adjusts to stay at your edge.</div>
+<span style="font-weight:800;color:var(--teal);font-family:monospace;font-size:1.1rem">2 min</span>
+<div><b style="color:var(--ink)">Friends of 10</b><br>Speed drill: a number appears, you click what + that number = 10. Builds automatic complement recall for carries and borrows. ~80 reps at fast pace.</div>
+<span style="font-weight:800;color:var(--teal);font-family:monospace;font-size:1.1rem">1 min</span>
+<div><b style="color:var(--ink)">Friends of 5</b><br>Speed drill: a number appears, you click what + that number = 5. Essential for upper bead operations. ~40 reps. Each complement type gets its own phase with a transition screen between them.</div>
+</div>
+<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--ring);color:var(--ink3);font-size:.8rem">
+<b style="color:var(--gold)">Why a structured routine matters:</b> Most soroban practice is unstructured &mdash; you sit down and do whatever feels right. This program keeps your daily work consistent: warm up your hands, sharpen bead recognition, train mental visualization, and drill complements in one fixed session. The difficulty adjusts so you stay challenged without guessing what to practice next.
+<br><br><span style="font-size:.75rem;color:var(--ink3)">Disclaimer: This software is provided as-is with no warranty of any kind. No guarantee of compatibility with future browser updates. Single-user license &mdash; not for redistribution or resale. Progress saves in your browser&rsquo;s local storage, which may be cleared if you delete browser data or move the file to a different folder. Always open the file from the same location using the same browser. Use the Export Progress button to back up your data regularly. Individual training results vary based on consistency and prior experience. This is a practice tool, not a medical or therapeutic device.</span>
+</div>
+</div>
+</div>
+</div><!-- end mainApp -->
+</div><!-- end container -->
+<div id="err"></div>
+<div id="toast"></div>
+<script>
+(()=>{
+'use strict';
+/* ===== ERROR HANDLER ===== */
+const errEl=document.getElementById('err');
+window.addEventListener('error',e=>{errEl.textContent='Error: '+(e.message||e.error);errEl.className='shown';setTimeout(()=>errEl.className='',5000)});
+/* ===== TOAST ===== */
+const toastEl=document.getElementById('toast');
+function showToast(msg,color){
+toastEl.textContent=msg;
+toastEl.style.background=color||'var(--good)';
+toastEl.style.color=color==='var(--gold)'?'#000':'#fff';
+toastEl.className='shown';
+setTimeout(()=>toastEl.className='',2000);
+}
+/* ===== CONSTANTS ===== */
+const DIFFICULTIES={
+beginner:{label:'Beginner (1-digit)',digits:1,chain:[3,4]},
+intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
+advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
+expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
+};
+const BUILD='v5.4.0';
+/* ===== STATE ===== */
+let mode='standard',difficulty='intermediate',technique='mixed';
+let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
+let running=false,timeLeft=0,correct=0,total=0,hintsUsed=0;
+let problem=null,problemCount=0;
+let isPaused=false,timerId=null,sessionStartTime=0;
+let frames=[],frameIdx=0,playTimer=null,playSpeed=1;
+let bpManual=load('soroban_bp_manual',true),bpPersist=false,bpMicro=false,bpHide=false,steppingLock=false;
+let persistedMisses=load('soroban_misses',[]),practiceMissesMode=false;
+let currentStreak=0,bestSessionStreak=0;
+let spTarget=0,spScoreVal=0,spTotalVal=0,spCurrentN=null,spCurrentAns=null;
+let spTimerId=null,spElapsed=0;
+let anzanNumbers=[],anzanAnswer=0,anzanIdx=0,anzanTimer=null;
+let anzanCorrectVal=0,anzanTotalVal=0,anzanTimeLeft=0,anzanTimerId=null,anzanPaused=false;
+let anzanAutoNext=false,anzanStreak=0,anzanBestStreak=0;
+let azSelectedLevel=0,azRoundNum=0,azRoundCorrect=0,azIntermediateSums=[];
+let azReviewStepIdx=0,azConsecutiveFails=0,azConsecutivePasses=0;
+let brStandaloneCols=null,beadReadDisplayCols=1;
+let anzanFreeConfig=null,azFreeDigits=1,azFreeCount=3,azFreeOps='add',azFreeSpeed=2200;
+let soundMode=load('soroban_sound','off');
+let focusMode=load('soroban_focus',false);
+let reducedMotion=load('soroban_reduce_motion',(()=>{try{return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}})());
+let audioCtx=null;
+let guidedProfile=null;
+let routineDailyStartLevel=3,routineDailyBeadCols=2,routineDailyWarmup={difficulty:'intermediate',stayUnder100:true,label:'intermediate 2-digit under 100'};
+const AZ_CURRICULUM=[
+{name:'Bead Reading',type:'beadRead',desc:'See a soroban bead pattern (1-2 digits), type the number it shows. Builds instant bead-to-number recognition.',passReq:8,passOf:10,maxNum:99},
+{name:'First Sums',type:'flash',desc:'2 numbers, addition only. Sum stays ≤4. Just the ones rod, no heaven bead yet.',count:2,maxNum:3,sumCap:4,addOnly:true,speed:3500,passReq:4,passOf:5},
+{name:'Cross Five',type:'flash',desc:'2 numbers, addition only. Sum can reach 9. See the heaven bead drop when you cross 5.',count:2,maxNum:6,sumCap:9,addOnly:true,speed:3000,passReq:4,passOf:5},
+{name:'Three Numbers',type:'flash',desc:'3 numbers, addition only, ones rod. Hold the image across 3 additions.',count:3,maxNum:5,sumCap:9,addOnly:true,speed:2500,passReq:4,passOf:5},
+{name:'Subtraction',type:'flash',desc:'3 numbers with subtraction. Ones rod. Watch beads go up AND down.',count:3,maxNum:5,sumCap:9,addOnly:false,speed:2500,passReq:4,passOf:5},
+{name:'Tens Rod Intro',type:'flash',desc:'2 numbers up to 20, add only. Now see TWO rods: tens and ones together.',count:2,maxNum:20,sumCap:50,addOnly:true,speed:3500,digits:2,passReq:4,passOf:5},
+{name:'Tens Practice',type:'flash',desc:'3 numbers, 2-digit, add only. Strengthen your two-rod mental image.',count:3,maxNum:25,sumCap:70,addOnly:true,speed:3000,digits:2,passReq:4,passOf:5},
+{name:'Two-Digit Mixed',type:'flash',desc:'4 numbers, mixed add/subtract, 2-digit. The real challenge begins.',count:4,maxNum:35,sumCap:99,addOnly:false,speed:2500,digits:2,passReq:4,passOf:5},
+{name:'Speed Up',type:'flash',desc:'5 numbers at faster speed. Push your mental soroban to keep pace.',count:5,maxNum:40,sumCap:99,addOnly:false,speed:1800,digits:2,passReq:4,passOf:5},
+{name:'Long Chains',type:'flash',desc:'7 numbers, fast speed. This is real anzan — pure mental calculation.',count:7,maxNum:45,sumCap:99,addOnly:false,speed:1500,digits:2,passReq:4,passOf:5},
+{name:'Hundreds Intro',type:'flash',desc:'3 numbers, add only, now reaching into the hundreds. Add a third rod without making the jump too abrupt.',count:3,maxNum:90,sumCap:180,addOnly:true,speed:2200,digits:3,passReq:4,passOf:5},
+{name:'Three-Digit Mixed',type:'flash',desc:'4 numbers, mixed add/subtract, 3-digit totals. This is the first true three-rod guided anzan stage.',count:4,maxNum:120,sumCap:260,addOnly:false,speed:2000,digits:3,passReq:4,passOf:5}
+];
+function loadAzProg(){return load('soroban_az_v5',{levels:[]})}
+function saveAzProg(p){save('soroban_az_v5',p)}
+function defaultGuidedProfile(){return{anzanAnchor:3,warmupAcc:0,beadAcc:0,anzanAcc:0,lastRun:''}}
+function inferGuidedAnchorFromHistory(){
+const hist=load('soroban_history',[]);
+for(let i=hist.length-1;i>=0;i--){
+const item=hist[i];
+if(!item||item.mode!=='guided-anzan'||typeof item.difficulty!=='string') continue;
+const match=item.difficulty.match(/anzan-lv(\d+)/i);
+if(match) return Math.max(3,Math.min(AZ_CURRICULUM.length-1,Number(match[1])-1));
+}
+return 3;
+}
+function loadGuidedProfile(){
+const fallback=defaultGuidedProfile();
+try{
+if(!localStorage.getItem('soroban_guided_profile_v53')) fallback.anzanAnchor=inferGuidedAnchorFromHistory();
+}catch(e){}
+const raw=load('soroban_guided_profile_v53',fallback)||fallback;
+const maxLevel=AZ_CURRICULUM.length-1;
+const rawAnchor=Number(raw.anzanAnchor);
+return{
+anzanAnchor:Math.max(3,Math.min(maxLevel,Number.isFinite(rawAnchor)?Math.round(rawAnchor):3)),
+warmupAcc:Math.max(0,Math.min(100,Number(raw.warmupAcc)||0)),
+beadAcc:Math.max(0,Math.min(100,Number(raw.beadAcc)||0)),
+anzanAcc:Math.max(0,Math.min(100,Number(raw.anzanAcc)||0)),
+lastRun:typeof raw.lastRun==='string'?raw.lastRun:''
+};
+}
+function saveGuidedProfileState(){if(guidedProfile) save('soroban_guided_profile_v53',guidedProfile)}
+function getGuidedWarmupConfig(profile){
+const anchor=profile&&profile.anzanAnchor||3;
+if(anchor>=10) return{difficulty:'advanced',stayUnder100:false,label:'advanced 3-digit mixed'};
+if(anchor>=8) return{difficulty:'advanced',stayUnder100:true,label:'advanced 2-digit under 100'};
+return{difficulty:'intermediate',stayUnder100:true,label:'intermediate 2-digit under 100'};
+}
+function getGuidedBeadColumns(profile){
+const anchor=profile&&profile.anzanAnchor||3;
+return anchor>=10?3:2;
+}
+function getGuidedStartLevel(profile){
+const anchor=profile&&profile.anzanAnchor||3;
+return anchor<=3?3:Math.max(3,anchor-1);
+}
+function guidedLevelText(lvl){
+const safe=Math.max(0,Math.min(AZ_CURRICULUM.length-1,Number(lvl)||0));
+return'Level '+(safe+1)+': '+AZ_CURRICULUM[safe].name;
+}
+function deriveGuidedRoutinePlan(){
+if(!guidedProfile) guidedProfile=loadGuidedProfile();
+routineDailyWarmup=getGuidedWarmupConfig(guidedProfile);
+routineDailyBeadCols=getGuidedBeadColumns(guidedProfile);
+routineDailyStartLevel=getGuidedStartLevel(guidedProfile);
+}
+function azIsUnlocked(lvl){
+if(lvl===0) return true;
+const prog=loadAzProg();
+const prev=prog.levels[lvl-1];
+return prev&&prev.correct>=AZ_CURRICULUM[lvl-1].passReq;
+}
+function azGetProgress(lvl){
+const prog=loadAzProg();
+return prog.levels[lvl]||{attempts:0,correct:0};
+}
+function azRecordResult(lvl,wasCorrect){
+const prog=loadAzProg();
+if(!prog.levels[lvl]) prog.levels[lvl]={attempts:0,correct:0};
+prog.levels[lvl].attempts++;
+if(wasCorrect) prog.levels[lvl].correct++;
+saveAzProg(prog);
+}
+let multRange='basic',multReverse=false,multA=0,multB=0,multAnswer=0;
+let multCorrect=0,multTotal=0,multTimeLeft=0,multTimerId=null,multPaused=false,multCount=0;
+let sessionMisses=[];
+/* ===== HELPERS ===== */
+const $=q=>document.querySelector(q);
+const $$=q=>document.querySelectorAll(q);
+const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function load(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch{return def}}
+function save(key,val){try{localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
+function fmtTime(secs){
+const m=String(Math.floor(secs/60)).padStart(2,'0');
+const s=String(secs%60).padStart(2,'0');
+return m+':'+s;
+}
+function leftPad(num,width){
+const s=String(Math.abs(num));
+return ' '.repeat(Math.max(0,width-s.length))+s;
+}
+function isSprintMode(){return mode==='sprint5'||mode==='sprint10'}
+function activeAnzanCfg(){return anzanFreeConfig||AZ_CURRICULUM[azSelectedLevel]}
+function buildAnzanFreeConfig(d,count,ops,speed){
+const maxNum=d===1?9:d===2?40:120;
+const sumCap=d===1?99:d===2?199:999;
+return{type:'flash',count,maxNum,sumCap,addOnly:ops==='add',speed,digits:d>=2?d:undefined,free:true};
+}
+function activePhaseKey(){return routineActive&&ROUTINE_PHASES[routinePhaseIdx]?ROUTINE_PHASES[routinePhaseIdx].key:''}
+function getSessionSurfaceMode(){
+if(routineActive){
+const phase=activePhaseKey();
+if(phase==='warmup') return 'standard';
+if(phase==='complements10'||phase==='complements5') return 'sprint';
+return 'anzan';
+}
+return isSprintMode()?'sprint':mode;
+}
+function syncPreferenceToggles(){
+if($('#soundOn')) $('#soundOn').checked=soundMode==='minimal';
+if($('#focusMode')) $('#focusMode').checked=focusMode;
+if($('#reducedMotion')) $('#reducedMotion').checked=reducedMotion;
+if($('#bpManual')) $('#bpManual').checked=bpManual;
+}
+function syncFocusButtons(){
+['#focusBtn','#anzanFocusBtn','#multFocusBtn'].forEach(sel=>{
+const btn=$(sel);
+if(!btn) return;
+btn.textContent=focusMode?'Focus: On':'Focus: Off';
+btn.classList.toggle('btn-primary',focusMode);
+btn.classList.toggle('btn-ghost',!focusMode);
+});
+}
+function applyReducedMotion(){
+document.body.classList.toggle('reduce-motion',reducedMotion);
+}
+function applyFocusMode(){
+document.body.classList.toggle('focus-mode',focusMode);
+const sidebar=$('#liveSidebar');
+const liveRoot=$('#live');
+if(sidebar){
+const hideSidebar=focusMode&&getSessionSurfaceMode()==='standard'&&!$('#live').classList.contains('hidden');
+sidebar.classList.toggle('hidden',hideSidebar);
+if(liveRoot) liveRoot.classList.toggle('focus-standard',hideSidebar);
+}
+syncFocusButtons();
+}
+function applyPreferences(){
+syncPreferenceToggles();
+applyReducedMotion();
+applyFocusMode();
+}
+function setSoundMode(enabled){
+soundMode=enabled?'minimal':'off';
+save('soroban_sound',soundMode);
+syncPreferenceToggles();
+}
+function setFocusMode(enabled){
+focusMode=!!enabled;
+save('soroban_focus',focusMode);
+applyFocusMode();
+syncPreferenceToggles();
+}
+function setReducedMotion(enabled){
+reducedMotion=!!enabled;
+save('soroban_reduce_motion',reducedMotion);
+applyReducedMotion();
+syncPreferenceToggles();
+if(reducedMotion) stopPlayback();
+}
+function ensureAudio(){
+if(soundMode!=='minimal') return null;
+const AudioCtor=window.AudioContext||window.webkitAudioContext;
+if(!AudioCtor) return null;
+if(!audioCtx) audioCtx=new AudioCtor();
+if(audioCtx.state==='suspended') audioCtx.resume().catch(()=>{});
+return audioCtx;
+}
+function playTone(freq,duration,volume,type,delay){
+const ctx=ensureAudio();
+if(!ctx) return;
+const startAt=ctx.currentTime+(delay||0);
+const osc=ctx.createOscillator();
+const gain=ctx.createGain();
+osc.type=type||'sine';
+osc.frequency.setValueAtTime(freq,startAt);
+gain.gain.setValueAtTime(.0001,startAt);
+gain.gain.exponentialRampToValueAtTime(volume||.02,startAt+.01);
+gain.gain.exponentialRampToValueAtTime(.0001,startAt+(duration||.12));
+osc.connect(gain);
+gain.connect(ctx.destination);
+osc.start(startAt);
+osc.stop(startAt+(duration||.12)+.03);
+}
+function playFeedbackTone(kind){
+if(kind==='good'){playTone(740,.12,.02,'sine');playTone(988,.16,.015,'triangle',.07)}
+else if(kind==='bad'){playTone(260,.16,.02,'sawtooth');playTone(196,.16,.015,'triangle',.07)}
+}
+function playPhaseTone(){
+playTone(523,.12,.018,'triangle');
+playTone(659,.14,.014,'triangle',.08);
+}
+function playCoachTick(){playTone(940,.04,.01,'square')}
+function setLiveProblemUI(showProblem){
+$('#problemArea').style.display='';
+$('#problemArea').classList.toggle('sprint-shell',!showProblem);
+$('#liveTopTools').classList.toggle('hidden',!showProblem);
+if(!showProblem) hintBox.classList.add('hidden');
+applyFocusMode();
+}
+function setBeadReadingValueForColumns(cols){
+if(cols===1) return randInt(0,9);
+if(cols===2) return randInt(10,99);
+return randInt(100,999);
+}
+function renderBeadReadingValue(num,container,quizMode){
+container.innerHTML='';
+const wrap=document.createElement('div');
+wrap.style.cssText='display:inline-block';
+if(beadReadDisplayCols<=1) renderBeadRod(num,wrap,{quiz:quizMode});
+else renderBeadRodMulti(num,wrap,{quiz:quizMode,fixedDigits:beadReadDisplayCols});
+container.appendChild(wrap);
+}
+function renderGuidedStatus(){
+const el=$('#guidedStatus');
+if(!el) return;
+const beadLabel=routineDailyBeadCols===3?'3-column bead reading':'2-column bead reading';
+el.textContent='Today: '+routineDailyWarmup.label+' warm-up; '+beadLabel+'; anzan starts at '+guidedLevelText(routineDailyStartLevel)+'.';
+}
+function renderSaveStatus(){
+const el=$('#saveStatus');
+if(!el) return;
+const anchor=guidedProfile?guidedLevelText(guidedProfile.anzanAnchor):guidedLevelText(3);
+el.textContent='Saving: local browser storage in this same HTML/browser profile. It updates the same saved data instead of creating new save files. Current guided anchor: '+anchor+'. Use Export if you want a backup file.';
+}
+/* ===== STORAGE ===== */
+function loadHist(){return load('soroban_history',[])}
+function saveHist(h){save('soroban_history',h)}
+function loadPB(){return load('soroban_pb',{accuracy:0,ppm:0,streak:0})}
+function savePB(pb){save('soroban_pb',pb)}
+function calcStreak(history){
+if(!history.length) return 0;
+const dates=[...new Set(history.map(h=>h.date))].sort();
+const today=todayISO();
+const last=dates[dates.length-1];
+const diffFromToday=Math.floor((new Date(today)-new Date(last))/(86400000));
+if(diffFromToday>1) return 0;
+let streak=1;
+for(let i=dates.length-1;i>0;i--){
+const curr=new Date(dates[i]),prev=new Date(dates[i-1]);
+const d=Math.floor((curr-prev)/86400000);
+if(d===1) streak++;
+else break;
+}
+return streak;
+}
+/* ===== SOROBAN MATH ===== */
+function numberToDigits(n,width){
+const s=String(Math.max(0,n));
+return s.padStart(Math.max(width,s.length),'0').split('').map(Number);
+}
+function digitToBeads(d){return{heaven:d>=5?1:0,earth:d%5}}
+function valueToBeads(n,width){return numberToDigits(n,width).map(digitToBeads)}
+/* ===== PROBLEM GENERATION ===== */
+function generateProblem(opts){
+const{digits,chainMin,chainMax}=opts;
+const width=stayUnder100?Math.min(2,digits):digits;
+const chainLen=randInt(chainMin,chainMax);
+const maxVal=stayUnder100?99:Math.pow(10,width)-1;
+const minVal=0;
+const startMin=width>=2?10:1;
+const startMax=stayUnder100?Math.min(80,maxVal):maxVal;
+let runningVal=randInt(startMin,startMax);
+const ops=['+'],nums=[runningVal];
+for(let i=1;i<chainLen;i++){
+let op;
+if(technique==='add') op='+';
+else if(technique==='sub') op='-';
+else op=Math.random()<0.55?'+':'-';
+let next;
+if(stayUnder100){
+// 40% of the time, deliberately pick numbers that force complement techniques
+const forceComplement=Math.random()<0.4;
+const onesDigit=runningVal%10;
+if(forceComplement&&op==='+'){
+// Pick numbers that force a carry on the ones rod
+const carryNums=[];
+for(let c=1;c<=9;c++){if(onesDigit+c>=10||onesDigit%5+c>=5) carryNums.push(c)}
+if(carryNums.length>0){
+const base=carryNums[randInt(0,carryNums.length-1)];
+const tens=Math.random()<0.5?randInt(0,Math.min(3,Math.floor((maxVal-runningVal)/10))):0;
+next=tens*10+base;
+next=Math.min(next,maxVal-runningVal);
+next=Math.max(1,next);
+} else {
+const room=maxVal-runningVal;
+next=room<1?0:randInt(1,Math.min(room,45));
+}
+} else if(forceComplement&&op==='-'){
+const borrowNums=[];
+for(let c=1;c<=9;c++){if(onesDigit-c<0||(onesDigit>=5&&onesDigit-c<5)) borrowNums.push(c)}
+if(borrowNums.length>0){
+const base=borrowNums[randInt(0,borrowNums.length-1)];
+const tens=Math.random()<0.5?randInt(0,Math.min(3,Math.floor(runningVal/10)-1)):0;
+next=Math.max(0,tens)*10+base;
+next=Math.min(next,runningVal-minVal);
+next=Math.max(1,next);
+} else {
+const room=runningVal-minVal;
+next=room<1?0:randInt(1,Math.min(room,45));
+}
+} else {
+// Normal random generation
+if(op==='+'){
+const room=maxVal-runningVal;
+if(room<1){op='-';next=randInt(1,Math.min(Math.abs(runningVal-minVal),45))}
+else next=randInt(1,Math.min(room,45));
+} else {
+const room=runningVal-minVal;
+if(room<1){op='+';next=randInt(1,Math.min(maxVal-runningVal,45))}
+else next=randInt(1,Math.min(room,45));
+}
+}
+// Safety: ensure next is valid
+if(!next||next<1){op=op==='+'?'-':'+';next=randInt(1,Math.min(op==='+'?maxVal-runningVal:runningVal-minVal,20));next=Math.max(1,next||1)}
+// Final bounds guarantee
+if(op==='+'&&runningVal+next>maxVal) next=maxVal-runningVal;
+if(op==='-'&&runningVal-next<minVal) next=runningVal-minVal;
+if(next<1) next=1;
+if(op==='+'&&runningVal+next>maxVal){op='-';next=Math.min(next,runningVal-minVal)}
+if(op==='-'&&runningVal-next<minVal){op='+';next=Math.min(next,maxVal-runningVal)}
+next=Math.max(1,next);
+} else {
+next=randInt(1,Math.pow(10,width)-1);
+if(op==='+' && runningVal+next>maxVal) op='-';
+if(op==='-' && runningVal-next<minVal) op='+';
+if(op==='+') next=Math.min(next,maxVal-runningVal);
+else next=Math.min(next,runningVal-minVal);
+next=Math.max(1,next);
+}
+runningVal=op==='+'?runningVal+next:runningVal-next;
+ops.push(op);
+nums.push(next);
+}
+const displayWidth=Math.max(2,...nums.map(n=>String(n).length));
+const lines=[leftPad(nums[0],displayWidth)];
+for(let i=1;i<nums.length;i++){
+lines.push(ops[i]+' '+leftPad(nums[i],displayWidth-1));
+}
+return{lines,answer:runningVal,width:Math.max(2,...lines.map(l=>l.length)),ops,nums};
+}
+/* ===== HINTS ===== */
+function makeHintText(p){
+const rows=['Start: set '+p.nums[0]+' on the soroban. '+describeBeads(p.nums[0])];
+let runVal=p.nums[0];
+for(let i=1;i<p.nums.length;i++){
+const op=p.ops[i];
+const verb=op==='+'?'Add':'Subtract';
+const n=p.nums[i];
+const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
+const parts=[];
+if(ones>0){
+const onesRod=runVal%10;
+const tech=describeComplementTechnique(op,ones,onesRod);
+parts.push(verb.toLowerCase()+' '+ones+' on ones'+(tech?' — '+tech:''));
+}
+if(tens>0){
+const tensRod=Math.floor(runVal/10)%10;
+const tech=describeComplementTechnique(op,tens,tensRod);
+parts.push(verb.toLowerCase()+' '+tens+' on tens'+(tech?' — '+tech:''));
+}
+if(huns>0) parts.push(verb.toLowerCase()+' '+huns+' on hundreds');
+runVal=op==='+'?runVal+n:runVal-n;
+rows.push('Line '+(i+1)+': '+verb+' '+n+'. '+(parts.length?parts.join('; '):verb+' 0')+'. Result: '+runVal+' '+describeBeads(runVal));
+}
+rows.push('\nFinal answer: '+runVal);
+return rows.join('\n');
+}
+/* ===== SOROBAN RENDERING ===== */
+function renderSoroban(el,beads,prevBeads,opts){
+opts=opts||{};
+el.innerHTML='';
+beads.forEach((b,idx)=>{
+const prev=prevBeads?prevBeads[idx]:null;
+const col=document.createElement('div');
+col.className='soroban-col';
+const heaven=document.createElement('div');
+heaven.className='soroban-heaven';
+const hBead=document.createElement('div');
+hBead.className='bead bead-heaven'+(b.heaven?' active':'');
+if(prev&&prev.heaven!==b.heaven) hBead.classList.add('moved');
+heaven.appendChild(hBead);
+col.appendChild(heaven);
+const bar=document.createElement('div');
+bar.className='soroban-bar';
+col.appendChild(bar);
+const earth=document.createElement('div');
+earth.className='soroban-earth';
+for(let i=1;i<=4;i++){
+const eBead=document.createElement('div');
+const active=i<=b.earth;
+eBead.className='bead bead-earth'+(active?' active':'');
+if(prev&&((i<=prev.earth)!==active)) eBead.classList.add('moved');
+earth.appendChild(eBead);
+}
+col.appendChild(earth);
+const label=document.createElement('div');
+label.className='soroban-digit';
+label.textContent=String(b.heaven*5+b.earth);
+col.appendChild(label);
+el.appendChild(col);
+});
+if(!opts.persistHighlight){
+setTimeout(()=>{el.querySelectorAll('.bead.moved').forEach(x=>x.classList.remove('moved'))},600);
+}
+}
+/* ===== FRAME COMPUTATION ===== */
+function computeCoarseFrames(p){
+const fr=[p.nums[0]];
+let t=p.nums[0];
+for(let i=1;i<p.nums.length;i++){
+t=p.ops[i]==='+'?t+p.nums[i]:t-p.nums[i];
+fr.push(t);
+}
+return fr;
+}
+function computeMicroFrames(p){
+const fr=[];
+const width=Math.max(p.width,String(Math.max(...p.nums,p.answer)).length,2);
+let a=p.nums[0];
+fr.push(a);
+for(let i=1;i<p.nums.length;i++){
+const op=p.ops[i],n=p.nums[i];
+const aD=numberToDigits(a,width),nD=numberToDigits(n,width);
+let carry=0;
+for(let c=width-1;c>=0;c--){
+if(op==='+'){
+const v=aD[c]+nD[c]+carry;
+aD[c]=v%10;
+carry=v>=10?1:0;
+} else {
+let v=aD[c]-nD[c]-carry;
+if(v<0){v+=10;carry=1}else carry=0;
+aD[c]=v;
+}
+fr.push(Number(aD.join('')));
+}
+a=Number(aD.join(''));
+}
+return fr;
+}
+/* ===== DOM REFS ===== */
+const problemEl=$('#problem'),ansEl=$('#answer'),revealArea=$('#revealArea'),feedbackEl=$('#feedback');
+const hintBox=$('#hintBox'),hintContent=$('#hintContent');
+const clockEl=$('#clock'),scoreCorrectEl=$('#scoreCorrect'),scoreTotalEl=$('#scoreTotal'),accEl=$('#acc'),ppmEl=$('#ppm');
+const soroEl=$('#soroban'),stepTagEl=$('#stepTag'),soroCaptionEl=$('#soroCaption');
+const pauseBtn=$('#pauseBtn');
+const problemNumEl=$('#problemNum');
+const bestStreakEl=$('#bestStreak');
+const spTagEl=$('#spTag'),spGridEl=$('#spGrid');
+const spNEl=$('#spN'),spAnsEl=$('#spAns'),spScoreEl=$('#spScore'),spTotalEl=$('#spTotal'),spFeedbackEl=$('#spFeedback');
+const anzanClockEl=$('#anzanClock'),anzanNumberEl=$('#anzanNumber');
+const anzanDotsEl=$('#anzanDots');
+const anzanFeedbackEl=$('#anzanFeedback');
+/* ===== SCREEN MANAGEMENT ===== */
+function setScreen(which){
+$('#setup').classList.toggle('hidden',which!=='setup');
+$('#live').classList.toggle('hidden',which!=='live');
+$('#anzanLive').classList.toggle('hidden',which!=='anzan');
+$('#multLive').classList.toggle('hidden',which!=='mult');
+$('#summary').classList.toggle('hidden',which!=='summary');
+applyFocusMode();
+}
+/* ===== SCORE DISPLAY ===== */
+function updateScores(){
+scoreCorrectEl.textContent=correct;
+scoreTotalEl.textContent=total;
+const a=total>0?Math.round(correct/total*1000)/10:0;
+accEl.textContent=a+'%';
+const elapsed=minutes*60-timeLeft;
+const ppmVal=elapsed>0?Math.round(total/(elapsed/60)*10)/10:0;
+ppmEl.textContent=ppmVal;
+bestStreakEl.textContent=bestSessionStreak;
+}
+/* ===== CLOCK ===== */
+function updateClockDisplay(el,secs){el.textContent=fmtTime(secs)}
+function startTimer(){
+running=true;isPaused=false;
+sessionStartTime=Date.now();
+if(timerId){clearInterval(timerId);timerId=null}
+updateClockDisplay(clockEl,timeLeft);
+timerId=setInterval(()=>{
+if(!running||isPaused) return;
+timeLeft=Math.max(0,timeLeft-1);
+updateClockDisplay(clockEl,timeLeft);
+if(timeLeft<=0){clearInterval(timerId);timerId=null;running=false;endSession()}
+},1000);
+}
+/* ===== PAUSE ===== */
+function setPausedUI(paused){
+pauseBtn.textContent=paused?'Resume':'Pause';
+pauseBtn.classList.toggle('btn-primary',paused);
+const standardSurface=getSessionSurfaceMode()==='standard';
+ansEl.disabled=paused||!standardSurface;
+$('#submitBtn').disabled=paused||!standardSurface;
+$('#skipBtn').disabled=paused||!standardSurface;
+$('#hintBtn').disabled=paused||!standardSurface;
+$('#revealBtn').disabled=paused||!standardSurface;
+}
+function togglePause(){
+if(!running) return;
+isPaused=!isPaused;
+if(isPaused) stopPlayback();
+setPausedUI(isPaused);
+}
+/* ===== RENDER PROBLEM ===== */
+function renderProblem(p){
+problemEl.innerHTML='';
+p.lines.forEach((ln,idx)=>{
+const div=document.createElement('div');
+div.className='problem-line';
+div.textContent=(idx===0?' ':'')+ln;
+problemEl.appendChild(div);
+});
+const rule=document.createElement('div');
+rule.className='problem-divider';
+rule.textContent='─'.repeat(Math.max(4,p.width+2));
+problemEl.appendChild(rule);
+}
+/* ===== BEAD COACH ===== */
+function getCoachExplanation(p,lineIdx){
+if(lineIdx===0) return 'Set '+p.nums[0]+' on the soroban.';
+const op=p.ops[lineIdx];
+const n=p.nums[lineIdx];
+let runVal=p.nums[0];
+for(let i=1;i<lineIdx;i++) runVal=p.ops[i]==='+'?runVal+p.nums[i]:runVal-p.nums[i];
+const ones=n%10,tens=Math.floor(n/10)%10,huns=Math.floor(n/100)%10;
+const onesRod=runVal%10,tensRod=Math.floor(runVal/10)%10;
+const parts=[];
+let onesCarry=0;
+if(ones>0){
+const onesResult=op==='+'?onesRod+ones:onesRod-ones;
+if(onesResult>=10) onesCarry=1;
+else if(onesResult<0) onesCarry=-1;
+const onesTech=describeComplementTechnique(op,ones,onesRod);
+parts.push((op==='+'?'+':'-')+ones+' on ones'+(onesTech?' ('+onesTech+')':''));
+}
+if(tens>0){
+const effectiveTensRod=clamp(tensRod+onesCarry,0,9);
+const tensTech=describeComplementTechnique(op,tens,effectiveTensRod);
+const carryNote=onesCarry!==0?' (after carry from ones)':'';
+parts.unshift((op==='+'?'+':'-')+tens+' on tens'+(tensTech?' ('+tensTech+')':'')+carryNote);
+} else if(onesCarry===1){
+parts.unshift('+1 carry to tens');
+} else if(onesCarry===-1){
+parts.unshift('-1 borrow from tens');
+}
+if(huns>0) parts.unshift((op==='+'?'+':'-')+huns+' on hundreds');
+return (op==='+'?'Add ':'Sub ')+n+': '+parts.join(', ');
+}
+function updateStepTag(p,idx){
+if(bpMicro){
+if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';soroCaptionEl.textContent='Set '+p.nums[0]+' on the soroban.';return}
+const width=Math.max(p.width,String(Math.max(...p.nums,p.answer)).length,2);
+let k=0;
+for(let i=1;i<p.nums.length;i++){
+for(let c=width-1;c>=0;c--){
+k++;
+if(k===idx){
+const op=p.ops[i];
+const colName=['ones','tens','hundreds','thousands'][width-1-c]||'col '+(width-c);
+stepTagEl.textContent=(op==='+'?'Add':'Sub')+' '+colName;
+stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
+const colDigit=numberToDigits(p.nums[i],width)[c];
+let microCaption=(op==='+'?'Add ':'Subtract ')+p.nums[i]+', working on '+colName+' rod.';
+if(colDigit>0){
+const rodDigit=numberToDigits(frames[k-1]||0,width)[c];
+const tech=describeComplementTechnique(op,colDigit,rodDigit);
+if(tech) microCaption+='\n'+tech;
+}
+soroCaptionEl.textContent=microCaption;
+return;
+}
+}
+}
+stepTagEl.textContent='Done';stepTagEl.className='step-tag';
+soroCaptionEl.textContent='Final answer: '+p.answer;
+} else {
+if(idx===0){stepTagEl.textContent='Set '+p.nums[0];stepTagEl.className='step-tag';soroCaptionEl.textContent='Set '+p.nums[0]+' on the soroban.';return}
+const op=p.ops[idx];
+stepTagEl.textContent='Line '+(idx+1)+' / '+p.nums.length+' — '+(op==='+'?'Add':'Sub');
+stepTagEl.className='step-tag '+(op==='+'?'add':'sub');
+soroCaptionEl.textContent=getCoachExplanation(p,idx);
+}
+}
+function refreshCoachBtns(){
+const atStart=frameIdx===0,atEnd=frameIdx===frames.length-1;
+$('#bpPrev').disabled=atStart;$('#bpFirst').disabled=atStart;
+$('#bpNext').disabled=atEnd;$('#bpLast').disabled=atEnd;
+}
+function showFrame(idx){
+if(!problem||!frames.length) return;
+const width=Math.max(String(Math.max(...frames)).length,problem.width,2);
+const prev=idx>0?valueToBeads(frames[idx-1],width):null;
+if(!bpHide){
+renderSoroban(soroEl,valueToBeads(frames[idx],width),prev,{persistHighlight:bpPersist});
+} else {
+soroEl.innerHTML='<div class="soroban-hidden-msg">Mental mode: visualize the beads</div>';
+}
+updateStepTag(problem,idx);
+refreshCoachBtns();
+}
+function buildFrames(p){
+frames=bpMicro?computeMicroFrames(p):computeCoarseFrames(p);
+frameIdx=0;
+showFrame(0);
+soroCaptionEl.textContent=bpMicro?'Micro-steps: each column change shown.':'Line-steps: one press per worksheet line.';
+if(!bpManual&&running&&!isPaused&&!reducedMotion&&getSessionSurfaceMode()==='standard') play();
+}
+function stopPlayback(){if(playTimer){clearInterval(playTimer);playTimer=null}}
+function play(){
+stopPlayback();
+const delay=Math.max(150,900/playSpeed);
+playTimer=setInterval(()=>{
+if(frameIdx<frames.length-1){frameIdx++;showFrame(frameIdx)}
+else stopPlayback();
+},delay);
+}
+function throttled(fn){
+if(steppingLock) return;
+steppingLock=true;
+try{fn()}finally{setTimeout(()=>steppingLock=false,200)}
+}
+/* ===== PROBLEM LIFECYCLE ===== */
+function beginProblem(){
+if(!running) return;
+let p;
+if(practiceMissesMode&&persistedMisses.length>0){
+const missIdx=problemCount%persistedMisses.length;
+const miss=persistedMisses[missIdx];
+p={lines:miss.lines,answer:miss.answer,ops:miss.ops||['+'],nums:miss.nums||[miss.answer]};
+} else {
+const conf=DIFFICULTIES[difficulty];
+const boost=adaptive?chainBoost:0;
+const digitsUsed=stayUnder100?Math.min(conf.digits,2):conf.digits;
+p=generateProblem({
+digits:digitsUsed,
+chainMin:clamp(conf.chain[0]+boost,conf.chain[0],conf.chain[1]+2),
+chainMax:clamp(conf.chain[1]+boost,conf.chain[0],conf.chain[1]+2)
+});
+}
+problem=p;
+problemCount++;
+problemNumEl.textContent=practiceMissesMode?'#'+problemCount+' (missed)':'#'+problemCount;
+renderProblem(p);
+hintBox.classList.add('hidden');
+hintContent.textContent='';
+revealArea.style.display='none';revealArea.textContent='';
+ansEl.value='';feedbackEl.textContent='';feedbackEl.className='feedback';
+ansEl.focus();
+if(p.ops&&p.nums) buildFrames(p);
+}
+function submitAnswer(){
+if(!problem||!running||isPaused) return;
+const val=ansEl.value.trim();
+if(!val) return;
+const v=Number(val);
+if(isNaN(v)) return;
+const ok=v===problem.answer;
+total++;
+const encourageMsg=['Correct!','Nice!','Well done!','Great work!','Right on!','Excellent!','Sharp!','Perfect!'];
+if(ok){
+correct++;
+currentStreak++;
+if(currentStreak>bestSessionStreak) bestSessionStreak=currentStreak;
+feedbackEl.className='feedback correct';
+feedbackEl.textContent=encourageMsg[randInt(0,encourageMsg.length-1)]+(currentStreak>=3?' ('+currentStreak+' in a row!)':'');
+$('#problemArea').classList.add('flash-correct');
+setTimeout(()=>$('#problemArea').classList.remove('flash-correct'),500);
+playFeedbackTone('good');
+} else {
+currentStreak=0;
+feedbackEl.className='feedback wrong';
+feedbackEl.textContent='Not quite. The answer was '+problem.answer;
+$('#problemArea').classList.add('flash-wrong');
+setTimeout(()=>$('#problemArea').classList.remove('flash-wrong'),500);
+playFeedbackTone('bad');
+sessionMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
+persistedMisses.push({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
+if(persistedMisses.length>10) persistedMisses=persistedMisses.slice(-10);
+save('soroban_misses',persistedMisses);
+}
+if(adaptive&&total%5===0){
+const accVal=total>0?(correct/total)*100:0;
+if(accVal>=90) chainBoost=Math.min(chainBoost+1,3);
+else if(accVal<=60) chainBoost=Math.max(chainBoost-1,0);
+}
+updateScores();
+if(!ok&&routineActive&&!reworkMode){
+// In guided mode, offer to rework missed problems (but not on a re-attempt)
+setTimeout(()=>{
+offerRework({lines:problem.lines,answer:problem.answer,ops:problem.ops,nums:problem.nums});
+},700);
+} else {
+reworkMode=false;
+setTimeout(()=>{stopPlayback();beginProblem()},ok?350:650);
+}
+}
+function revealAnswer(){
+if(!problem) return;
+if(revealArea.style.display==='none'||!revealArea.style.display){
+revealArea.style.display='inline-block';
+revealArea.textContent=problem.answer;
+} else {
+revealArea.style.display='none';
+revealArea.textContent='';
+}
+}
+function startSession(){
+correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
+currentStreak=0;bestSessionStreak=0;
+timeLeft=minutes*60;
+updateScores();
+setScreen('live');
+setLiveProblemUI(true);
+isPaused=false;setPausedUI(false);
+startTimer();
+beginProblem();
+ensureKeypad();
+}
+function startSprintSession(target){
+spTarget=target;
+spTagEl.textContent=target===10?'Friends of 10':'Friends of 5';
+$('#sp5').classList.toggle('btn-active',target===5);
+$('#sp10').classList.toggle('btn-active',target===10);
+correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
+currentStreak=0;bestSessionStreak=0;
+timeLeft=minutes*60;
+updateScores();
+setScreen('live');
+setLiveProblemUI(false);
+isPaused=false;setPausedUI(false);
+startTimer();
+resetSprintStats();
+ensureKeypad();
+nextSprint();
+}
+function endSession(){
+if(routineActive){
+// During guided routine, skip to next phase
+showToast('Phase complete, moving to next...','var(--teal)');
+onRoutinePhaseEnd();return}
+if(isSprintMode()){
+correct=spScoreVal;
+total=spTotalVal;
+bestSessionStreak=bestSessionStreak||currentStreak;
+}
+running=false;isPaused=false;
+if(timerId){clearInterval(timerId);timerId=null}
+if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+stopPlayback();
+setScreen('summary');
+const accVal=total>0?Math.round(correct/total*1000)/10:0;
+const elapsed=minutes*60-timeLeft;
+const ppmVal=elapsed>0?Math.round(total/(elapsed/60)*10)/10:0;
+$('#sumCorrect').textContent=correct;
+$('#sumTotal').textContent=total;
+$('#sumAcc').textContent=accVal+'%';
+$('#sumAcc').className='value '+(accVal>=80?'good':accVal>=60?'warn':'bad');
+$('#sumPPM').textContent=ppmVal;
+$('#sumHints').textContent=hintsUsed;
+$('#sumBestStreak').textContent=bestSessionStreak;
+const pb=loadPB();
+let newPB=false;
+if(total>=5){
+if(accVal>pb.accuracy){pb.accuracy=accVal;newPB=true}
+if(ppmVal>pb.ppm){pb.ppm=ppmVal;newPB=true}
+if(bestSessionStreak>pb.streak){pb.streak=bestSessionStreak;newPB=true}
+if(newPB){savePB(pb);showToast('New Personal Best!','var(--gold)')}
+}
+$('#sumPB').classList.toggle('hidden',!newPB);
+const msgs=accVal>=90?['Outstanding! Your bead work is razor sharp.','Excellent session! You are building real speed.','Sensei-level accuracy! Keep this streak going.']:
+accVal>=70?['Good work! Consistency is the key to mastery.','Solid session. Focus on the ones you missed.','You are improving. Try the missed set for extra practice.']:
+accVal>=50?['Keep going! Every session builds your mental soroban.','Practice makes progress. Try slowing down for accuracy.','Not bad! Focus on complement pairs to speed up.']:
+['Tough session. Try the complement sprint to strengthen your basics.','Every expert was once a beginner. Keep practicing daily!','Slow down and focus on visualizing each bead movement.'];
+$('#sumMessage').textContent=msgs[randInt(0,msgs.length-1)];
+const hist=loadHist();
+hist.push({date:todayISO(),mode,difficulty,minutes,accuracy:accVal,correct,total,hints:hintsUsed,ppm:ppmVal,bestStreak:bestSessionStreak});
+saveHist(hist);
+$('#streakVal').textContent=calcStreak(hist);
+renderHistory(hist);
+$('#missLen').textContent=sessionMisses.length;
+if(sessionMisses.length){
+$('#missWrap').classList.remove('hidden');
+const list=$('#missList');
+list.innerHTML='';
+sessionMisses.forEach(m=>{
+const box=document.createElement('div');
+box.className='missed-item';
+m.lines.forEach((ln,idx)=>{
+const d=document.createElement('div');
+d.style.whiteSpace='pre';
+d.textContent=(idx===0?' ':'')+ln;
+box.appendChild(d);
+});
+const r=document.createElement('div');
+r.textContent='─'.repeat(Math.max(4,m.lines[0].length));
+r.style.color='var(--ink3)';
+box.appendChild(r);
+const a=document.createElement('div');
+a.className='ans';a.textContent='= '+m.answer;
+box.appendChild(a);
+list.appendChild(box);
+});
+} else {
+$('#missWrap').classList.add('hidden');
+}
+$('#missCount').textContent=persistedMisses.length;
+}
+/* ===== COMPLEMENT SPRINT ===== */
+function ensureKeypad(){
+spGridEl.innerHTML='';
+for(let d=1;d<=9;d++){
+const b=document.createElement('button');
+b.className='btn';
+b.textContent=d;
+b.addEventListener('click',()=>checkSprint(d));
+if(!spTarget) b.disabled=true;
+spGridEl.appendChild(b);
+}
+}
+function resetSprintStats(){
+spScoreVal=0;spTotalVal=0;
+spScoreEl.textContent='0';spTotalEl.textContent='0';
+spNEl.textContent='-';spAnsEl.textContent='?';
+spFeedbackEl.textContent='';
+spElapsed=0;
+spLastNums=[];
+if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+const spClockEl=$('#spClock');
+if(routineActive){
+// During guided routine, show countdown from phase time
+spClockEl.textContent=fmtTime(routinePhaseTime);
+spTimerId=setInterval(()=>{
+if(isPaused) return;
+spClockEl.textContent=fmtTime(routinePhaseTime);
+},1000);
+} else {
+spClockEl.textContent='0:00';
+spTimerId=setInterval(()=>{
+if(isPaused) return;
+spElapsed++;
+const m=Math.floor(spElapsed/60);
+const s=spElapsed%60;
+spClockEl.textContent=m+':'+(s<10?'0':'')+s;
+},1000);
+}
+}
+let spLastNums=[];
+function nextSprint(){
+if(!spTarget) return;
+let n;
+if(spTarget===10){
+// Avoid repeating last 2 numbers
+let attempts=0;
+do{n=randInt(1,9);attempts++}while(spLastNums.includes(n)&&attempts<20);
+spCurrentAns=10-n;
+} else {
+let attempts=0;
+do{n=randInt(1,4);attempts++}while(spLastNums.includes(n)&&attempts<20);
+spCurrentAns=5-n;
+}
+spCurrentN=n;
+spLastNums.push(n);
+if(spLastNums.length>2) spLastNums.shift();
+spNEl.textContent=spCurrentN;
+spAnsEl.textContent='?';
+spAnsEl.style.color='var(--gold)';
+spFeedbackEl.textContent='';
+spGridEl.querySelectorAll('button').forEach(b=>{
+b.disabled=isPaused;
+b.className='btn';
+});
+}
+function checkSprint(x){
+if(!spTarget||isPaused) return;
+spTotalVal++;spTotalEl.textContent=spTotalVal;
+if(x===spCurrentAns){
+spScoreVal++;spScoreEl.textContent=spScoreVal;
+currentStreak++;
+if(currentStreak>bestSessionStreak) bestSessionStreak=currentStreak;
+spAnsEl.textContent=spCurrentAns;
+spAnsEl.style.color='var(--good)';
+playFeedbackTone('good');
+setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},250);
+} else {
+currentStreak=0;
+spFeedbackEl.innerHTML='<span style="color:var(--bad)">'+spCurrentN+' + '+spCurrentAns+' = '+spTarget+'</span>';
+spAnsEl.textContent=spCurrentAns;
+spAnsEl.style.color='var(--bad)';
+playFeedbackTone('bad');
+setTimeout(()=>{spAnsEl.style.color='var(--gold)';nextSprint()},600);
+}
+correct=spScoreVal;
+total=spTotalVal;
+updateScores();
+}
+/* ===== ANZAN (MENTAL VISUALIZATION) — v5 REWRITE ===== */
+function renderBeadRod(num,container,opts){
+opts=opts||{};
+container.innerHTML='';
+if(num<0||num>9) return;
+const heaven=num>=5?1:0;
+const earth=num>=5?num-5:num;
+const col=document.createElement('div');col.className='bead-col';
+const rodLine=document.createElement('div');rodLine.className='rod-line';col.appendChild(rodLine);
+const hz=document.createElement('div');hz.className='heaven-zone';
+const hb=document.createElement('div');hb.className='bead heaven '+(heaven?'active':'away');
+hz.appendChild(hb);col.appendChild(hz);
+const ez=document.createElement('div');ez.className='earth-zone';
+for(let i=0;i<4;i++){const eb=document.createElement('div');eb.className='bead earth '+(i<earth?'active':'away');ez.appendChild(eb)}
+col.appendChild(ez);
+const wrap=document.createElement('div');wrap.className='bead-rod';wrap.appendChild(col);
+if(!opts.quiz){const lbl=document.createElement('div');lbl.className='bead-rod-label';lbl.textContent='= '+num;wrap.appendChild(lbl)}
+container.appendChild(wrap);
+}
+function renderBeadRodMulti(num,container,opts){
+opts=opts||{};
+container.innerHTML='';
+if(num<0||num>999) return;
+const fixedDigits=opts.fixedDigits||0;
+if(num<=9&&fixedDigits<=1){renderBeadRod(num,container,opts);return}
+const digits=(fixedDigits?String(num).padStart(fixedDigits,'0'):String(num)).split('').map(Number);
+const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
+const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:20px;align-items:flex-start';
+digits.forEach((d,i)=>{const div=document.createElement('div');div.style.textAlign='center';renderBeadRod(d,div,{quiz:true});
+const lbl=div.querySelector('.bead-rod-label');
+if(!opts.quiz){
+if(!lbl){const nl=document.createElement('div');nl.className='bead-rod-label';nl.textContent=labels[i];div.querySelector('.bead-rod').appendChild(nl)}
+else lbl.textContent=labels[i];
+} else if(lbl) lbl.remove();
+wrap.appendChild(div)});
+const outer=document.createElement('div');outer.className='bead-rod';outer.appendChild(wrap);
+if(!opts.quiz){const totalLbl=document.createElement('div');totalLbl.className='bead-rod-label';totalLbl.textContent='= '+num;outer.appendChild(totalLbl)}
+container.appendChild(outer);
+}
+function describeComplementTechnique(op,value,rodVal){
+const newVal=op==='+'?rodVal+value:rodVal-value;
+if(op==='+'){
+if(rodVal<5&&newVal<5&&value<=4-rodVal%5) return null;
+if(rodVal>=5&&newVal>=5&&newVal<=9&&value<=(4-(rodVal-5))) return null;
+if(rodVal<5&&newVal>=5&&newVal<=9){const comp=5-value;
+if(comp>0) return 'Add 5 (drop heaven), subtract '+(5-value)+' (friend of 5)';
+if(comp===0) return 'Drop the heaven bead (add 5)'}
+if(newVal>=10){const comp=10-value;return 'Add 10 (carry to tens), subtract '+comp+' (complement of '+value+')'}
+if(rodVal%5+value>4&&newVal<10&&newVal>=5){const comp=5-value;
+if(comp>0) return 'Drop heaven bead, pull back '+(5-value)+' earth (friend of 5: '+value+'+'+(5-value)+'=5)'}
+} else {
+if(rodVal>=5&&newVal>=5&&value<=(rodVal-5)) return null;
+if(rodVal<5&&value<=rodVal) return null;
+if(rodVal>=5&&newVal<5){const give=5-value;
+if(give>0) return 'Lift heaven bead (-5), push '+(5-value)+' earth up (friend of 5)';
+if(give===0) return 'Lift the heaven bead (-5)'}
+if(newVal<0||rodVal<value){const comp=10-value;return 'Borrow from tens (-10), add '+comp+' (complement of '+value+': 10-'+value+'='+comp+')'}
+}
+return null;
+}
+function describeOneRod(d){
+if(d===0) return 'heaven up, 0 earth';if(d<5) return 'heaven up, '+d+' earth';
+if(d===5) return 'heaven DOWN, 0 earth';return 'heaven DOWN, '+(d-5)+' earth';
+}
+function describeBeads(n){
+if(n<0||n>999) return '';if(n<=9) return '['+describeOneRod(n)+']';
+const digits=String(n).split('').map(Number);
+const labels=digits.length===3?['hundreds','tens','ones']:['tens','ones'];
+return digits.map((d,i)=>'['+labels[i]+': '+describeOneRod(d)+']').join(' ');
+}
+/* -- Anzan level grid -- */
+function renderAzLevelGrid(){
+const grid=$('#azLevelGrid');grid.innerHTML='';
+AZ_CURRICULUM.forEach((cfg,i)=>{
+const unlocked=azIsUnlocked(i);
+const prog=azGetProgress(i);
+const passed=prog.correct>=cfg.passReq;
+const card=document.createElement('div');
+card.className='az-level'+(i===azSelectedLevel?' active':'')+(unlocked?'':' locked')+(passed?' complete':'');
+card.innerHTML='<div class="lv-num">Level '+(i+1)+'</div>'
++'<div class="lv-name">'+cfg.name+'</div>'
++'<div class="lv-desc">'+cfg.desc.slice(0,80)+(cfg.desc.length>80?'...':'')+'</div>'
++(passed?'<span class="lv-badge pass">✓ Passed</span>':(!unlocked?'<span class="lv-badge lock">🔒</span>':''))
++(unlocked&&!passed&&prog.attempts>0?'<div class="az-progress-bar"><div class="az-progress-fill" style="width:'+Math.min(100,Math.round(prog.correct/cfg.passReq*100))+'%"></div></div>':'');
+card.addEventListener('click',()=>{
+if(!unlocked) return;
+azSelectedLevel=i;
+renderAzLevelGrid();
+showAzLevelInfo(i);
+});
+grid.appendChild(card);
+});
+}
+function showAzLevelInfo(i){
+const cfg=AZ_CURRICULUM[i];
+const prog=azGetProgress(i);
+const passed=prog.correct>=cfg.passReq;
+const info=$('#azLevelInfo');
+let html='<b style="color:var(--gold)">Level '+(i+1)+': '+cfg.name+'</b><br>'+cfg.desc+'<br><br>';
+if(cfg.type==='beadRead') html+='<b>Goal:</b> '+cfg.passReq+'/'+cfg.passOf+' correct. <b>Progress:</b> '+prog.correct+'/'+cfg.passReq+(passed?' ✔ Passed':'');
+else html+='<b>Numbers:</b> '+cfg.count+' &middot; <b>Speed:</b> '+(cfg.speed/1000)+'s &middot; <b>Ops:</b> '+(cfg.addOnly?'Add only':'Mixed')+' &middot; <b>Max:</b> '+cfg.maxNum+'<br><b>Goal:</b> '+cfg.passReq+'/'+cfg.passOf+' correct. <b>Progress:</b> '+prog.correct+'/'+cfg.passReq+(passed?' ✔ Passed':'');
+html+='<br><br><i style="color:var(--teal);font-style:normal">⚠ No beads or answers shown during the flash. Review with beads shown AFTER you answer.</i>';
+info.innerHTML=html;
+}
+/* -- Anzan problem generation -- */
+function generateAnzanProblem(cfg){
+const nums=[];let sum=0;let safetyCounter=0;
+const count=cfg.count||3,maxNum=cfg.maxNum||9,sumCap=cfg.sumCap||99;
+const minFirst=cfg.digits===2?10:1,addOnly=cfg.addOnly!==false;
+for(let i=0;i<count;i++){
+if(safetyCounter++>count*10) break; // generous safety limit
+if(i===0){
+const n=randInt(minFirst,Math.min(maxNum,sumCap));
+nums.push({value:n,op:'+'});sum=n;
+} else {
+let op=addOnly?'+':Math.random()<0.55?'+':'-';
+let n;
+if(op==='+'){
+const room=sumCap-sum;
+if(room<1){
+if(addOnly){op='-';n=randInt(1,Math.min(Math.max(sum,1),maxNum))}
+else{op='-';n=randInt(1,Math.min(Math.max(sum,1),maxNum))}
+}
+else n=randInt(1,Math.min(room,maxNum));
+} else {
+if(sum<1){op='+';n=randInt(1,Math.min(Math.max(sumCap-sum,1),maxNum))}
+else n=randInt(1,Math.min(sum,maxNum));
+}
+if(!n||n<1) n=1;
+// Final bounds check
+if(op==='+'&&sum+n>sumCap) n=Math.max(1,sumCap-sum);
+if(op==='-'&&sum-n<0) n=Math.max(1,sum);
+if(n<1) n=1;
+sum=op==='+'?sum+n:sum-n;
+nums.push({value:n,op});
+}
+}
+return{numbers:nums,answer:sum};
+}
+/* -- Bead Reading mode -- */
+let beadReadAnswer=0;
+function nextBeadReading(){
+if(routinePhaseEnding) return; // block stale setTimeout from previous phase
+if(!running&&!routineActive) return;
+if(brStandaloneCols){
+beadReadDisplayCols=brStandaloneCols;
+beadReadAnswer=setBeadReadingValueForColumns(brStandaloneCols);
+} else if(routineActive&&activePhaseKey()==='beadread'){
+beadReadDisplayCols=routineDailyBeadCols;
+beadReadAnswer=setBeadReadingValueForColumns(routineDailyBeadCols);
+} else {
+const maxN=AZ_CURRICULUM[azSelectedLevel].maxNum||9;
+if(maxN<=9){
+beadReadDisplayCols=1;
+beadReadAnswer=randInt(0,maxN);
+} else {
+const useSingleDigit=Math.random()<0.25;
+beadReadDisplayCols=useSingleDigit?1:2;
+beadReadAnswer=useSingleDigit?randInt(0,9):randInt(10,maxN);
+}
+}
+const container=$('#anzanNumber');
+container.style.opacity='1';
+renderBeadReadingValue(beadReadAnswer,container,true);
+$('#anzanInstruction').textContent='What number do these beads show? Type it below.';
+$('#anzanAnswerRow').style.display='flex';
+$('#anzanInput').value='';$('#anzanInput').focus();
+$('#anzanFeedback').textContent='';$('#anzanFeedback').className='feedback';
+$('#anzanReview').classList.add('hidden');
+$('#anzanNextBtn').classList.add('hidden');$('#anzanReplayBtn').classList.add('hidden');
+}
+function submitBeadReading(){
+const val=$('#anzanInput').value.trim();if(!val) return;
+const v=Number(val);if(isNaN(v)) return;
+anzanTotalVal++;azRoundNum++;
+const ok=v===beadReadAnswer;
+if(ok){anzanCorrectVal++;azRoundCorrect++;anzanStreak++;
+if(anzanStreak>anzanBestStreak) anzanBestStreak=anzanStreak;
+$('#anzanFeedback').className='feedback correct';
+$('#anzanFeedback').textContent='✓ '+beadReadAnswer;
+playFeedbackTone('good');
+} else {
+anzanStreak=0;
+$('#anzanFeedback').className='feedback wrong';
+$('#anzanFeedback').textContent='✗ Was '+beadReadAnswer+'. '+describeBeads(beadReadAnswer);
+playFeedbackTone('bad');
+}
+if(!routineActive) azRecordResult(azSelectedLevel,ok);
+updateAzStats();
+const cfg=AZ_CURRICULUM[azSelectedLevel];
+$('#anzanRoundDisplay').textContent=azRoundNum+'/'+cfg.passOf;
+if(routineActive){
+// During guided routine: just keep cycling bead reading, never change levels
+if(ok){
+setTimeout(nextBeadReading,500);
+} else {
+// Show correct beads briefly then continue
+const container=$('#anzanNumber');
+renderBeadReadingValue(beadReadAnswer,container,false);
+$('#anzanAnswerRow').style.display='none';
+$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next';
+}
+if(azRoundNum>=cfg.passOf){azRoundNum=0;azRoundCorrect=0}
+return;
+}
+// Standalone mode below
+if(azRoundNum>=cfg.passOf){
+const passed=azRoundCorrect>=cfg.passReq;
+setTimeout(()=>{
+$('#anzanFeedback').className='feedback '+(passed?'correct':'wrong');
+$('#anzanFeedback').textContent=passed?'Level passed! '+azRoundCorrect+'/'+cfg.passOf+' correct.':'Not quite: '+azRoundCorrect+'/'+cfg.passOf+'. Need '+cfg.passReq+'. Try again!';
+$('#anzanAnswerRow').style.display='none';
+$('#anzanNextBtn').classList.remove('hidden');
+$('#anzanNextBtn').textContent=passed?(azSelectedLevel<AZ_CURRICULUM.length-1?'Next Level':'Play Again'):'Retry Level';
+if(passed&&azSelectedLevel<AZ_CURRICULUM.length-1){azSelectedLevel++;$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+AZ_CURRICULUM[azSelectedLevel].name}
+azRoundNum=0;azRoundCorrect=0;
+},800);
+return;
+}
+if(ok&&anzanAutoNext) setTimeout(nextBeadReading,500);
+else if(ok){
+$('#anzanAnswerRow').style.display='none';
+$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next';
+}
+else{
+const container=$('#anzanNumber');
+renderBeadReadingValue(beadReadAnswer,container,false);
+$('#anzanAnswerRow').style.display='none';
+$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next';
+}
+}
+/* -- Flash Anzan mode -- */
+let anzanFirstRound=true;
+function nextAnzanRound(replay){
+if(routinePhaseEnding) return; // block stale setTimeout from previous phase
+if(!running&&!routineActive) return; // guard against stale setTimeout
+if(anzanTimeLeft<=0&&!routineActive) return;
+const cfg=activeAnzanCfg();
+if(!replay){
+const gen=generateAnzanProblem(cfg);
+anzanNumbers=gen.numbers;anzanAnswer=gen.answer;
+azIntermediateSums=[];let s=0;
+anzanNumbers.forEach(item=>{s=item.op==='+'?s+item.value:s-item.value;azIntermediateSums.push(s)});
+}
+anzanIdx=0;
+const dotsEl=$('#anzanDots');dotsEl.innerHTML='';
+for(let i=0;i<anzanNumbers.length;i++){const dot=document.createElement('div');dot.className='anzan-dot';dotsEl.appendChild(dot)}
+$('#anzanAnswerRow').style.display='none';
+$('#anzanNextBtn').classList.add('hidden');$('#anzanReplayBtn').classList.add('hidden');
+$('#anzanFeedback').textContent='';$('#anzanFeedback').className='feedback';
+$('#anzanReview').classList.add('hidden');
+$('#anzanInput').value='';
+$('#anzanInstruction').textContent='Watch each number. Visualize the soroban beads moving in your mind.';
+$('#anzanNumber').innerHTML='&nbsp;';
+if(anzanFirstRound){
+anzanFirstRound=false;
+runCountdown(()=>flashAnzanNumber());
+} else {
+// Brief pause then start flashing - no countdown between rounds
+setTimeout(()=>flashAnzanNumber(),800);
+}
+}
+function runCountdown(callback){
+const cdEl=$('#anzanCountdown');cdEl.classList.remove('hidden');
+$('#anzanNumber').innerHTML='&nbsp;';
+const steps=['3','2','1','Go!'];let si=0;
+function tick(){
+if(anzanPaused){setTimeout(tick,100);return}
+if(si>=steps.length){cdEl.classList.add('hidden');callback();return}
+cdEl.textContent=steps[si];cdEl.style.animation='none';cdEl.offsetHeight;cdEl.style.animation='countPulse .7s ease';
+si++;setTimeout(tick,si===steps.length?400:700);
+}
+tick();
+}
+function flashAnzanNumber(){
+const cfg=activeAnzanCfg();
+const count=anzanNumbers.length; // use ACTUAL array length, not cfg.count
+const speed=cfg.speed||2000;
+if(anzanIdx>=count){
+$('#anzanNumber').innerHTML='&nbsp;';
+$('#anzanInstruction').textContent='What is the total? Read your mental soroban.';
+$('#anzanAnswerRow').style.display='flex';
+$('#anzanInput').focus();
+return;
+}
+const item=anzanNumbers[anzanIdx];
+const prefix=anzanIdx===0?'':item.op==='+'?'+':'−';
+const numEl=$('#anzanNumber');
+numEl.textContent=prefix+item.value;
+numEl.style.opacity='1';
+numEl.style.color=item.op==='+'?'var(--teal)':'var(--accent2)';
+const dots=$('#anzanDots').querySelectorAll('.anzan-dot');
+dots.forEach((d,i)=>{d.className='anzan-dot';if(i<anzanIdx) d.classList.add('shown');if(i===anzanIdx) d.classList.add('current')});
+const showTime=Math.max(300,speed-200);
+anzanTimer=setTimeout(()=>{
+numEl.style.opacity='0';
+setTimeout(()=>{anzanIdx++;if(!anzanPaused) flashAnzanNumber()},200);
+},showTime);
+}
+function submitAnzan(){
+const val=$('#anzanInput').value.trim();if(!val) return;
+const v=Number(val);if(isNaN(v)) return;
+const cfg=activeAnzanCfg();
+const freeMode=!!anzanFreeConfig;
+anzanTotalVal++;azRoundNum++;
+const ok=v===anzanAnswer;
+if(ok){
+anzanCorrectVal++;azRoundCorrect++;anzanStreak++;
+if(anzanStreak>anzanBestStreak) anzanBestStreak=anzanStreak;
+$('#anzanFeedback').className='feedback correct';
+$('#anzanFeedback').textContent='✓ '+anzanAnswer+(anzanStreak>=3?' ('+anzanStreak+' streak!)':'');
+playFeedbackTone('good');
+} else {
+anzanStreak=0;
+$('#anzanFeedback').className='feedback wrong';
+$('#anzanFeedback').textContent='✗ Answer: '+anzanAnswer+' (you: '+v+')';
+playFeedbackTone('bad');
+}
+if(!freeMode) azRecordResult(azSelectedLevel,ok);
+updateAzStats();
+$('#anzanRoundDisplay').textContent=azRoundNum+'/'+(freeMode?'∞':cfg.passOf);
+$('#anzanAnswerRow').style.display='none';
+// Quick Anzan free practice: never change level, never gate — just keep going.
+if(freeMode){
+if(ok){
+if(anzanAutoNext) setTimeout(()=>nextAnzanRound(),600);
+else{$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next Round';}
+} else {
+showAnzanReview();
+$('#anzanReplayBtn').classList.remove('hidden');
+$('#anzanNextBtn').classList.remove('hidden');$('#anzanNextBtn').textContent='Next Round';
+}
+return;
+}
+// Check if round set complete
+if(azRoundNum>=cfg.passOf){
+const passed=azRoundCorrect>=cfg.passReq;
+if(!ok) showAnzanReview();
+setTimeout(()=>{
+$('#anzanFeedback').className='feedback '+(passed?'correct':'wrong');
+if(routineActive){
+// During guided routine: auto-fluctuate based on performance
+if(passed){
+azConsecutiveFails=0;
+azConsecutivePasses++;
+if(azConsecutivePasses>=2&&azSelectedLevel<AZ_CURRICULUM.length-1){
+// Advance after 2 consecutive passes
+azSelectedLevel++;
+azConsecutivePasses=0;
+$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+AZ_CURRICULUM[azSelectedLevel].name;
+$('#anzanFeedback').textContent='✔ Moving up to '+guidedLevelText(azSelectedLevel)+'.';
+} else {
+$('#anzanFeedback').textContent='✔ Holding at '+guidedLevelText(azSelectedLevel)+'. '+azRoundCorrect+'/'+cfg.passOf+' correct.'+(azConsecutivePasses>=1?' One more strong set moves you up.':'');
+}
+} else {
+azConsecutivePasses=0;
+azConsecutiveFails++;
+if(azSelectedLevel>1){
+// Drop back immediately on fail in guided mode - don't let user struggle
+azSelectedLevel--;
+azConsecutiveFails=0;
+$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+AZ_CURRICULUM[azSelectedLevel].name;
+$('#anzanFeedback').textContent='Stepping back to '+guidedLevelText(azSelectedLevel)+' after '+azRoundCorrect+'/'+cfg.passOf+'.';
+} else {
+$('#anzanFeedback').textContent='Holding at '+guidedLevelText(azSelectedLevel)+'. Need '+cfg.passReq+'/'+cfg.passOf+'.';
+}
+}
+azRoundNum=0;azRoundCorrect=0;
+// Auto-continue after brief pause
+setTimeout(()=>nextAnzanRound(),1200);
+} else {
+// Standalone mode: allow level-up on pass, drop-back on consecutive fails
+$('#anzanFeedback').textContent=passed?'✔ Level passed! '+azRoundCorrect+'/'+cfg.passOf+' correct!':'Need '+cfg.passReq+'/'+cfg.passOf+'. Got '+azRoundCorrect+'. Try again!';
+$('#anzanNextBtn').classList.remove('hidden');
+if(passed){
+azConsecutiveFails=0;
+$('#anzanNextBtn').textContent=azSelectedLevel<AZ_CURRICULUM.length-1?'Next Level →':'Play Again';
+if(azSelectedLevel<AZ_CURRICULUM.length-1){azSelectedLevel++;$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+AZ_CURRICULUM[azSelectedLevel].name}
+} else {
+azConsecutiveFails++;
+if(azConsecutiveFails>=2&&azSelectedLevel>1){
+// Drop back one level after 2 consecutive fails
+azSelectedLevel--;
+azConsecutiveFails=0;
+$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+AZ_CURRICULUM[azSelectedLevel].name;
+$('#anzanNextBtn').textContent='Dropped to Lv'+(azSelectedLevel+1)+' — Try again';
+$('#anzanFeedback').textContent+=' Dropping back to Level '+(azSelectedLevel+1)+' to strengthen foundations.';
+} else {
+$('#anzanNextBtn').textContent='Retry Level';
+}
+}
+azRoundNum=0;azRoundCorrect=0;
+}
+},1200);
+return;
+}
+if(ok){
+// Correct: auto-advance only when the user enabled it
+if(anzanAutoNext) setTimeout(()=>nextAnzanRound(),600);
+else{
+$('#anzanNextBtn').classList.remove('hidden');
+$('#anzanNextBtn').textContent='Next Round';
+}
+} else {
+// Wrong: show full review with bead stepper, wait for user
+showAnzanReview();
+$('#anzanReplayBtn').classList.remove('hidden');
+$('#anzanNextBtn').classList.remove('hidden');
+$('#anzanNextBtn').textContent='Next Round';
+}
+}
+/* -- Post-answer review with bead stepper -- */
+function showAnzanReview(){
+const review=$('#anzanReview');review.classList.remove('hidden');
+const stepsEl=$('#anzanReviewSteps');stepsEl.innerHTML='';
+let sum=0;
+anzanNumbers.forEach((item,i)=>{
+const prevSum=sum;
+sum=item.op==='+'?sum+item.value:sum-item.value;
+const step=document.createElement('div');
+step.className='az-review-step'+(i===anzanNumbers.length-1?' current':'');
+let techHtml='';
+if(i>0){
+const onesAdd=item.value%10,tensAdd=Math.floor(item.value/10)%10;
+if(onesAdd>0){const t=describeComplementTechnique(item.op,onesAdd,prevSum%10);if(t) techHtml+='<br><span style="color:var(--ink3);font-size:.75rem">→ Ones: '+t+'</span>'}
+if(tensAdd>0){const t=describeComplementTechnique(item.op,tensAdd,Math.floor(prevSum/10)%10);if(t) techHtml+='<br><span style="color:var(--ink3);font-size:.75rem">→ Tens: '+t+'</span>'}
+}
+step.innerHTML='<span class="az-op '+(item.op==='+'?'add':'sub')+'">'+(i===0?' ':item.op)+'</span>'
++'<span>'+item.value+'</span>'
++'<span style="margin-left:auto;color:var(--gold)">= '+sum+'</span>'
++'<span style="color:var(--ink3);font-size:.75rem;margin-left:8px">'+describeBeads(sum)+'</span>'
++techHtml;
+stepsEl.appendChild(step);
+});
+// Setup bead stepper
+azReviewStepIdx=azIntermediateSums.length-1;
+renderAzReviewBead(azReviewStepIdx);
+}
+function renderAzReviewBead(idx){
+if(idx<0||idx>=azIntermediateSums.length) return;
+azReviewStepIdx=idx;
+const val=azIntermediateSums[idx];
+const container=$('#anzanReviewBeads');
+if(val>=0&&val<=999){
+if(val<=9) renderBeadRod(val,container);
+else renderBeadRodMulti(val,container);
+} else container.innerHTML='<span style="color:var(--ink3)">Value out of bead range</span>';
+$('#azRevStepLabel').textContent='Step '+(idx+1)+'/'+azIntermediateSums.length+' = '+val;
+// Highlight current step in review
+const steps=$('#anzanReviewSteps').querySelectorAll('.az-review-step');
+steps.forEach((s,i)=>{s.classList.toggle('current',i===idx)});
+}
+function updateAzStats(){
+$('#anzanCorrect').textContent=anzanCorrectVal;$('#anzanTotal').textContent=anzanTotalVal;
+const a=anzanTotalVal>0?Math.round(anzanCorrectVal/anzanTotalVal*1000)/10:0;
+$('#anzanAcc').textContent=a+'%';
+$('#anzanStreakVal').textContent=anzanStreak;$('#anzanBestStreakVal').textContent=anzanBestStreak;
+}
+/* -- Anzan session management -- */
+function startAnzan(){
+anzanCorrectVal=0;anzanTotalVal=0;anzanStreak=0;anzanBestStreak=0;
+azRoundNum=0;azRoundCorrect=0;anzanFirstRound=true;azConsecutiveFails=0;azConsecutivePasses=0;
+anzanTimeLeft=minutes*60;anzanPaused=false;
+const cfg=activeAnzanCfg();
+setScreen('anzan');
+if(anzanFreeConfig){
+$('#anzanLevelDisplay').textContent='Quick: '+azFreeDigits+'-digit ×'+cfg.count;
+$('#anzanRoundDisplay').textContent='0/∞';
+} else {
+$('#anzanLevelDisplay').textContent='Lv'+(azSelectedLevel+1)+': '+cfg.name;
+$('#anzanRoundDisplay').textContent='0/'+cfg.passOf;
+}
+updateClockDisplay($('#anzanClock'),anzanTimeLeft);
+updateAzStats();
+if(anzanTimerId) clearInterval(anzanTimerId);
+anzanTimerId=setInterval(()=>{
+if(anzanPaused) return;
+anzanTimeLeft=Math.max(0,anzanTimeLeft-1);
+updateClockDisplay($('#anzanClock'),anzanTimeLeft);
+if(anzanTimeLeft<=0){clearInterval(anzanTimerId);anzanTimerId=null;endAnzan()}
+},1000);
+running=true;
+if(cfg.type==='beadRead') nextBeadReading();
+else nextAnzanRound();
+}
+function endAnzan(){
+if(routineActive){showToast('Phase complete, moving to next...','var(--teal)');onRoutinePhaseEnd();return}
+brStandaloneCols=null;
+anzanFreeConfig=null;
+running=false;
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+correct=anzanCorrectVal;total=anzanTotalVal;
+timeLeft=anzanTimeLeft;bestSessionStreak=anzanBestStreak;currentStreak=anzanStreak;
+mode='anzan';endSession();
+}
+/* ===== MULTIPLICATION DRILL ===== */
+function getMultRange(){
+if(multRange==='extended') return 12;
+if(multRange==='hard') return 20;
+return 9;
+}
+function nextMultProblem(){
+const max=getMultRange();
+multA=randInt(2,max);
+multB=randInt(2,max);
+multAnswer=multA*multB;
+multCount++;
+$('#multProbNum').textContent='#'+multCount;
+if(multReverse){
+$('#multA').textContent='?';
+$('#multB').textContent=multB;
+$('#multEq').classList.remove('hidden');
+$('#multResult').classList.remove('hidden');
+$('#multResult').textContent=multAnswer;
+$('#multInput').placeholder='factor';
+} else {
+$('#multA').textContent=multA;
+$('#multB').textContent=multB;
+$('#multEq').classList.add('hidden');
+$('#multResult').classList.add('hidden');
+$('#multInput').placeholder='?';
+}
+$('#multInput').value='';
+$('#multFeedback').textContent='';
+$('#multFeedback').className='feedback';
+$('#multInput').focus();
+}
+function submitMult(){
+const val=$('#multInput').value.trim();
+if(!val) return;
+const v=Number(val);
+if(isNaN(v)) return;
+const correctAns=multReverse?multA:multAnswer;
+const ok=v===correctAns;
+multTotal++;
+if(ok){
+multCorrect++;
+$('#multFeedback').className='feedback correct';
+$('#multFeedback').textContent='Correct!';
+playFeedbackTone('good');
+} else {
+$('#multFeedback').className='feedback wrong';
+$('#multFeedback').textContent='Wrong. Answer: '+correctAns;
+playFeedbackTone('bad');
+}
+$('#multCorrectEl').textContent=multCorrect;
+$('#multTotalEl').textContent=multTotal;
+const a=multTotal>0?Math.round(multCorrect/multTotal*1000)/10:0;
+$('#multAccEl').textContent=a+'%';
+const elapsed=minutes*60-multTimeLeft;
+const ppmVal=elapsed>0?Math.round(multTotal/(elapsed/60)*10)/10:0;
+$('#multPPMEl').textContent=ppmVal;
+setTimeout(nextMultProblem,ok?350:800);
+}
+function startMult(){
+multCorrect=0;multTotal=0;multCount=0;
+multTimeLeft=minutes*60;
+multPaused=false;
+setScreen('mult');
+updateClockDisplay($('#multClock'),multTimeLeft);
+$('#multCorrectEl').textContent='0';$('#multTotalEl').textContent='0';
+$('#multAccEl').textContent='0%';$('#multPPMEl').textContent='0';
+if(multTimerId) clearInterval(multTimerId);
+multTimerId=setInterval(()=>{
+if(multPaused) return;
+multTimeLeft=Math.max(0,multTimeLeft-1);
+updateClockDisplay($('#multClock'),multTimeLeft);
+if(multTimeLeft<=0){clearInterval(multTimerId);multTimerId=null;endMult()}
+},1000);
+running=true;
+nextMultProblem();
+}
+function endMult(){
+running=false;
+if(multTimerId){clearInterval(multTimerId);multTimerId=null}
+correct=multCorrect;total=multTotal;
+timeLeft=multTimeLeft;
+mode='multiplication';
+endSession();
+}
+/* ===== HISTORY ===== */
+function renderHistory(hist){
+const card=$('#historyCard');
+const list=$('#historyList');
+card.classList.remove('hidden');
+list.innerHTML='';
+if(!hist.length){
+const empty=document.createElement('div');
+empty.className='tip';
+empty.style.fontStyle='normal';
+empty.textContent='No saved session history yet. When you finish a session it will appear here. You can still use Export and Import anytime.';
+list.appendChild(empty);
+return;
+}
+hist.slice(-10).reverse().forEach(h=>{
+const row=document.createElement('div');
+row.className='history-item';
+const modeLabel=h.mode==='standard'?(DIFFICULTIES[h.difficulty]&&DIFFICULTIES[h.difficulty].label)||'Standard':
+h.mode==='anzan'?'Anzan':
+h.mode==='multiplication'?'Multiplication':
+h.mode==='sprint10'?'Sprint 10':
+h.mode==='sprint5'?'Sprint 5':
+h.mode==='guided-warmup'?'Warm-Up':
+h.mode==='guided-beadread'?'Bead Reading':
+h.mode==='guided-anzan'?'Anzan':
+h.mode==='guided-complements10'?'Friends of 10':
+h.mode==='guided-complements5'?'Friends of 5':
+h.mode;
+row.innerHTML='<div><div class="history-date">'+h.date+' — '+modeLabel+'</div>'+
+'<div class="history-detail">'+h.minutes+' min · '+h.correct+'/'+h.total+' · Hints: '+(h.hints||0)+(h.ppm?' · '+h.ppm+' PPM':'')+(h.bestStreak?' · Streak: '+h.bestStreak:'')+'</div></div>'+
+'<span class="history-acc" style="color:'+(h.accuracy>=80?'var(--good)':h.accuracy>=60?'var(--gold)':'var(--bad)')+'">'+h.accuracy+'%</span>';
+list.appendChild(row);
+});
+}
+/* ===== EVENT WIRING ===== */
+$$('.btn[data-mode]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('.btn[data-mode]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+mode=btn.dataset.mode;
+$('#anzanSetup').classList.toggle('hidden',mode!=='anzan');
+$('#multSetup').classList.toggle('hidden',mode!=='multiplication');
+if(mode==='anzan'){renderAzLevelGrid();showAzLevelInfo(azSelectedLevel)}
+});
+});
+$$('.btn[data-diff]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('.btn[data-diff]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+difficulty=btn.dataset.diff;
+});
+});
+$$('.btn.dur').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('.btn.dur').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+minutes=Number(btn.dataset.min);
+});
+});
+$$('.btn.tech').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('.btn.tech').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+technique=btn.dataset.tech;
+});
+});
+$$('.btn[data-multrng]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('.btn[data-multrng]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+multRange=btn.dataset.multrng;
+});
+});
+$('#multReverse').addEventListener('change',e=>multReverse=e.target.checked);
+$('#under100').addEventListener('change',e=>stayUnder100=e.target.checked);
+$('#adaptive').addEventListener('change',e=>adaptive=e.target.checked);
+$('#soundOn').addEventListener('change',e=>setSoundMode(e.target.checked));
+$('#focusMode').addEventListener('change',e=>setFocusMode(e.target.checked));
+$('#reducedMotion').addEventListener('change',e=>setReducedMotion(e.target.checked));
+$('#practiceMisses').addEventListener('change',e=>practiceMissesMode=e.target.checked);
+$('#anzanAutoNext').addEventListener('change',e=>anzanAutoNext=e.target.checked);
+$('#azResetProg').addEventListener('click',()=>{
+if(!confirm('Reset all anzan level progress? You will start from Level 1 again.')) return;
+save('soroban_az_v5',{levels:[]});
+azSelectedLevel=0;
+renderAzLevelGrid();showAzLevelInfo(0);
+showToast('Anzan progress reset','var(--bad)');
+});
+$('#azUnlockAll').addEventListener('click',()=>{
+const prog=loadAzProg();
+for(let i=0;i<AZ_CURRICULUM.length;i++){
+if(!prog.levels[i]) prog.levels[i]={attempts:0,correct:0};
+prog.levels[i].correct=Math.max(prog.levels[i].correct,AZ_CURRICULUM[i].passReq);
+}
+saveAzProg(prog);
+renderAzLevelGrid();
+showToast('All levels unlocked!','var(--gold)');
+});
+let brColumns=2;
+$$('[data-brcol]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('[data-brcol]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+brColumns=Number(btn.dataset.brcol);
+});
+});
+$('#startBeadReadOnly').addEventListener('click',()=>{
+anzanFreeConfig=null;
+brStandaloneCols=brColumns;
+azSelectedLevel=0;
+minutes=10;
+startAnzan();
+});
+$$('[data-azfd]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('[data-azfd]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+azFreeDigits=Number(btn.dataset.azfd);
+});
+});
+$$('[data-azfc]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('[data-azfc]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+azFreeCount=Number(btn.dataset.azfc);
+});
+});
+$$('[data-azfo]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('[data-azfo]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+azFreeOps=btn.dataset.azfo;
+});
+});
+$$('[data-azfs]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+$$('[data-azfs]').forEach(b=>b.classList.remove('btn-active'));
+btn.classList.add('btn-active');
+azFreeSpeed=Number(btn.dataset.azfs);
+});
+});
+$('#startQuickAnzan').addEventListener('click',()=>{
+brStandaloneCols=null;
+anzanFreeConfig=buildAnzanFreeConfig(azFreeDigits,azFreeCount,azFreeOps,azFreeSpeed);
+minutes=10;
+startAnzan();
+});
+$('#startBtn').addEventListener('click',()=>{
+practiceMissesMode=$('#practiceMisses').checked;
+anzanAutoNext=$('#anzanAutoNext').checked;
+brStandaloneCols=null;
+anzanFreeConfig=null;
+if(mode==='anzan'){startAnzan();return}
+if(mode==='multiplication'){startMult();return}
+if(mode==='sprint5'||mode==='sprint10'){
+startSprintSession(mode==='sprint10'?10:5);
+return;
+}
+startSession();
+});
+$('#submitBtn').addEventListener('click',submitAnswer);
+ansEl.addEventListener('keydown',e=>{
+if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitAnswer()}
+});
+$('#endBtn').addEventListener('click',endSession);
+$('#skipBtn').addEventListener('click',()=>{if(running&&!isPaused){stopPlayback();beginProblem()}});
+$('#homeBtn').addEventListener('click',()=>{
+if(!confirm('Leave session and go back to setup? Progress will be lost.')) return;
+if(routineActive){endGuidedRoutine();return}
+running=false;isPaused=false;
+brStandaloneCols=null;
+if(timerId){clearInterval(timerId);timerId=null}
+if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+stopPlayback();
+setScreen('setup');
+});
+$('#hintBtn').addEventListener('click',()=>{
+if(!problem) return;
+if(hintBox.classList.contains('hidden')){
+hintsUsed++;
+hintContent.textContent=makeHintText(problem);
+hintBox.classList.remove('hidden');
+} else {
+hintBox.classList.add('hidden');
+}
+});
+$('#revealBtn').addEventListener('click',revealAnswer);
+pauseBtn.addEventListener('click',togglePause);
+$('#newSession').addEventListener('click',()=>setScreen('setup'));
+$('#practiceMissBtn').addEventListener('click',()=>{
+practiceMissesMode=true;
+setScreen('setup');
+$('#practiceMisses').checked=true;
+});
+$('#clearHistBtn').addEventListener('click',()=>{
+if(!confirm('Clear all practice history?')) return;
+saveHist([]);
+$('#historyCard').classList.add('hidden');
+$('#streakVal').textContent='0';
+});
+$('#exportBtn').addEventListener('click',()=>{
+try{
+const data={
+history:loadHist(),
+anzan:load('soroban_az_v5',{levels:[]}),
+misses:load('soroban_misses',[]),
+exported:new Date().toISOString()
+};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='soroban-progress-backup.json';
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+URL.revokeObjectURL(url);
+showToast('Progress exported!','var(--good)');
+try{localStorage.setItem('stp_last_export',String(Date.now()))}catch(e){}
+}catch(e){showToast('Export failed: '+e.message,'var(--bad)')}
+});
+$('#importBtn').addEventListener('click',()=>{
+const input=document.createElement('input');
+input.type='file';input.accept='.json';
+input.addEventListener('change',e=>{
+const file=e.target.files[0];if(!file) return;
+const reader=new FileReader();
+reader.onload=ev=>{
+try{
+const data=JSON.parse(ev.target.result);
+if(!data.history||!Array.isArray(data.history)){showToast('Invalid backup file','var(--bad)');return}
+if(!confirm('Replace current progress with this backup? (exported '+new Date(data.exported).toLocaleDateString()+')')) return;
+saveHist(data.history);
+if(data.anzan) save('soroban_az_v5',data.anzan);
+if(data.misses) save('soroban_misses',data.misses);
+renderHistory(loadHist());
+$('#streakVal').textContent=calcStreak(loadHist());
+renderAzLevelGrid();
+showToast('Progress restored!','var(--good)');
+}catch(err){showToast('Invalid file: '+err.message,'var(--bad)')}
+};
+reader.readAsText(file);
+});
+input.click();
+});
+$('#exportBtnSetup').addEventListener('click',()=>$('#exportBtn').click());
+$('#importBtnSetup').addEventListener('click',()=>$('#importBtn').click());
+$('#bpMicro').addEventListener('change',e=>{bpMicro=e.target.checked;if(problem)buildFrames(problem)});
+$('#bpManual').addEventListener('change',e=>{
+bpManual=e.target.checked;
+save('soroban_bp_manual',bpManual);
+if(bpManual) stopPlayback();
+else if(problem&&running&&!isPaused&&!reducedMotion&&getSessionSurfaceMode()==='standard') play();
+});
+$('#bpPersist').addEventListener('change',e=>{bpPersist=e.target.checked;showFrame(frameIdx)});
+$('#bpHide').addEventListener('change',e=>{bpHide=e.target.checked;showFrame(frameIdx)});
+$('#bpPeek').addEventListener('click',()=>{
+if(!bpHide) return;
+playCoachTick();
+const oldHide=bpHide;bpHide=false;showFrame(frameIdx);
+setTimeout(()=>{bpHide=oldHide;showFrame(frameIdx)},1200);
+});
+$('#bpFirst').addEventListener('click',()=>throttled(()=>{playCoachTick();frameIdx=0;showFrame(frameIdx)}));
+$('#bpPrev').addEventListener('click',()=>throttled(()=>{playCoachTick();frameIdx=Math.max(0,frameIdx-1);showFrame(frameIdx)}));
+$('#bpPlay').addEventListener('click',play);
+$('#bpPause').addEventListener('click',stopPlayback);
+$('#bpNext').addEventListener('click',()=>throttled(()=>{playCoachTick();frameIdx=Math.min(frames.length-1,frameIdx+1);showFrame(frameIdx)}));
+$('#bpLast').addEventListener('click',()=>throttled(()=>{playCoachTick();frameIdx=frames.length-1;showFrame(frameIdx)}));
+$('#bpRestart').addEventListener('click',()=>throttled(()=>{playCoachTick();frameIdx=0;showFrame(frameIdx)}));
+$('#bpSpeed').addEventListener('change',e=>{playSpeed=Number(e.target.value)||1;if(playTimer)play()});
+$('#sp5').addEventListener('click',()=>{
+spTarget=5;spTagEl.textContent='Friends of 5';
+$('#sp5').classList.add('btn-active');$('#sp10').classList.remove('btn-active');
+resetSprintStats();ensureKeypad();nextSprint();
+});
+$('#sp10').addEventListener('click',()=>{
+spTarget=10;spTagEl.textContent='Friends of 10';
+$('#sp10').classList.add('btn-active');$('#sp5').classList.remove('btn-active');
+resetSprintStats();ensureKeypad();nextSprint();
+});
+$('#anzanSubmitBtn').addEventListener('click',()=>{
+const cfg=activeAnzanCfg();
+if(cfg.type==='beadRead') submitBeadReading();
+else submitAnzan();
+});
+$('#anzanInput').addEventListener('keydown',e=>{
+if(e.key==='Enter'){e.preventDefault();e.stopPropagation();
+const cfg=activeAnzanCfg();
+if(cfg.type==='beadRead') submitBeadReading(); else submitAnzan()}
+});
+$('#anzanNextBtn').addEventListener('click',()=>{
+const cfg=activeAnzanCfg();
+if(cfg.type==='beadRead') nextBeadReading();
+else nextAnzanRound();
+});
+$('#anzanReplayBtn').addEventListener('click',()=>nextAnzanRound(true));
+$('#azRevPrev').addEventListener('click',()=>{if(azReviewStepIdx>0) renderAzReviewBead(azReviewStepIdx-1)});
+$('#azRevNext').addEventListener('click',()=>{if(azReviewStepIdx<azIntermediateSums.length-1) renderAzReviewBead(azReviewStepIdx+1)});
+$('#anzanEndBtn').addEventListener('click',endAnzan);
+$('#anzanHomeBtn').addEventListener('click',()=>{
+if(!confirm('Leave session and go back to setup?')) return;
+if(routineActive){endGuidedRoutine();return}
+running=false;anzanPaused=false;
+brStandaloneCols=null;
+anzanFreeConfig=null;
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+setScreen('setup');renderAzLevelGrid();
+});
+$('#anzanPauseBtn').addEventListener('click',()=>{
+anzanPaused=!anzanPaused;
+$('#anzanPauseBtn').textContent=anzanPaused?'Resume':'Pause';
+$('#anzanPauseBtn').classList.toggle('btn-primary',anzanPaused);
+if(anzanPaused){
+if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+} else {
+const cfg=activeAnzanCfg();
+const count=anzanNumbers?anzanNumbers.length:(cfg.count||3);
+if(anzanIdx<count&&$('#anzanAnswerRow').style.display==='none'){
+flashAnzanNumber();
+}
+}
+});
+$('#multSubmitBtn').addEventListener('click',submitMult);
+$('#multInput').addEventListener('keydown',e=>{
+if(e.key==='Enter'){e.preventDefault();e.stopPropagation();submitMult()}
+});
+$('#multSkipBtn').addEventListener('click',()=>{if(running&&!multPaused)nextMultProblem()});
+$('#multEndBtn').addEventListener('click',endMult);
+$('#multHomeBtn').addEventListener('click',()=>{
+if(!confirm('Leave session and go back to setup?')) return;
+running=false;multPaused=false;
+if(multTimerId){clearInterval(multTimerId);multTimerId=null}
+setScreen('setup');
+});
+$('#multPauseBtn').addEventListener('click',()=>{
+multPaused=!multPaused;
+$('#multPauseBtn').textContent=multPaused?'Resume':'Pause';
+$('#multPauseBtn').classList.toggle('btn-primary',multPaused);
+$('#multInput').disabled=multPaused;
+});
+['#focusBtn','#anzanFocusBtn','#multFocusBtn'].forEach(sel=>{
+const btn=$(sel);
+if(btn) btn.addEventListener('click',()=>setFocusMode(!focusMode));
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPlayback()});
+document.addEventListener('keydown',e=>{
+if(!running||isPaused) return;
+if(e.key==='Enter'){
+const nb=$('#anzanNextBtn');
+if(nb&&!nb.classList.contains('hidden')){
+e.preventDefault();nb.click();return;
+}
+}
+if(document.activeElement&&document.activeElement.tagName==='INPUT') {
+if(e.key==='ArrowLeft'){e.preventDefault();$('#bpPrev').click()}
+else if(e.key==='ArrowRight'){e.preventDefault();$('#bpNext').click()}
+return;
+}
+const k=e.key.toLowerCase();
+if(k==='enter'){e.preventDefault();submitAnswer()}
+else if(k==='h'){e.preventDefault();$('#hintBtn').click()}
+else if(k==='r'){e.preventDefault();revealAnswer()}
+else if(k==='s'){e.preventDefault();if(!isPaused){stopPlayback();beginProblem()}}
+else if(e.key==='ArrowLeft'){e.preventDefault();$('#bpPrev').click()}
+else if(e.key==='ArrowRight'){e.preventDefault();$('#bpNext').click()}
+});
+/* ===== GUIDED ROUTINE SYSTEM ===== */
+let routineActive=false,routinePhaseIdx=0,routineTimer=null,routinePhaseTime=0;
+let routinePhaseEnding=false; // blocks stale setTimeouts between phases
+let routineMissedThisPhase=[];
+let reworkMode=false,reworkProblem=null;
+let routineTimes=null;
+const ROUTINE_PHASES=[
+{key:'warmup',name:'Warm-Up',icon:'WU',desc:'Settle in with physical soroban practice that ramps with your current guided level.',tip:'Aim for calm, accurate finger movement before you chase speed.'},
+{key:'beadread',name:'Bead Reading',icon:'BR',desc:'Read bead patterns quickly and say the number as soon as you recognize it.',tip:'Recognize the pattern instantly instead of counting individual beads.'},
+{key:'anzan',name:'Anzan',icon:'AZ',desc:'Short number flashes train the mental bead movement you need for reliable anzan.',tip:'Hold the movement, not a perfect picture. Clarity grows with repetition.'},
+{key:'complements10',name:'Friends of 10',icon:'F10',desc:'Lock in complement pairs for carries and borrows under time pressure.',tip:'Stay light and fast. These pairs should feel automatic.'},
+{key:'complements5',name:'Friends of 5',icon:'F5',desc:'Finish with upper-bead complements for smoother, more efficient technique.',tip:'Keep these pairs crisp: 1-4, 2-3, 3-2, 4-1.'}
+];
+function getRoutineTimes(){
+const lvl=azSelectedLevel;
+if(lvl<=2) return [300,180,600,80,40]; // 5+3+10+1.3+0.7 = 20 min (early anzan, more bead reading)
+if(lvl<=6) return [300,0,780,80,40];   // 5+0+13+1.3+0.7 = 20 min (mid anzan, no bead reading needed)
+return [180,0,900,80,40];               // 3+0+15+1.3+0.7 = 20 min (advanced, less warmup more anzan)
+}
+function startGuidedRoutine(){
+guidedProfile=loadGuidedProfile();
+deriveGuidedRoutinePlan();
+routineActive=true;routinePhaseIdx=0;routinePhaseEnding=false;
+routineMissedThisPhase=[];
+// Always use fixed time allocation for guided routine:
+// 4 min warmup + 3 min bead reading + 10 min anzan + 2 min friends of 10 + 1 min friends of 5 = 20 min
+routineTimes=[240,180,600,120,60];
+// Set standard drill defaults for warmup
+difficulty=routineDailyWarmup.difficulty;technique='mixed';stayUnder100=routineDailyWarmup.stayUnder100;adaptive=true;
+// Render phase bar
+renderRoutineBar();
+// Show transition for first phase
+showPhaseTransition(0);
+}
+function renderRoutineBar(){
+const bar=$('#routineBar');bar.classList.remove('hidden');
+const phases=$('#routinePhases');phases.innerHTML='';
+const times=routineTimes||getRoutineTimes();
+ROUTINE_PHASES.forEach((p,i)=>{
+if(times[i]===0) return; // skip phases with 0 time
+const pill=document.createElement('span');
+pill.className='routine-phase'+(i===routinePhaseIdx?' active':i<routinePhaseIdx?' done':' upcoming');
+pill.innerHTML='<span class="phase-code">'+p.icon+'</span><span>'+p.name+'</span>';
+phases.appendChild(pill);
+});
+updateRoutinePhaseLabel();
+}
+function updateRoutinePhaseLabel(){
+const times=routineTimes||getRoutineTimes();
+const activePhases=ROUTINE_PHASES.filter((_,i)=>times[i]>0);
+const activeIdx=activePhases.findIndex((_,i)=>{
+let realIdx=0,count=0;
+for(let j=0;j<ROUTINE_PHASES.length;j++){
+if(times[j]>0){if(count===i){realIdx=j;break}count++}
+}
+return realIdx===routinePhaseIdx;
+});
+$('#routinePhaseLabel').textContent=ROUTINE_PHASES[routinePhaseIdx].name+' ('+(activeIdx+1)+'/'+activePhases.length+')';
+}
+function showPhaseTransition(phaseIdx){
+const times=routineTimes||getRoutineTimes();
+// Skip phases with 0 time
+while(phaseIdx<ROUTINE_PHASES.length&&times[phaseIdx]===0) phaseIdx++;
+if(phaseIdx>=ROUTINE_PHASES.length){endGuidedRoutine();return}
+routinePhaseIdx=phaseIdx;
+renderRoutineBar();
+const phase=ROUTINE_PHASES[phaseIdx];
+const t=$('#routineTransition');t.classList.remove('hidden');
+$('#rtTitle').textContent=phase.name;
+$('#rtDesc').textContent=phase.desc;
+if(phase.key==='warmup') $('#rtDesc').textContent='Settle in with physical soroban practice at '+routineDailyWarmup.label+'.';
+if(phase.key==='beadread') $('#rtDesc').textContent='Read '+(routineDailyBeadCols===3?'three-digit':'two-digit')+' bead patterns quickly and say the number as soon as you recognize it.';
+if(phase.key==='anzan') $('#rtDesc').textContent=phase.desc+' Today starts at '+guidedLevelText(routineDailyStartLevel)+' based on your recent guided work. It will move up after strong sets and step back quickly if you struggle.';
+$('#rtTip').textContent=phase.tip;
+playPhaseTone();
+$('#rtContinue').onclick=()=>{t.classList.add('hidden');beginRoutinePhase(phaseIdx)};
+}
+function beginRoutinePhase(phaseIdx){
+routinePhaseEnding=false; // allow new phase to operate
+anzanPaused=false; // clear anzan pause state from previous phase
+isPaused=false; // clear standard pause state
+const times=routineTimes||getRoutineTimes();
+routinePhaseTime=times[phaseIdx];
+routineMissedThisPhase=[];
+reworkMode=false;
+$('#routineTimer').textContent=fmtTime(routinePhaseTime);
+if(routineTimer){clearInterval(routineTimer);routineTimer=null}
+routineTimer=setInterval(()=>{
+if(isPaused||anzanPaused) return;
+routinePhaseTime=Math.max(0,routinePhaseTime-1);
+$('#routineTimer').textContent=fmtTime(routinePhaseTime);
+// Sync in-session clock displays
+const phase=ROUTINE_PHASES[routinePhaseIdx];
+if(phase.key==='warmup'||phase.key==='complements10'||phase.key==='complements5'){
+timeLeft=routinePhaseTime;updateClockDisplay(clockEl,routinePhaseTime);
+} else if(phase.key==='beadread'||phase.key==='anzan'){
+anzanTimeLeft=routinePhaseTime;updateClockDisplay($('#anzanClock'),routinePhaseTime);
+}
+if(routinePhaseTime<=0){clearInterval(routineTimer);routineTimer=null;onRoutinePhaseEnd()}
+},1000);
+const phase=ROUTINE_PHASES[phaseIdx];
+if(phase.key==='warmup'){
+// Start standard drill with guided routine settings
+difficulty=routineDailyWarmup.difficulty;technique='mixed';stayUnder100=routineDailyWarmup.stayUnder100;adaptive=true;
+correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
+currentStreak=0;bestSessionStreak=0;
+timeLeft=routinePhaseTime;minutes=Math.ceil(routinePhaseTime/60);
+updateScores();
+setScreen('live');
+setLiveProblemUI(true);
+isPaused=false;setPausedUI(false);
+running=true;
+// Update the in-session clock from routine timer
+updateClockDisplay(clockEl,routinePhaseTime);
+beginProblem();
+} else if(phase.key==='beadread'){
+azSelectedLevel=0; // bead reading is always level 0
+minutes=Math.ceil(routinePhaseTime/60);
+startAnzan();
+// Kill anzan's internal timer - routine timer handles phase end
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+anzanTimeLeft=routinePhaseTime;
+updateClockDisplay($('#anzanClock'),anzanTimeLeft);
+} else if(phase.key==='anzan'){
+// Start just below the saved guided anchor so the routine ramps in instead of resetting too low every day.
+azSelectedLevel=routineDailyStartLevel;
+azConsecutiveFails=0;azConsecutivePasses=0;
+minutes=Math.ceil(routinePhaseTime/60);
+startAnzan();
+// Kill anzan's internal timer - routine timer handles phase end
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+// Sync anzan clock display to routine time
+anzanTimeLeft=routinePhaseTime;
+updateClockDisplay($('#anzanClock'),anzanTimeLeft);
+} else if(phase.key==='complements10'||phase.key==='complements5'){
+spTarget=phase.key==='complements10'?10:5;
+$('#spTag').textContent=phase.key==='complements10'?'Friends of 10':'Friends of 5';
+$('#sp5').classList.toggle('btn-active',phase.key==='complements5');
+$('#sp10').classList.toggle('btn-active',phase.key==='complements10');
+// Disable toggle buttons during guided routine
+$('#sp5').disabled=true;$('#sp10').disabled=true;
+correct=0;total=0;chainBoost=0;hintsUsed=0;problemCount=0;sessionMisses=[];
+currentStreak=0;bestSessionStreak=0;
+timeLeft=routinePhaseTime;minutes=Math.ceil(routinePhaseTime/60);
+updateScores();
+setScreen('live');
+isPaused=false;setPausedUI(false);
+running=true;
+updateClockDisplay(clockEl,routinePhaseTime);
+setLiveProblemUI(false);
+resetSprintStats();nextSprint();
+}
+}
+function onRoutinePhaseEnd(){
+if(!routineActive) return; // guard against double-fire
+routinePhaseEnding=true; // block stale setTimeouts
+running=false;isPaused=false;anzanPaused=false;
+brStandaloneCols=null; // clear any standalone bead-reading override
+if(timerId){clearInterval(timerId);timerId=null}
+if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+stopPlayback();
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+setLiveProblemUI(true);
+$('#missedReworkArea').classList.add('hidden');
+$('#sp5').disabled=false;$('#sp10').disabled=false;
+pendingRework=null;
+// Save history for each phase type
+const phase=ROUTINE_PHASES[routinePhaseIdx];
+const hist=loadHist();
+if(phase.key==='warmup'){
+const accVal=total>0?Math.round(correct/total*1000)/10:0;
+hist.push({date:todayISO(),mode:'guided-warmup',difficulty,minutes:Math.ceil((routineTimes||getRoutineTimes())[0]/60),accuracy:accVal,correct,total,hints:0,ppm:0,bestStreak:bestSessionStreak});
+if(guidedProfile){guidedProfile.warmupAcc=accVal;saveGuidedProfileState()}
+saveHist(hist);
+}
+if(phase.key==='beadread'){
+const accVal=anzanTotalVal>0?Math.round(anzanCorrectVal/anzanTotalVal*1000)/10:0;
+hist.push({date:todayISO(),mode:'guided-beadread',difficulty:routineDailyBeadCols+'-col',minutes:Math.ceil((routineTimes||getRoutineTimes())[routinePhaseIdx]/60),accuracy:accVal,correct:anzanCorrectVal,total:anzanTotalVal,hints:0,ppm:0,bestStreak:anzanBestStreak});
+if(guidedProfile){guidedProfile.beadAcc=accVal;saveGuidedProfileState()}
+saveHist(hist);
+}
+if(phase.key==='anzan'){
+const accVal=anzanTotalVal>0?Math.round(anzanCorrectVal/anzanTotalVal*1000)/10:0;
+hist.push({date:todayISO(),mode:'guided-anzan',difficulty:'anzan-lv'+(azSelectedLevel+1),minutes:Math.ceil((routineTimes||getRoutineTimes())[routinePhaseIdx]/60),accuracy:accVal,correct:anzanCorrectVal,total:anzanTotalVal,hints:0,ppm:0,bestStreak:anzanBestStreak});
+if(guidedProfile){
+guidedProfile.anzanAcc=accVal;
+guidedProfile.anzanAnchor=Math.max(3,Math.min(AZ_CURRICULUM.length-1,azSelectedLevel));
+guidedProfile.lastRun=todayISO();
+saveGuidedProfileState();
+deriveGuidedRoutinePlan();
+renderGuidedStatus();
+}
+saveHist(hist);
+}
+if(phase.key==='complements10'||phase.key==='complements5'){
+hist.push({date:todayISO(),mode:'guided-'+phase.key,difficulty:phase.key==='complements10'?'sprint-10':'sprint-5',minutes:Math.ceil((routineTimes||getRoutineTimes())[routinePhaseIdx]/60),accuracy:spTotalVal>0?Math.round(spScoreVal/spTotalVal*1000)/10:0,correct:spScoreVal,total:spTotalVal,hints:0,ppm:0,bestStreak:0});
+saveHist(hist);
+}
+$('#streakVal').textContent=calcStreak(loadHist());
+// Move to next phase
+const nextIdx=routinePhaseIdx+1;
+if(nextIdx>=ROUTINE_PHASES.length){endGuidedRoutine();return}
+showPhaseTransition(nextIdx);
+}
+function endGuidedRoutine(){
+routineActive=false;routineTimes=null;routinePhaseEnding=false;
+if(routineTimer){clearInterval(routineTimer);routineTimer=null}
+running=false;isPaused=false;
+if(timerId){clearInterval(timerId);timerId=null}
+if(spTimerId){clearInterval(spTimerId);spTimerId=null}
+if(anzanTimerId){clearInterval(anzanTimerId);anzanTimerId=null}
+if(anzanTimer){clearTimeout(anzanTimer);anzanTimer=null}
+stopPlayback();
+$('#routineBar').classList.add('hidden');
+$('#routineTransition').classList.add('hidden');
+setLiveProblemUI(true);
+$('#missedReworkArea').classList.add('hidden');
+// Show completion summary
+setScreen('setup');
+showToast('Routine complete. Next anzan start: '+guidedLevelText(routineDailyStartLevel)+'.','var(--gold)');
+renderAzLevelGrid();
+renderHistory(loadHist());
+renderGuidedStatus();
+renderSaveStatus();
+// Remind user to back up if last export was 7+ days ago
+try{
+const lastExport=localStorage.getItem('stp_last_export');
+const daysSince=lastExport?Math.floor((Date.now()-Number(lastExport))/(1000*60*60*24)):999;
+if(daysSince>=7){
+setTimeout(()=>{showToast('Tip: Back up your progress with the Export button','var(--teal)')},2500);
+}
+}catch(e){}
+}
+/* -- Missed problem rework -- */
+let pendingRework=null;
+function offerRework(missedProblem){
+if(!routineActive){$('#missedReworkArea').classList.add('hidden');return}
+pendingRework=missedProblem;
+$('#missedReworkArea').classList.remove('hidden');
+}
+
+/* ===== GUIDED ROUTINE EVENTS ===== */
+$('#guidedBtn').addEventListener('click',startGuidedRoutine);
+$('#routineSkipPhase').addEventListener('click',()=>{
+if(routineActive&&routinePhaseTime>0){routinePhaseTime=0;clearInterval(routineTimer);routineTimer=null;onRoutinePhaseEnd()}
+});
+$('#routineEnd').addEventListener('click',()=>{
+if(confirm('End the guided routine early?')) endGuidedRoutine();
+});
+$('#reworkYes').addEventListener('click',()=>{
+$('#missedReworkArea').classList.add('hidden');
+if(pendingRework){
+reworkMode=true; // flag so we don't offer rework again if they miss it a second time
+// Re-display the same problem for rework
+problem={lines:pendingRework.lines,answer:pendingRework.answer,ops:pendingRework.ops,nums:pendingRework.nums};
+renderProblem(problem);
+if(problem.ops&&problem.nums) buildFrames(problem);
+ansEl.value='';feedbackEl.textContent='';feedbackEl.className='feedback';
+ansEl.focus();
+pendingRework=null;
+}
+});
+$('#reworkNo').addEventListener('click',()=>{
+$('#missedReworkArea').classList.add('hidden');
+pendingRework=null;
+stopPlayback();beginProblem();
+});
+/* ===== INIT ===== */
+$('#buildBadge').textContent=BUILD;
+if($('#welcomeVersion')) $('#welcomeVersion').textContent=BUILD;
+if($('#footerBuild')) $('#footerBuild').textContent=BUILD;
+renderAzLevelGrid();
+showAzLevelInfo(0);
+guidedProfile=loadGuidedProfile();
+deriveGuidedRoutinePlan();
+const hist=loadHist();
+$('#streakVal').textContent=calcStreak(hist);
+$('#missCount').textContent=persistedMisses.length;
+renderHistory(hist);
+ensureKeypad();
+applyPreferences();
+renderGuidedStatus();
+renderSaveStatus();
+/* ===== WELCOME SCREEN ===== */
+const welcomeEl=$('#welcome');
+const mainAppEl=$('#mainApp');
+function showWelcome(){if(routineActive){endGuidedRoutine()}welcomeEl.style.display='';mainAppEl.style.display='none'}
+function hideWelcome(){welcomeEl.style.display='none';mainAppEl.style.display='';try{localStorage.setItem('stp_seen','1')}catch(e){}}
+$('#welcomeStartBtn').addEventListener('click',hideWelcome);
+$('#helpBtn').addEventListener('click',showWelcome);
+// Skip welcome for returning users
+try{if(localStorage.getItem('stp_seen')){hideWelcome()}else{showWelcome()}}catch(e){showWelcome()}
+})();
+</script>
+</body>
+</html>
