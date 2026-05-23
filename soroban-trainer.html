@@ -857,7 +857,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.4.0';
+const BUILD='v5.5.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -1117,8 +1117,12 @@ container.appendChild(wrap);
 function renderGuidedStatus(){
 const el=$('#guidedStatus');
 if(!el) return;
-const beadLabel=routineDailyBeadCols===3?'3-column bead reading':'2-column bead reading';
-el.textContent='Today: '+routineDailyWarmup.label+' warm-up; '+beadLabel+'; anzan starts at '+guidedLevelText(routineDailyStartLevel)+'.';
+const anchor=guidedProfile?guidedProfile.anzanAnchor:3;
+let beadLabel='2-digit bead reading';
+if(anchor>=10) beadLabel='mostly 3-digit bead reading';
+else if(anchor>=7) beadLabel='mixed 2- and 3-digit bead reading';
+else if(anchor>=4) beadLabel='2-digit bead reading with some 3-digit';
+el.textContent='Guided routine resumes at '+guidedLevelText(routineDailyStartLevel)+' (your saved progress). Warm-up: '+routineDailyWarmup.label+'. Bead reading: '+beadLabel+'.';
 }
 function renderSaveStatus(){
 const el=$('#saveStatus');
@@ -1946,8 +1950,12 @@ if(brStandaloneCols){
 beadReadDisplayCols=brStandaloneCols;
 beadReadAnswer=setBeadReadingValueForColumns(brStandaloneCols);
 } else if(routineActive&&activePhaseKey()==='beadread'){
-beadReadDisplayCols=routineDailyBeadCols;
-beadReadAnswer=setBeadReadingValueForColumns(routineDailyBeadCols);
+const anchor=guidedProfile?guidedProfile.anzanAnchor:3;
+let p3=0;
+if(anchor>=10) p3=0.8; else if(anchor>=7) p3=0.5; else if(anchor>=4) p3=0.25;
+const cols=Math.random()<p3?3:2;
+beadReadDisplayCols=cols;
+beadReadAnswer=setBeadReadingValueForColumns(cols);
 } else {
 const maxN=AZ_CURRICULUM[azSelectedLevel].maxNum||9;
 if(maxN<=9){
@@ -2195,8 +2203,8 @@ azRoundNum=0;azRoundCorrect=0;
 return;
 }
 if(ok){
-// Correct: auto-advance only when the user enabled it
-if(anzanAutoNext) setTimeout(()=>nextAnzanRound(),600);
+// Correct: auto-advance during the guided routine, or when the user enabled it
+if(anzanAutoNext||routineActive) setTimeout(()=>nextAnzanRound(),600);
 else{
 $('#anzanNextBtn').classList.remove('hidden');
 $('#anzanNextBtn').textContent='Next Round';
@@ -2815,7 +2823,7 @@ const t=$('#routineTransition');t.classList.remove('hidden');
 $('#rtTitle').textContent=phase.name;
 $('#rtDesc').textContent=phase.desc;
 if(phase.key==='warmup') $('#rtDesc').textContent='Settle in with physical soroban practice at '+routineDailyWarmup.label+'.';
-if(phase.key==='beadread') $('#rtDesc').textContent='Read '+(routineDailyBeadCols===3?'three-digit':'two-digit')+' bead patterns quickly and say the number as soon as you recognize it.';
+if(phase.key==='beadread'){const a=guidedProfile?guidedProfile.anzanAnchor:3;const bd=a>=10?'three-digit':a>=4?'two- and three-digit':'two-digit';$('#rtDesc').textContent='Read '+bd+' bead patterns quickly and say the number as soon as you recognize it.';}
 if(phase.key==='anzan') $('#rtDesc').textContent=phase.desc+' Today starts at '+guidedLevelText(routineDailyStartLevel)+' based on your recent guided work. It will move up after strong sets and step back quickly if you struggle.';
 $('#rtTip').textContent=phase.tip;
 playPhaseTone();
@@ -2950,6 +2958,14 @@ if(nextIdx>=ROUTINE_PHASES.length){endGuidedRoutine();return}
 showPhaseTransition(nextIdx);
 }
 function endGuidedRoutine(){
+// If we bail out during the anzan phase, still save where we got to so tomorrow resumes there.
+const exitingPhase=ROUTINE_PHASES[routinePhaseIdx];
+if(exitingPhase&&exitingPhase.key==='anzan'&&guidedProfile){
+guidedProfile.anzanAnchor=Math.max(3,Math.min(AZ_CURRICULUM.length-1,azSelectedLevel));
+guidedProfile.lastRun=todayISO();
+saveGuidedProfileState();
+deriveGuidedRoutinePlan();
+}
 routineActive=false;routineTimes=null;routinePhaseEnding=false;
 if(routineTimer){clearInterval(routineTimer);routineTimer=null}
 running=false;isPaused=false;
