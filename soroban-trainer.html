@@ -939,7 +939,7 @@ intermediate:{label:'Intermediate (2-digit)',digits:2,chain:[4,5]},
 advanced:{label:'Advanced (3-digit)',digits:3,chain:[4,6]},
 expert:{label:'Expert (4-digit)',digits:4,chain:[5,7]}
 };
-const BUILD='v5.9.0';
+const BUILD='v6.0.0';
 /* ===== STATE ===== */
 let mode='standard',difficulty='intermediate',technique='mixed';
 let adaptive=true,stayUnder100=true,allowNegatives=false,minutes=20,chainBoost=0;
@@ -1281,8 +1281,8 @@ else if(technique==='sub') op='-';
 else op=Math.random()<0.55?'+':'-';
 let next;
 if(stayUnder100){
-// 40% of the time, deliberately pick numbers that force complement techniques
-const forceComplement=Math.random()<0.4;
+// Over half the time, deliberately pick numbers that force complement (carry/borrow) techniques
+const forceComplement=Math.random()<0.55;
 const onesDigit=runningVal%10;
 if(forceComplement&&op==='+'){
 // Pick numbers that force a carry on the ones rod
@@ -1338,6 +1338,18 @@ if(op==='+' && runningVal+next>maxVal) op='-';
 if(op==='-' && runningVal-next<minVal) op='+';
 if(op==='+') next=Math.min(next,maxVal-runningVal);
 else next=Math.min(next,runningVal-minVal);
+next=Math.max(1,next);
+// Half the time, force the ones rod to require a carry (+) or borrow (-) so multi-digit work isn't trivially easy
+if(Math.random()<0.5){
+const onesDigit=runningVal%10;const opts=[];
+if(op==='+'){for(let c=0;c<=9;c++) if(onesDigit+c>=10||onesDigit%5+c>=5) opts.push(c)}
+else{for(let c=0;c<=9;c++) if(onesDigit-c<0||(onesDigit>=5&&onesDigit-c<5)) opts.push(c)}
+if(opts.length){
+const base=opts[randInt(0,opts.length-1)];
+const cand=next-(next%10)+base;
+if(cand>=1&&(op==='+'?runningVal+cand<=maxVal:runningVal-cand>=minVal)) next=cand;
+}
+}
 next=Math.max(1,next);
 }
 runningVal=op==='+'?runningVal+next:runningVal-next;
